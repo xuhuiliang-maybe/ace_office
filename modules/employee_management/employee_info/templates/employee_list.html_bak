@@ -1,0 +1,550 @@
+{% extends "base/base.html" %}
+{% load share_module_tags %}
+{% load organizational_structure_tags %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="#">员工管理</a></li>
+    <li class="active">
+        {% if employee_type == "employee" %}员工信息{% endif %}
+        {% if employee_type == "temporary" %}临时工信息{% endif %}
+    </li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#user_form').submit()" data-rel="tooltip"
+                                    title="搜索">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+
+                            {% if employee_type == "employee" %}
+                                <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增员工"
+                                        onclick="window.location.href='{% url "employee_info:employee_add" %}'">
+                            {% endif %}
+                            {% if employee_type == "temporary" %}
+                                <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增临时工"
+                                        onclick="window.location.href='{% url "employee_info:temporary_add" %}'">
+                            {% endif %}
+                            <i class="ace-icon fa fa-plus-circle bigger-130"></i>
+                            新增
+                            </button>
+
+                            {% if employee_type == "employee" %}
+                                <button class="btn btn-xs btn-info" data-rel="tooltip" title="批量删除"
+                                        onclick="batch_delete('{% url "employee_info:employee_batch_delete" %}')">
+                            {% endif %}
+                            {% if employee_type == "temporary" %}
+                                <button class="btn btn-xs btn-info" data-rel="tooltip" title="批量删除"
+                                        onclick="batch_delete('{% url "employee_info:temporary_batchdelete_delete" %}')">
+                            {% endif %}
+                            <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                            批量删除
+                            </button>
+
+                            {% if employee_type == "employee" %}
+                                <button class="btn btn-xs btn-info"
+                                        onclick="$('#myEmployeeModal').modal({backdrop: 'static', keyboard: false})"
+                                        data-rel="tooltip" title="导入Excel">
+                            {% endif %}
+                            {% if employee_type == "temporary" %}
+                                <button class="btn btn-xs btn-info"
+                                        onclick="$('#myEmployeeModal').modal({backdrop: 'static', keyboard: false})"
+                                        data-rel="tooltip" title="导入Excel">
+                            {% endif %}
+                            <i class="ace-icon fa fa-cloud-upload bigger-130"></i>
+                            导入
+                            </button>
+
+                            {% if employee_type == "employee" %}
+                                <button class="btn btn-xs btn-info" id="exportemployee" data-rel="tooltip" title="导出Excel">
+                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>
+                                    导出
+                                </button>
+                            {% endif %}
+                            {% if employee_type == "temporary" %}
+                                <button class="btn btn-xs btn-info" id="exporttemporary" data-rel="tooltip" title="导出Excel">
+                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>
+                                    导出
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="user_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            {% if employee_type == "employee" %}
+                                                <input type="text" id="dept_name" name="dept_name" placeholder="归属部门搜索"
+                                                       onclick="query_dept_param()" value="{{ dept_name }}" readonly/>
+                                                <input type="hidden" id="dept_ids" name="dept_ids"/>
+                                                <input type="text" id="principal" name="principal" placeholder="项目负责人"
+                                                       value="{{ principal }}"/>
+                                            {% endif %}
+
+                                            <input type="text" id="project_name" name="project_name" placeholder="项目名称"
+                                                   value="{{ project_name }}"/>
+                                            <input type="text" id="name" name="name" placeholder="姓名搜索"
+                                                   value="{{ name }}"/>
+                                            <input type="text" id="identity_card_number" name="identity_card_number"
+                                                   placeholder="身份证号" value="{{ identity_card_number }}"/>
+
+
+                                            {% if employee_type == "temporary" %}
+                                                <input type="text" id="phone_number" name="phone_number"
+                                                       placeholder="联系方式" value="{{ phone_number }}"/>
+                                                <input type="text" id="st_release_time" name="st_release_time"
+                                                       placeholder="发放起始日期" value="{{ st_release_time }}" readonly/>
+                                                <input type="text" id="et_release_time" name="et_release_time"
+                                                       placeholder="发放终止日期" value="{{ et_release_time }}" readonly/>
+                                                <input type="text" id="recruitment_attache" name="recruitment_attache"
+                                                       placeholder="招聘人员" value="{{ recruitment_attache }}"/>
+                                            {% endif %}
+
+                                            {% if employee_type == "employee" %}
+                                                <select name="person_type" id="person_type">
+                                                    <option value=0>人员属性</option>
+                                                    {% for one_type in person_type_list %}
+                                                        <option value={{ one_type.id }} {% if person_type ==  one_type.id %}selected{% endif %}>{{ one_type.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <select name="contract_type" id="contract_type">
+                                                    <option value="">合同属性</option>
+                                                    {% for one_contract_type in list_contract_type %}
+                                                        <option value={{ one_contract_type.0 }} {% if contract_type == one_contract_type.0 %}selected{% endif %}>
+                                                            {{ one_contract_type.1 }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                                <select name="status" id="status">
+                                                    <option value="">目前状态</option>
+                                                {% for one_status in list_status %}
+                                                    <option value={{ one_status.0 }} {% if status == one_status.0 %}selected{% endif %}>
+                                                        {{ one_status.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                                </select>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            {% if customer_service == 1 %}
+                <div class="alert alert-block alert-info">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="ace-icon fa fa-times"></i>
+                    </button>
+                    <i class="ace-icon fa fa-info"></i>
+
+                    <strong class="">：
+                        您的岗位为客服部(客服专员、客服主管、外包主管、客服经理)，只能查询所在部门信息。
+                    </strong>
+                </div>
+            {% endif %}
+{#            <div class="table-responsive">#}
+            <div class="scroll_table_content" id="scroll_wrap">
+
+{#                <table class="table table-hover dataTable" id="MyTable">#}
+                <table class="table table-hover" id="top_fix_table" border="0" cellpadding="4" cellspacing="0">
+                    <thead>
+                    <tr id="table_head">
+                        <td class="center">
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" name="check_all"/>
+                                <span class="lbl"></span>
+                            </label>
+                        </td>
+                        <!--公共信息-->
+                        <td class="center">序号</td>
+                        <td class="center">姓名</td>
+                        <td class="center">性别</td>
+                        <td class="center">身份证号</td>
+                        <td class="center">项目名称</td>
+                        <td class="center">项目负责人</td>
+                        <td class="center">服务部门</td>
+                        <td class="center">招聘人员</td>
+
+                        <!--员工信息-->
+                        {% if employee_type == "employee" %}
+                            <td class="center">目前状态</td>
+                            <td class="center">银行卡号</td>
+                            <td class="center">开户银行</td>
+                            <td class="center">部门</td>
+                            <td class="center">职务</td>
+                            <td class="center">民族</td>
+                            <td class="center">学历</td>
+                            <td class="center">出生年月</td>
+                            <td class="center">员工年龄</td>
+                            <td class="center">户口所在地</td>
+                            <td class="center">户口邮编</td>
+                            <td class="center">户口性质</td>
+                            <td class="center">工作地</td>
+                            <td class="center">社保地</td>
+                            <td class="center">人员属性</td>
+                            <td class="center">合同属性</td>
+                            <td class="center">合同主体</td>
+                            <td class="center">入职时间(加入时间)</td>
+                            <td class="center">社保增员日期</td>
+                            <td class="center">社保支付卡</td>
+                            <td class="center">开户银行</td>
+                            <td class="center">商保增员日期</td>
+                            <td class="center">公积金增员日期</td>
+                            <td class="center">合同开始时间</td>
+                            <td class="center">试用期限（月）</td>
+                            <td class="center">合同期限（月）</td>
+                            <td class="center">试用到期时间</td>
+                            <td class="center">合同到期时间</td>
+                            <td class="center">合同续签次数</td>
+                            <td class="center">离职时间</td>
+                            <td class="center">离职手续</td>
+                            <td class="center">离职原因</td>
+                            <td class="center">社保减员日期</td>
+                            <td class="center">商保减员日期</td>
+                            <td class="center">公积金减员日期</td>
+                            <td class="center">联系电话</td>
+                            <td class="center">紧急联系人</td>
+                            <td class="center">与联系人关系</td>
+                            <td class="center">联系人电话</td>
+                            <td class="center">招聘渠道</td>
+                            <td class="center">客服专员</td>
+                            <td class="center">客服主管</td>
+                            <td class="center">外包主管</td>
+                            <td class="center">客服经理</td>
+                            <td class="center">其他负责人</td>
+                        {% endif %}
+
+                        <!--临时工信息-->
+                        {% if employee_type == "temporary" %}
+                            <td class="center">联系电话</td>
+                            <td class="center">开始工作日</td>
+                            <td class="center">结束工作日</td>
+                            <td class="center">工作天数</td>
+                            <td class="center">小时数</td>
+                            <td class="center">发放金额</td>
+                            <td class="center">发放人</td>
+                            <td class="center">发放时间</td>
+                            <td class="center">备注</td>
+                        {% endif %}
+                        <td class="center">操作</td>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for emplyee in emplyee_list %}
+                        <tr class="center">
+                            <td>
+                                <label class="pos-rel">
+                                    <input type="checkbox" class="ace" name="db_id" value="{{ emplyee.id }}"/>
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+                            <!--公共信息-->
+                            <td>{{ forloop.counter }} </td>
+                            <td>
+                                {% if employee_type == "employee" %}
+                                    <a href="{% url "employee_info:employee_edit" pk=emplyee.id %}">
+                                {% endif %}
+                                {% if employee_type == "temporary" %}
+                                    <a href="{% url "employee_info:temporary_edit" pk=emplyee.id %}">
+                                {% endif %}
+                                {{ emplyee.name }}
+                                </a>
+                            </td>
+                            <td>{{ emplyee.sex | selectgender }}</td>
+                            <td>{{ emplyee.identity_card_number }}</td>
+                            <td>{{ emplyee.project_name | default_if_none:"" }}</td>
+                            <td>{{ emplyee.project_name.principal | default_if_none:"" }}</td>
+                            <td>{{ emplyee.project_name.department }}</td>
+                            <td>{{ emplyee.recruitment_attache | default_if_none:"" }}</td>
+
+                            <!--员工信息-->
+                            {% if employee_type == "employee" %}
+
+                                <td>{{ emplyee.get_status_display }}</td>
+                                <td>{{ emplyee.salary_card_number }}</td>
+                                <td>{{ emplyee.bank_account }}</td>
+                                <td>{{ emplyee.job_dept }}</td>
+                                <td>{{ emplyee.position }}</td>
+                                <td>{{ emplyee.get_nation_display }}</td>
+                                <td>{{ emplyee.get_education_display }}</td>
+                                <td>{{ emplyee.birthday | default_if_none:"" | date }}</td>
+                                <td>{{ emplyee.age }}</td>
+                                <td>{{ emplyee.register_address }}</td>
+                                <td>{{ emplyee.register_postcode }}</td>
+                                <td>{{ emplyee.get_register_type_display }}</td>
+                                <td>{{ emplyee.work_address }}</td>
+                                <td>{{ emplyee.insured_place }}</td>
+                                <td>{{ emplyee.person_type | default_if_none:"" }}</td>
+                                <td>{{ emplyee.get_contract_type_display }}</td>
+                                <td>{{ emplyee.contract_subject | default_if_none:"" }}</td>
+                                <td>{{ emplyee.entry_date | date }}</td>
+                                <td>{{ emplyee.social_insurance_increase_date | date }}</td>
+                                <td>{{ emplyee.social_security_payment_card | default_if_none:"" }}</td>
+                                <td>{{ emplyee.use_bank | default_if_none:"" }}</td>
+                                <td>{{ emplyee.business_insurance_increase_date | date }}</td>
+                                <td>{{ emplyee.provident_fund_increase_date | date }}</td>
+                                <td>{{ emplyee.contract_begin_date| date }}</td>
+                                <td>{{ emplyee.probation_period | default_if_none:"" }}</td>
+                                <td>{{ emplyee.contract_period | default_if_none:"" }}</td>
+                                <td>{{ emplyee.probation_end_date | date }}</td>
+                                <td>{{ emplyee.contract_end_date | date }}</td>
+                                <td>{{ emplyee.contract_renew_times  | default_if_none:"" }}</td>
+                                <td>{{ emplyee.departure_date | date }}</td>
+                                <td>{{ emplyee.get_departure_procedure_display }} </td>
+                                <td>{{ emplyee.departure_cause }} </td>
+                                <td>{{ emplyee.social_insurance_reduce_date  | date }} </td>
+                                <td>{{ emplyee.business_insurance_reduce_date | date }} </td>
+                                <td>{{ emplyee.provident_fund_reduce_date | date }} </td>
+                                <td>{{ emplyee.phone_number }} </td>
+                                <td>{{ emplyee.contact_person }}</td>
+                                <td>{{ emplyee.contact_relationship }}</td>
+                                <td>{{ emplyee.contact_person_phone }}</td>
+                                <td>{{ emplyee.get_recruitment_channel_display }} </td>
+                                <td>{{ emplyee.project_name.customer_service_staff | default_if_none:"" }}</td>
+                                <td>{{ emplyee.project_name.customer_service_charge | default_if_none:"" }}</td>
+                                <td>{{ emplyee.project_name.outsource_director | default_if_none:"" }}</td>
+                                <td>{{ emplyee.project_name.customer_service_director | default_if_none:"" }}</td>
+                                <td>{{ emplyee.project_name.other_responsible_person | default_if_none:"" }}</td>
+                            {% endif %}
+
+                            <!--临时工信息-->
+                            {% if employee_type == "temporary" %}
+                                <td>{{ emplyee.phone_number }} </td>
+                                <td>{{ emplyee.start_work_date | date }}</td>
+                                <td>{{ emplyee.end_work_date | date }}</td>
+                                <td>{{ emplyee.work_days | default_if_none:"" }}</td>
+                                <td>{{ emplyee.hours | default_if_none:"" }}</td>
+                                <td>{{ emplyee.amount_of_payment | default_if_none:"" }}</td>
+                                <td>{{ emplyee.release_user.first_name | default_if_none:"" }}</td>
+                                <td>{{ emplyee.release_time | date }}</td>
+                                <td>{{ emplyee.remark1 }}</td>
+                            {% endif %}
+                            <td>
+
+                                <div>
+                                    {% if employee_type == "employee" %}
+                                        <button class="btn btn-minier btn-info"
+                                                onclick="window.location.href='{% url "employee_info:employee_edit" pk=emplyee.id %}'">
+                                    {% endif %}
+                                    {% if employee_type == "temporary" %}
+                                        <button class="btn btn-minier btn-info"
+                                                onclick="window.location.href='{% url "employee_info:temporary_edit" pk=emplyee.id %}'">
+                                    {% endif %}
+                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+
+                                    {% if employee_type == "employee" %}
+                                        <button class="btn btn-minier btn-danger"
+                                                onclick="window.location.href='{% url "employee_info:employee_delete" pk=emplyee.id %}'">
+                                    {% endif %}
+                                    {% if employee_type == "temporary" %}
+                                        <button class="btn btn-minier btn-danger"
+                                                onclick="window.location.href='{% url "employee_info:temporary_delete" pk=emplyee.id %}'">
+                                    {% endif %}
+                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info">
+                            {% if employee_type == "temporary" %}
+                                <td colspan="19">
+                            {% endif %}
+                            {% if employee_type == "employee" %}
+                                <td colspan="55">
+                            {% endif %}
+                            抱歉，目前没有满足条件的信息。
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div id="test_width"></div>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+    {% include "department_tree.html" %}
+
+    <!-- 导入员工信息 -->
+    <div id="myEmployeeModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">
+                        导入员工信息
+                        <small>
+                            以模板格式为准
+                        </small>
+                    </h4>
+                </div>
+
+                {% if employee_type == "employee" %}
+                    <form action="{% url "employee_info:employee_load" %}" method="post"
+                          enctype="multipart/form-data" class="form-horizontal" onsubmit="return submit_after('#myEmployeeModal');">{% csrf_token %}
+                {% endif %}
+                {% if employee_type == "temporary" %}
+                    <form action="{% url "employee_info:temporary_load" %}" method="post" enctype="multipart/form-data"
+                          class="form-horizontal" onsubmit="return submit_after('#myEmployeeModal');">{% csrf_token %}
+                {% endif %}
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <input id="load_info" name="load_info" type="file" required/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm"> 导入</button>
+
+                    {% if employee_type == "employee" %}
+                        <button class="btn btn-pink btn-sm" data-dismiss="modal"
+                                onclick="window.location.href='{% url "download" template_name="employee_info" %}'">
+                        下载模板
+                    {% endif %}
+                    {% if employee_type == "temporary" %}
+                        <button class="btn btn-pink btn-sm" data-dismiss="modal"
+                                onclick="window.location.href='{% url "download" template_name="temporary_info" %}'">
+                        下载模板
+                    {% endif %}
+                    </button>
+                    <button class="btn btn-sm" data-dismiss="modal">
+                        <i class="ace-icon fa fa-times"></i>
+                        取消
+                    </button>
+                </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/fuelux/fuelux.tree.js"></script>
+    <script src="/static/customjs/custom_tree.js"></script>
+    <script src="/static/customjs/custom_base.js"></script>
+    <script src="/static/customjs/fixt_able.js"></script>
+{% endblock %}
+
+{% block modules_js %}
+    <script src="/static/customjs/upload_file.js"></script>
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+{#        $(document).ready(function () {#}
+{#            FixTable("top_fix_table", 7);#}
+{#        });#}
+
+        $("#st_release_time, #et_release_time").datepicker(datepickerOptions);
+
+        // listener query param, select department
+        select_dept_name = "";
+        select_dept_id = "";
+        $('#tree1').on('selected.fu.tree', function (e, result) {
+            var select_list = result.selected;
+            select_dept_name = "";
+            select_dept_id = "";
+            for (var i = 0; i < select_list.length; i++) {
+                select_dept_name += delHtmlTag(select_list[i].text.replace(/\s/gi,'')) + ",";
+                select_dept_id += select_list[i].value + ",";
+                select_dept_name = select_dept_name.substring(0,select_dept_name.length-1);
+                select_dept_id = select_dept_id.substring(0,select_dept_id.length-1);
+            }
+        });
+
+        function select_dept() {
+            $('#dept_name').val(select_dept_name);
+            $('#dept_ids').val(select_dept_id)
+        }
+
+        //choice department,query param
+        function query_dept_param() {
+            get_all_dept("#tree1", true);
+            $('#myDeptModal').modal({backdrop: 'static', keyboard: false})
+        }
+
+        /* export employee*/
+        $("#exportemployee").click(function () {
+            var status = $("#status").val();
+            var project_name = $("#project_name").val();
+            var dept_name = $("#dept_name").val();
+            var dept_ids = $("#dept_ids").val();
+            var principal = $("#principal").val();
+            var name = $("#name").val();
+            var identity_card_number = $("#identity_card_number").val();
+            var person_type = $("#person_type").val();
+            var contract_type = $("#contract_type").val();
+            location.href = "/employeemanage/export?employee_type=employee&status=" + status
+                    + "&project_name=" + project_name
+                    + "&dept_name=" + dept_name
+                    + "&dept_ids=" + dept_ids
+                    + "&principal=" + principal
+                    + "&name=" + name
+                    + "&identity_card_number=" + identity_card_number
+                    + "&person_type=" + person_type
+                    + "&contract_type=" + contract_type
+        });
+        /* export temporary*/
+        $("#exporttemporary").click(function () {
+            var project_name = $("#project_name").val();
+            var name = $("#name").val();
+            var identity_card_number = $("#identity_card_number").val();
+            var phone_number = $("#phone_number").val();
+            var st_release_time = $("#st_release_time").val();
+            var et_release_time = $("#et_release_time").val();
+            var recruitment_attache = $("#recruitment_attache").val();
+
+            location.href = "/employeemanage/export?employee_type=temporary"
+                    + "&project_name=" + project_name
+                    + "&name=" + name
+                    + "&identity_card_number=" + identity_card_number
+                    + "&phone_number=" + phone_number
+                    + "&st_release_time=" + st_release_time
+                    + "&et_release_time=" + et_release_time
+                    + "&recruitment_attache=" + recruitment_attache
+
+        });
+
+
+    </script>
+{% endblock %}

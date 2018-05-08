@@ -1,0 +1,215 @@
+{% extends "base/base.html" %}
+{% load share_module_tags %}
+{% load organizational_structure_tags %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="#">员工管理</a></li>
+    <li class="active">员工档案信息</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#user_form').submit()" data-rel="tooltip"
+                                    title="搜索">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+
+                            <!--
+                            <button class="btn btn-xs btn-info" id="exportprofile" data-rel="tooltip" title="导出Excel">
+                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>
+                                导出
+                            </button>
+                            -->
+
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="user_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="name" name="name" placeholder="姓名搜索"
+                                                   value="{{ name }}"/>
+                                            <input type="text" id="identity_card_number" name="identity_card_number"
+                                                   placeholder="身份证号搜索" value="{{ identity_card_number }}"/>
+                                            <input type="text" id="project_name" name="project_name"
+                                                   placeholder="项目名称搜索" value="{{ project_name }}"/>
+                                            <select name="status" id="status">
+                                                <option value="">目前状态</option>
+                                                {% for one_status in list_status %}
+                                                    <option value={{ one_status.0 }} {% if status == one_status.0 %}selected{% endif %}>
+                                                        {{ one_status.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                            <select name="issue">
+                                                <option value="">全部发出状态</option>
+
+                                                {% for one_issue_status in list_issue_status %}
+                                                    <option value={{ one_issue_status.0 }} {% if issue == one_issue_status.0 %}selected="selected"{% endif %}>
+                                                        {{ one_issue_status.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                            <select name="receive">
+                                                <option value="">全部收到状态</option>
+                                                {% for one_issue_status in list_issue_status %}
+                                                    <option value={{ one_issue_status.0 }} {% if receive == one_issue_status.0 %}selected="selected"{% endif %}>
+                                                        {{ one_issue_status.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+
+                <table class="table table-hover dataTable" id="MyTable">
+                    <thead>
+                    <tr>
+                        <th class="center">序号</th>
+                        <th class="center">员工姓名</th>
+                        <th class="center">项目名称</th>
+                        <th class="center">服务部门</th>
+                        <th class="center">身份证号</th>
+                        <th class="center">目前状态</th>
+                        <th class="center">合同开始时间</th>
+                        <th class="center">离职日期</th>
+                        <th class="center">档案编号</th>
+                        <th class="center">档案类型</th>
+                        <th class="center">是否发出</th>
+                        <th class="center">是否收到</th>
+                        <th class="center">银行卡复印件</th>
+                        <th class="center">身份证复印件</th>
+                        <th class="center">户口本复印件</th>
+                        <th class="center">照片</th>
+                        <th class="center">合同</th>
+                        <th class="center">员工简历</th>
+                        <th class="center">计划生育合同</th>
+                        <th class="center">入职须知</th>
+                        <th class="center">违约责任书</th>
+                        <th class="center">薪资确认单</th>
+                        <th class="center">健康证明</th>
+                        <th class="center">离职单</th>
+                        <th class="center">解除劳动关系证明</th>
+                        <th class="center">报到函发出时间</th>
+                        <th class="center">解除函发出时间</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for archive in archive_list %}
+                        <tr class="center">
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{% url "archive_info:archive_edit" pk=archive.id %}">
+                                    {{ archive.employee_id.name }}
+                                </a>
+                            </td>
+                            <td> {{ archive.employee_id.project_name | default_if_none:"" }} </td>
+                            <td>{{ archive.employee_id.project_name.department.name | default_if_none:"" }}</td>
+                            <td>{{ archive.employee_id.identity_card_number }}</td>
+                            <td>{{ archive.employee_id.get_status_display }}</td>
+                            <td>{{ archive.employee_id.contract_begin_date | date }}</td>
+                            <td>{{ archive.employee_id.departure_date | date }}</td>
+                            <td>{{ archive.number | default_if_none:"" }}</td>
+                            <td>{{ archive.type.name | default_if_none:"" }}</td>
+                            <td>{{ archive.get_issue_display }}</td>
+                            <td>{{ archive.get_receive_display }}</td>
+                            <td>{{ archive.bank_copy | default_if_none:"" }}</td>
+                            <td>{{ archive.id_copy | default_if_none:"" }}</td>
+                            <td>{{ archive.booklet_copy | default_if_none:"" }}</td>
+                            <td>{{ archive.photo | default_if_none:"" }}</td>
+                            <td>{{ archive.contract | default_if_none:"" }}</td>
+                            <td>{{ archive.resume | default_if_none:"" }}</td>
+                            <td>{{ archive.family_contract | default_if_none:"" }} </td>
+                            <td>{{ archive.entry_conditions | default_if_none:"" }}</td>
+                            <td>{{ archive.breach_book | default_if_none:"" }}</td>
+                            <td>{{ archive.salary_confirmation | default_if_none:"" }}</td>
+                            <td>{{ archive.health_certificate | default_if_none:"" }}</td>
+                            <td>{{ archive.his_resignation | default_if_none:"" }}</td>
+                            <td>{{ archive.labor_relations_prove | default_if_none:"" }}</td>
+                            <td>{{ archive.register_letter | date }}</td>
+                            <td>{{ archive.relieve_letter | date }}</td>
+                            <td>
+
+                                <div>
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "archive_info:archive_edit" pk=archive.id %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "archive_info:archive_delete" pk=archive.id %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="28">抱歉，目前没有满足条件的信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+
+{% endblock %}
+
+{% block js %}
+    <script src="/static/customjs/fixt_able.js"></script>
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            FixTable("MyTable", 4);
+        });
+
+        /* 导出*/
+        $("#exportprofile").click(function () {
+            layer.open({title: '提示', content: "待开发"});
+            //var select_dept_id = $("#dept_ids").val();
+            //var first_name = $("#first_name").val();
+            //location.href = "/organizational/profile/export?dept_ids=" + select_dept_id + "&first_name=" + first_name;
+        });
+
+
+    </script>
+{% endblock %}

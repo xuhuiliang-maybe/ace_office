@@ -1,0 +1,181 @@
+{% extends "base/base.html" %}
+{% load share_module_tags %}
+{% load personnel_operation_tags %}
+
+{% block breadcrumb %}
+    <li><a href="#">人事操作质量</a></li>
+    <li class="active">个人操作质量</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#personnel_form').submit()"
+                                    data-rel="tooltip" title="搜索">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增"
+                                    onclick="window.location.href='{% url "personnel_info:personnel_add" %}'">
+                                <i class="ace-icon fa fa-plus-circle bigger-130"></i>
+                                新增
+                            </button>
+
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="personnel_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="st_error_date" name="st_error_date"
+                                                   placeholder="问题起始日期" value="{{ st_error_date }}" readonly/>
+                                            <input type="text" id="et_error_date" name="et_error_date"
+                                                   placeholder="问题终止日期" value="{{ et_error_date }}" readonly/>
+                                            <select id="improve_status" name="improve_status">
+                                                <option value="">改善状态</option>
+                                                {% for status in improvestatus %}
+                                                    <option value={{ status.id }} {% if improve_status == status.id %}selected{% endif %}>{{ status.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+
+                <table class="table table-hover dataTable" id="MyTable">
+                    <thead>
+                    <tr>
+                        <th class="center">
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" name="check_all"/>
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        <th class="center">编号</th>
+                        <th class="center">服务部门</th>
+                        <th class="center">项目负责人</th>
+                        <th class="center">项目名称</th>
+                        <th class="center">指标项</th>
+                        <th class="center">问题项</th>
+                        <th class="center">问题说明</th>
+                        <th class="center">操作错误数</th>
+                        <th class="center">数据提供者</th>
+                        <th class="center">问题日期</th>
+                        <th class="center">改善时限</th>
+                        <th class="center">改善状态</th>
+                        <th class="center">改善日期</th>
+                        <th class="center">已用天数</th>
+                        <th class="center">超期错误数</th>
+                        <th class="center">错误合计</th>
+                        <th class="center">创建时间</th>
+                        <th class="center">备注</th>
+                        <th class="center">备注1</th>
+                        <th class="center">备注2</th>
+                        <th class="center">备注3</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for personnel in personnel_list %}
+                        <tr class="center">
+                            <td>
+                                <label class="pos-rel">
+                                    <input type="checkbox" class="ace" name="db_id" value="{{ personnel.id }}"/>
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+
+                            <td>
+                                <a href="{% url "personnel_info:personnel_edit" pk=personnel.id %}">
+                                    {{ personnel.id }}
+                                </a>
+                            </td>
+                            <td>{{ personnel.department.name }}</td>
+                            <td>{{ personnel.project_id.principal | default_if_none:"" }}</td>
+                            <td>{{ personnel.project_id.full_name }}</td>
+                            <td>{{ personnel.get_index_items_display }}</td>
+                            <td>{{ personnel.problems_items }}</td>
+                            <td>{{ personnel.problems_explain }}</td>
+                            <td>{{ personnel.error_number }}</td>
+                            <td>{{ personnel.provider  | default_if_none:"" }}</td>
+                            <td>{{ personnel.error_date | date }}</td>
+                            <td>{{ personnel.improve_time }}</td>
+                            <td>{{ personnel.improve_status }}</td>
+                            <td>{{ personnel.improve_date | date }}</td>
+                            <td>{{ personnel | compute_use_days }}</td>
+                            <td>{{ personnel | compute_extended_error }}</td>
+                            <td>{{ personnel | compute_total_error }}</td>
+                            <td>{{ personnel.create_date }}</td>
+                            <td>{{ personnel.remark }}</td>
+                            <td>{{ personnel.remark1 }}</td>
+                            <td>{{ personnel.remark2 }}</td>
+                            <td>{{ personnel.remark3 }}</td>
+                            <td>
+
+                                <div>
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "personnel_info:personnel_edit" pk=personnel.id %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "personnel_info:personnel_del" pk=personnel.id %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="23">抱歉，目前没有满足条件的个人操作质量信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+{% endblock %}
+
+{% block js %}
+    <script src="/static/customjs/fixt_able.js"></script>
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            FixTable("MyTable", 4);
+        });
+        $("#st_error_date").datepicker(datepickerOptions);
+        $("#et_error_date").datepicker(datepickerOptions);
+    </script>
+{% endblock %}

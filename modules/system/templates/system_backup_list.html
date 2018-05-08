@@ -1,0 +1,170 @@
+{% extends "base/base.html" %}
+{% load system_tags %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="#">系统相关</a></li>
+    <li class="active">数据备份</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#user_form').submit()" data-rel="tooltip"
+                                    title="搜索备份">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="备份"
+                                    onclick="backup()">
+                                <i class="ace-icon fa fa-plus-circle bigger-130"></i>
+                                备份
+                            </button>
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="user_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="bak_starttime" name="bak_starttime"
+                                                   placeholder="备份开始时间" value="{{ bak_starttime }}" readonly/>
+                                            <input type="text" id="bak_endtime" name="bak_endtime"
+                                                   placeholder="备份结束时间" value="{{ bak_endtime }}" readonly/>
+                                            <select name="status">
+                                                <option value="">备份状态</option>
+                                                {% for one_status in list_status %}
+                                                    <option value={{ one_status.0 }}
+                                                            {% if status == one_status.0 %}selected="selected"{% endif %}>
+                                                        {{ one_status.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+
+                <table class="table table-striped table-hover dataTable">
+                    <thead>
+                    <tr>
+                        <th class="center">编号</th>
+                        <th class="center">备份(是否存在)</th>
+                        <th class="center">数据库类型</th>
+                        <th class="center">备份数据库名</th>
+                        <th class="center">备份开始时间</th>
+                        <th class="center">备份结束时间</th>
+                        <th class="center">状态</th>
+                        <th class="center">还原时间</th>
+                        <th class="center">操作员</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for system_backup in system_backup_list %}
+                        <tr class="center">
+                            <td>{{ system_backup.id }}</td>
+                            <td>{{ system_backup.backupdatabase | check_db_backup | safe }}</td>
+                            <td>{{ system_backup.databasetype }}</td>
+                            <td>{{ system_backup.backupdatabase }}</td>
+                            <td>{{ system_backup.starttime }}</td>
+                            <td>{{ system_backup.endtime }}</td>
+                            <td>{{ system_backup.status | backup_db_status | safe }}</td>
+                            <td>{{ system_backup.reduct_time | default_if_none:"" }}</td>
+                            <td>{{ system_backup.operator }}</td>
+                            <td>
+                                <div>
+                                    <button class="btn btn-minier btn-success" data-rel="tooltip" title="还原"
+                                            onclick="backup_action({{ system_backup.id }}, 'reduction')">
+                                        <i class="ace-icon fa fa-refresh bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger" data-rel="tooltip" title="删除"
+                                            onclick="backup_action({{ system_backup.id }},'delete')">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-primary" data-rel="tooltip" title="下载"
+                                            onclick="backup_download({{ system_backup.id }},'download')">
+                                        <i class="ace-icon fa fa-arrow-circle-o-down bigger-120"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="10">抱歉，目前没有满足条件的信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        $('[data-rel=tooltip]').tooltip();
+        $("#bak_starttime").datepicker(datepickerOptions);
+        $("#bak_endtime").datepicker(datepickerOptions);
+
+        function backup_action(backup_id, type) {
+            var url = "/system/data_backup/" + backup_id + "/" + type;
+            var data = {};
+            var result = custom_ajax_post(url, data);
+            if (result == 1) {
+                window.location.reload()
+            }
+        }
+        function backup_download(backup_id, type) {
+            location.href = "/system/data_backup/" + backup_id + "/" + type
+        }
+
+
+        function backup() {
+            var url = "{% url "system:data_backup_add" %}";
+            var data = {};
+            var result = custom_ajax_post(url, data);
+            if (result == 1) {
+                window.location.reload()
+            }
+
+        }
+
+    </script>
+{% endblock %}

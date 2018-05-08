@@ -1,0 +1,281 @@
+{% extends "base/blank.html" %}
+{% load share_module_tags %}
+{% load approval_process_tags %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/chosen.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'admin_account:login' %}">登录</a></li>
+    <li class="active">合同管理</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="col-sm-12">
+        {% if active != "" %}
+            <div class="tabbable">
+                <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="menu">
+                    {% if send == "1" %}
+                        <li><a data-toggle="tab" id="show_1" onclick="href_table('1')">派遣-合同</a></li>
+                    {% endif %}
+                    {% if outsourc == "2" %}
+                        <li><a data-toggle="tab" id="show_2" onclick="href_table('2')">外包-合同</a></li>
+                    {% endif %}
+
+                    {% if intern == "3" %}
+                        <li><a data-toggle="tab" id="show_3" onclick="href_table('3')">实习生-合同</a></li>
+                    {% endif %}
+
+                    {% if service == "4" %}
+                        <li><a data-toggle="tab" id="show_4" onclick="href_table('4')">劳务-合同</a></li>
+                    {% endif %}
+
+                    {% if hourly == "5" %}
+                        <li><a data-toggle="tab" id="show_5" onclick="href_table('5')">小时工-合同</a></li>
+                    {% endif %}
+
+                </ul>
+            </div>
+
+            <div class="tab-content">
+                <!--content-->
+                {% if active == "1" %}{% include "tab_content_send.html" %}{% endif %}
+                {% if active == "2" %}{% include "tab_content_outsourc.html" %}{% endif %}
+                {% if active == "3" %}{% include "tab_content_intern.html" %}{% endif %}
+                {% if active == "4" %}{% include "tab_content_service.html" %}{% endif %}
+                {% if active == "5" %}{% include "tab_content_hourly.html" %}{% endif %}
+
+                <!--page-->
+                {% include  "base/paginator.html" %}
+            </div>
+        {% else %}
+            <table width="100%" height="100%" bgcolor="#F3F5F8" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                    <td width="100%" align="center" valign="top" bgcolor="" style="min-height: 200px;">
+                        <table>
+                            <tr>
+                                <td class="table-td-wrap" align="center" width="458">
+                                    <table class="table-space" height="18"
+                                           style="height: 18px; font-size: 0; line-height: 0; width: 450px; background-color: #F3F5F8;"
+                                           width="450" bgcolor="#F3F5F8" cellspacing="0" cellpadding="0" border="0">
+                                        <tbody>
+                                        <tr>
+                                            <td class="table-space-td" valign="middle" height="18"
+                                                style="height: 18px; width: 450px; background-color: #F3F5F8;"
+                                                width="450"
+                                                bgcolor="#F3F5F8" align="left">&nbsp;</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="table-space" height="8"
+                                           style="height: 8px; font-size: 0; line-height: 0; width: 450px; background-color: #F3F5F8;"
+                                           width="450" bgcolor="#F3F5F8" cellspacing="0" cellpadding="0" border="0">
+                                        <tbody>
+                                        <tr>
+                                            <td class="table-space-td" valign="middle" height="8"
+                                                style="height: 8px; width: 450px; background-color: #F3F5F8;"
+                                                width="450"
+                                                bgcolor="#F3F5F8" align="left">&nbsp;</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table-row" width="450" bgcolor="#F3F5F8"
+                                           style="table-layout: fixed; background-color: #F3F5F8;" cellspacing="0"
+                                           cellpadding="0"
+                                           border="0">
+                                        <tbody>
+                                        <tr>
+                                            <td class="table-row-td"
+                                                style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 36px; padding-right: 36px;"
+                                                valign="top" align="left">
+                                                <table class="table-col" align="left" width="378" cellspacing="0"
+                                                       cellpadding="0"
+                                                       border="0" style="table-layout: fixed;">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="table-col-td" width="378"
+                                                            style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; width: 378px;"
+                                                            valign="top" align="left">
+                                                            <table class="header-row" width="378" cellspacing="0"
+                                                                   cellpadding="0"
+                                                                   border="0" style="table-layout: fixed;">
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td class="header-row-td" width="378"
+                                                                        style="font-family: Arial, sans-serif; font-weight: normal; line-height: 19px; color: #478fca; margin: 0; font-size: 18px; padding-bottom: 10px; padding-top: 15px;"
+                                                                        valign="top" align="left">欢迎自助下载个人合同！
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <div style="font-family: Arial, sans-serif; line-height: 20px; color: #444444; font-size: 13px;">
+                                                                <b style="color: #777777;">我们很高兴您服务</b>
+                                                                <br>
+                                                                <br>
+                                                               您当前没有签署任何合同，请联系您的负责人。
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table-space" height="12"
+                                           style="height: 12px; font-size: 0; line-height: 0; width: 450px; background-color: #F3F5F8;"
+                                           width="450" bgcolor="#F3F5F8" cellspacing="0" cellpadding="0" border="0">
+                                        <tbody>
+                                        <tr>
+                                            <td class="table-space-td" valign="middle" height="12"
+                                                style="height: 12px; width: 450px; background-color: #F3F5F8;"
+                                                width="450"
+                                                bgcolor="#F3F5F8" align="left">&nbsp;</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="table-space" height="12"
+                                           style="height: 12px; font-size: 0; line-height: 0; width: 450px; background-color: #ffffff;"
+                                           width="450" bgcolor="#F3F5F8" cellspacing="0" cellpadding="0" border="0">
+                                        <tbody>
+                                        <tr>
+                                            <td class="table-space-td" valign="middle" height="12"
+                                                style="height: 12px; width: 450px; padding-left: 16px; padding-right: 16px; background-color: #F3F5F8;"
+                                                width="450" bgcolor="#F3F5F8" align="center">&nbsp;
+                                                <table bgcolor="#E8E8E8" height="0" width="100%" cellspacing="0"
+                                                       cellpadding="0"
+                                                       border="0">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td bgcolor="#ffffff" height="1" width="100%"
+                                                            style="height: 1px; font-size:0;" valign="top" align="left">
+                                                            &nbsp;</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="table-space" height="16"
+                                           style="height: 16px; font-size: 0; line-height: 0; width: 450px; background-color: rgba(238, 240, 243, 0.75);"
+                                           width="450" bgcolor="#F3F5F8" cellspacing="0" cellpadding="0" border="0">
+                                        <tbody>
+                                        <tr>
+                                            <td class="table-space-td" valign="middle" height="16"
+                                                style="height: 16px; width: 450px; background-color: #F3F5F8;"
+                                                width="450"
+                                                bgcolor="#F3F5F8" align="left">&nbsp;</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table-row" width="450" bgcolor="#F3F5F8"
+                                           style="table-layout: fixed; background-color: #F3F5F8;" cellspacing="0"
+                                           cellpadding="0"
+                                           border="0">
+                                        <tbody>
+                                        <tr>
+                                            <td class="table-row-td"
+                                                style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 36px; padding-right: 36px;"
+                                                valign="top" align="left">
+                                                <table class="table-col" align="left" width="378" cellspacing="0"
+                                                       cellpadding="0"
+                                                       border="0" style="table-layout: fixed;">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="table-col-td" width="378"
+                                                            style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; width: 378px;"
+                                                            valign="top" align="left">
+                                                            <div style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; text-align: center;">
+                                                                <a href="javascript:history.back()"
+                                                                   style="color: #F3F5F8; text-decoration: none; margin: 0; text-align: center; vertical-align: baseline; border: 4px solid #6fb3e0; padding: 4px 9px; font-size: 15px; line-height: 21px; background-color: #6fb3e0;">
+                                                                    &nbsp; 返回 &nbsp;</a>
+                                                            </div>
+                                                            <table class="table-space" height="16"
+                                                                   style="height: 16px; font-size: 0; line-height: 0; width: 378px; background-color: #F3F5F8;"
+                                                                   width="378" bgcolor="#F3F5F8" cellspacing="0"
+                                                                   cellpadding="0"
+                                                                   border="0">
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td class="table-space-td" valign="middle"
+                                                                        height="16"
+                                                                        style="height: 16px; width: 378px; background-color: #F3F5F8;"
+                                                                        width="378" bgcolor="#F3F5F8" align="left">
+                                                                        &nbsp;</td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        $("#menu a[id='show_" + "{{active}}" + "']").parent("li").addClass('active');
+
+        //选项卡点击
+        function href_table(active) {
+            location.href = "{% url 'contract:list_contract' %}"
+                    + "?name={{ name }}"
+                    + "&identity_card_number={{ identity_card_number }}"
+                    + "&active=" + active
+        }
+
+        /* export approval*/
+        $("#export_approval").click(function () {
+            var apply_type = "{{ apply_type }}";
+            var title = $("#title").val();
+            var status = $("#status").val();
+            var month = $("#month").val();
+            var dept_name = $("#dept_name").val();
+            var project_name = $("#project_name").val();
+            if (title == undefined) {
+                title = ""
+            }
+            if (status == undefined) {
+                status = ""
+            }
+            if (month == undefined) {
+                month = ""
+            }
+            if (dept_name == undefined) {
+                dept_name = ""
+            }
+            if (project_name == undefined) {
+                project_name = ""
+            }
+
+            location.href = "{% url 'approval:export_approval' %}"
+                    + "?apply_type=" + apply_type
+                    + "&title=" + title
+                    + "&status=" + status
+                    + "&month=" + month
+                    + "&dept_name=" + dept_name
+                    + "&project_name=" + project_name
+        });
+
+    </script>
+{% endblock %}

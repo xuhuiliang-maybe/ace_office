@@ -1,0 +1,232 @@
+{% extends "base/base.html" %}
+{% block css %}
+{% endblock %}
+{% block breadcrumb %}
+    <li class="active"> 社保审核</li>
+{% endblock %}
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#payroll_form').submit()" data-rel="tooltip"
+                                    title="搜索">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增"
+                                    onclick="window.location.href='{% url "finance:social_security_audit:add_socialsecurityaudit" %}'">
+                                <i class="ace-icon fa fa-plus-circle bigger-130"></i>
+                                新增
+                            </button>
+                            <button class="btn btn-xs btn-warning" id="export_info"
+                                    data-rel="tooltip"
+                                    title="导出Excel">
+                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>
+                                导出
+                            </button>
+                            {#                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="批量删除"#}
+                            {#                                    onclick="batch_delete('{% url "settlement_pay:payroll_batch_delete" %}')">#}
+                            {#                                <i class="ace-icon fa fa-trash-o bigger-130"></i>#}
+                            {#                                批量删除#}
+                            {#                            </button>#}
+
+                            {#                            <button class="btn btn-xs btn-info" id="exportprofile" data-rel="tooltip" title="导出Excel">#}
+                            {#                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>#}
+                            {#                                导出#}
+                            {#                            </button>#}
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="payroll_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="social_security_date" name="social_security_date"
+                                                   placeholder="社保月份"
+                                                   value="{{ social_security_date }}" readonly/>
+                                            <input type="text" id="name" name="name" placeholder="姓名"
+                                                   value="{{ name }}"/>
+                                            <input type="text" id="identity_card_number" name="identity_card_number"
+                                                   placeholder="身份证号" value="{{ identity_card_number }}"/>
+                                            <input type="text" id="job_dept" name="job_dept" placeholder="部门"
+                                                   value="{{ job_dept }}"/>
+                                            <input type="text" id="project_name" name="project_name" placeholder="项目名称"
+                                                   value="{{ project_name }}"/>
+
+                                            <select name="social_security_balance">
+                                                <option value="">社保平衡</option>
+                                                {% for one_balance in list_social_security_balance %}
+                                                    <option value={{ one_balance.0 }} {% if social_security_balance == one_balance.0 %}selected="selected"{% endif %}>
+                                                        {{ one_balance.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+
+                                            <select name="provident_fund_balance">
+                                                <option value="">公积金平衡</option>
+                                                {% for one_balance in list_provident_fund_balance %}
+                                                    <option value={{ one_balance.0 }} {% if provident_fund_balance == one_balance.0 %}selected="selected"{% endif %}>
+                                                        {{ one_balance.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+
+                <table class="table table-striped table-hover dataTable">
+                    <thead>
+                    <tr>
+                        <th class="center">
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" name="check_all"/>
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        <th class="center">编号</th>
+                        <th class="center">姓名</th>
+                        <th class="center">身份证号</th>
+                        <th class="center">入职时间</th>
+                        <th class="center">离职时间</th>
+                        <th class="center">项目名称</th>
+                        <th class="center">部门</th>
+                        <th class="center">项目负责人</th>
+                        <th class="center">社保月份</th>
+                        <th class="center">社保结算</th>
+                        <th class="center">社保支出</th>
+                        <th class="center">社保平衡</th>
+                        <th class="center">公积金结算</th>
+                        <th class="center">公积金支出</th>
+                        <th class="center">公积金平衡</th>
+                        <th class="center">备注</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for social_security_audit in social_security_audit_list %}
+                        <tr class="center">
+                            <td>
+                                <label class="pos-rel">
+                                    <input type="checkbox" class="ace" name="db_id"
+                                           value="{{ social_security_audit.id }}"/>
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+
+                            <td>{{ social_security_audit.id }}</td>
+                            <td>{{ social_security_audit.name }}</td>
+                            <td>{{ social_security_audit.identity_card_number }}</td>
+                            <td>{{ social_security_audit.employee.entry_date | date }}</td>
+                            <td>{{ social_security_audit.employee.departure_date | date }}</td>
+                            <td>{{ social_security_audit.employee.project_name.full_name }}</td>
+                            <td>{{ social_security_audit.employee.job_dept }}</td>
+                            <td>{{ social_security_audit.employee.project_name.principal }}</td>
+                            <td>{{ social_security_audit.social_security_date | date:"Y, F" }}</td>
+                            <td>{{ social_security_audit.social_security_billing }}</td>
+                            <td>{{ social_security_audit.social_security_outlay }}</td>
+                            <td>{{ social_security_audit.get_social_security_balance_display }}</td>
+                            <td>{{ social_security_audit.provident_fund_billing }}</td>
+                            <td>{{ social_security_audit.provident_fund_outlay }}</td>
+                            <td>{{ social_security_audit.get_provident_fund_balance_display }}</td>
+                            <td>{{ social_security_audit.remark | default_if_none:"" }}</td>
+                            <td>
+
+                                <div>
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "finance:social_security_audit:edit_socialsecurityaudit" pk=social_security_audit.id %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "finance:social_security_audit:del_socialsecurityaudit" pk=social_security_audit.id %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="19">抱歉，目前没有满足条件的信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        $("#social_security_date").datepicker(datepickerOptionsMonth).attr("readonly", true);
+
+        /* export*/
+        $("#export_info").click(function () {
+            var social_security_date = $("#social_security_date").val();
+            var name = $("#name").val();
+            var identity_card_number = $("#identity_card_number").val();
+            var job_dept = $("#job_dept").val();
+            var project_name = $("#project_name").val();
+            var social_security_balance = $("#social_security_balance").val();
+            var provident_fund_balance = $("#provident_fund_balance").val();
+            if (name == undefined) {
+                name = ""
+            }
+            if (identity_card_number == undefined) {
+                identity_card_number = ""
+            }
+            if (job_dept == undefined) {
+                job_dept = ""
+            }
+            if (project_name == undefined) {
+                project_name = ""
+            }
+            if (social_security_balance == undefined) {
+                social_security_balance = ""
+            }
+            if (provident_fund_balance == undefined) {
+                provident_fund_balance = ""
+            }
+            location.href = "{% url 'finance:social_security_audit:export_socialsecurityaudit' %}"
+                    + "?social_security_date=" + social_security_date
+                    + "&name=" + name
+                    + "&identity_card_number=" + identity_card_number
+                    + "&job_dept=" + job_dept
+                    + "&project_name=" + project_name
+                    + "&social_security_balance=" + social_security_balance
+                    + "&provident_fund_balance=" + provident_fund_balance
+        });
+    </script>
+{% endblock %}

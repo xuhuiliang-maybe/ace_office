@@ -1,0 +1,215 @@
+{% extends "base/base.html" %}
+{% load i18n admin_static %}
+{% load bootstrap_tags %}
+{% block css %}
+{% endblock %}
+{% block breadcrumb %}
+    <li class="active">信息维护</li>
+{% endblock %}
+{% block page-content %}
+    <div class="page-header">
+        <h1>
+            <i class="ace-icon fa fa-star orange"></i>
+            {{ form_content }}
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                按页面提示信息录入信息
+            </small>
+        </h1>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="progressbar"></div>
+            <form class="form-horizontal" id="base_edit" role="form" action="" method="post">{% csrf_token %}
+                <div class="widget-box">
+                    <div class="widget-header widget-header-blue widget-header-flat">
+                        <h4 class="widget-title lighter">
+                            <i class="ace-icon fa fa-list-alt smaller-90"></i>
+                        </h4>
+
+                        <div class="widget-toolbar">
+                            <div class="center">
+                                <!-- #section:plugins/fuelux.wizard.buttons -->
+                                <button class="layui-btn layui-btn-normal layui-btn-small" type="submit" name="_addanother" value="addanother">
+                                    保存并添加另一个
+                                </button>
+
+                                <button class="layui-btn layui-btn-normal layui-btn-small" type="submit">
+                                    保存
+                                </button>
+
+                                <a class="layui-btn layui-btn-primary layui-btn-small" onclick="javascript:history.back()">
+                                    返回
+                                </a>
+
+{#                                <button class="btn btn-sm btn-primary" type="submit" name="_addanother"#}
+{#                                        value="addanother">#}
+{#                                    <i class="ace-icon fa fa-check bigger-110"></i>#}
+{#                                    保存并添加另一个#}
+{#                                </button>#}
+{##}
+{#                                <button class="btn btn-sm btn-info" type="submit">#}
+{#                                    <i class="ace-icon fa fa-check bigger-110"></i>#}
+{#                                    保存#}
+{#                                </button>#}
+{##}
+{#                                <a href="javascript:history.back()" class="btn btn-sm btn-grey">#}
+{#                                    <i class="ace-icon fa fa-arrow-left"></i>#}
+{#                                    返回#}
+{#                                </a>#}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div id="fuelux-wizard-container">
+                                <div class="step-content pos-rel">
+                                    <div class="step-pane active" data-step="1">
+                                        <h3 class="lighter block red">
+                                            {% if form.errors %}
+                                                {% if form.errors.items|length == 1 %}
+                                                    {% trans "Please correct the error below." %}
+                                                {% else %}
+                                                    {% trans "Please correct the errors below." %}
+                                                {% endif %}
+                                            {% endif %}
+                                        </h3>
+
+                                        <label for="inputError2"
+                                               class="col-xs-12 col-sm-3 control-label no-padding-right"></label>
+                                        <div class="form-group">
+                                            <div class="col-xs-12 col-sm-6">
+                                                <input type="hidden" name="referrer" value="{{ referrer }}"/>
+                                                {{ form | as_bootstrap_horizontal:"col-md-4" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr/>
+                            <div class="center">
+                                <!-- #section:plugins/fuelux.wizard.buttons -->
+
+                                <button class="layui-btn layui-btn-normal layui-btn" type="submit" name="_addanother" value="addanother">
+                                    保存并添加另一个
+                                </button>
+
+                                <button class="layui-btn layui-btn-normal layui-btn" type="submit">
+                                    保存
+                                </button>
+
+                                <a class="layui-btn layui-btn-primary layui-btn" onclick="javascript:history.back()">
+                                    返回
+                                </a>
+
+                            </div>
+
+                        </div><!-- /.widget-main -->
+                    </div><!-- /.widget-body -->
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+
+
+    <!-- 部门树模态对话框 -->
+    {% include "department_tree.html" %}
+    {% include "address_modal.html" %}
+
+
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/jquery-ui.js"></script>
+    <script src="/static/js/fuelux/fuelux.tree.js"></script>
+    <script src="/static/customjs/custom_tree.js"></script>
+    <script src="/static/customjs/custom_base.js"></script>
+    <script src="/static/js/jquery.validate.js"></script>
+    <script src="/static/customjs/jquery.cityselect.js"></script>
+
+    <script type="text/javascript">
+        function bind_propertychange() {
+            var frm = document.getElementById("base_edit");
+            var type_list = ["submit", "hidden"];
+            for (var i = 0; i < frm.length; i++) {//遍历每一个input元素
+                var is_has = $.inArray(frm.elements[i].type, type_list);
+                if (is_has == -1) {
+                    $('#' + frm[i].id).bind('input onpropertychange onchange change', function () {
+                        checkform()
+                    });
+                }
+            }
+        }
+
+        function checkform() {
+            var icount = 0;//表单总数
+            var notEmpty = 0;//不为空
+            var frm = document.getElementById("base_edit");//.getElementsByTagName("input");
+            var type_list = ["submit", "hidden"];
+            for (var i = 0; i < frm.length; i++) {//遍历每一个input元素
+                var is_has = $.inArray(frm.elements[i].type, type_list);
+                if (is_has == -1) {
+                    icount++;//是则给统计变量+1
+
+                    if (frm.elements[i].value != "") {
+                        if (frm.elements[i].type == "checkbox" && !frm.elements[i].checked) {
+                            notEmpty--
+                        }
+                        notEmpty++
+                    }
+                }
+            }
+            var percentage = (notEmpty / icount) * 100;
+            change_schedule(percentage)
+        }
+
+        function change_schedule(percentage) {
+            $("#progressbar").progressbar({
+                value: percentage, create: function (event, ui) {
+                    $(this).addClass('progress progress-striped active').children(0).addClass('progress-bar progress-bar-success');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            checkform();
+            bind_propertychange();
+        });
+    </script>
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+
+        $('#id_attribution_dept').on('click', function (ev) {
+            select_dept("#tree1", "#myDeptModal")
+        });
+
+        $('#id_parent_dept').attr("readonly", "true");
+        $('#id_parent_dept').on('click', function (ev) {
+            select_dept("#tree1", "#myDeptModal")
+        });
+
+        $('#id_department').on('click', function (ev) {
+            select_dept("#tree1", "#myDeptModal")
+        });
+
+        //监听新增用户选择部门
+        $('#tree1').on('selected.fu.tree', function (e, result) {
+            var dept_name = delHtmlTag(result.selected[0].text.replace(/\s/gi, ''));
+            var dept_value = result.selected[0].value;
+            $('#id_attribution_dept').val(dept_name);
+            $('#id_parent_dept').val(dept_value);
+            $('#id_department').val(dept_value);
+        });
+
+    </script>
+{% endblock %}
+
+{% block modules_js %}
+{% endblock %}

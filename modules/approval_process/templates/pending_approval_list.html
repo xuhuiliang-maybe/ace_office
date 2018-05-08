@@ -1,0 +1,279 @@
+{% extends "base/base.html" %}
+{% load share_module_tags %}
+{% load approval_process_tags %}
+{% block css %} {% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="#">审批流程</a></li>
+    <li class="active">待审批信息</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#user_form').submit()" data-rel="tooltip"
+                                    title="搜索待审批信息">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="user_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="apply_user" name="apply_user" placeholder="申请人"
+                                                   value="{{ apply_user }}"/>
+                                            <select name="apply_types">
+                                                <option value="">申请类型</option>
+                                                {% for one_type in list_apply_types %}
+                                                    <option value={{ one_type.0 }}
+                                                                    {% if apply_types == one_type.0 %}selected="selected"{% endif %}>
+                                                        {{ one_type.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                            <select name="status">
+                                                <option value="">审批状态</option>
+                                                {% for one_status in list_status %}
+                                                    <option value={{ one_status.0 }}
+                                                                    {% if status == one_status.0 %}selected="selected"{% endif %}>
+                                                        {{ one_status.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </p>
+                                    <!-- <p>
+                                            <a href="/approval/pending">
+                                                <span class="label label-xlg label-light arrowed-in-right">
+                                                    全部
+                                                </span>
+                                            </a>
+                                            <a href="/approval/pending?apply_types=1">
+                                                <span class='label label-xlg label-info arrowed arrowed-in-right'>
+                                                    请假
+                                                </span>
+                                            </a>
+                                            <a href="/approval/pending?apply_types=2">
+                                                <span class='label label-xlg label-pink arrowed arrowed-in-right'>
+                                                    备用金
+                                                </span>
+                                            </a>
+                                            <a href="/approval/pending?apply_types=3">
+                                                <span class='label label-xlg label-success arrowed arrowed-in-right'>
+                                                    报销与销账
+                                                </span>
+                                            </a>
+                                            <a href="/approval/pending?apply_types=4">
+                                                <span class='label label-xlg label-purple arrowed arrowed-in-right'>
+                                                    工资与职位调整
+                                                </span>
+                                            </a>
+                                            <a href="/approval/pending?apply_types=5">
+                                                <span class='label label-xlg label-yellow arrowed arrowed-in-right'>
+                                                    工资补发申请
+                                                </span>
+                                            </a>
+                                            <a href="/approval/pending?apply_types=6">
+                                                <span class='label label-xlg label-warning arrowed arrowed-in-right'>
+                                                    结算与发薪
+                                                </span>
+                                            </a>
+                                            <a href="/approval/pending?apply_types=7">
+                                                <span class='label label-xlg label-primary arrowed arrowed-in-right'>
+                                                    管理人员需求与离职
+                                                </span>
+                                            </a>
+                                            <a href="/approval/pending?apply_types=8">
+                                                <span class='label label-xlg label-grey arrowed arrowed-in-right'>
+                                                    临时工销账与开票
+                                                </span>
+                                            </a>
+                                            <a href="/approval/pending?apply_types=9">
+                                                <span class='label label-xlg label-inverse arrowed'>
+                                                    待招计算与销账
+                                                </span>
+                                            </a>
+                                        </p>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+
+                <table class="table table-hover dataTable" id="MyTable">
+                    <thead>
+                    <tr>
+                        <th class="center">
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" name="check_all"/>
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        <th class="center">编号</th>
+                        <th class="center">标题</th>
+                        <th class="center">说明</th>
+                        <th class="center">申请详情</th>
+                        <th class="center">申请人</th>
+                        <th class="center">申请时间</th>
+                        <th class="center">申请类型</th>
+                        <th class="center">审批状态</th>
+                        <th class="center">审批人</th>
+                        <th class="center">审批时间</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for pending_approval in pending_approval_list %}
+                        {% ifequal pending_approval.event.status "1" %}
+                            <tr class="center warning">
+                                {% else %}
+                            <tr class="center">
+                        {% endifequal %}
+
+
+                    <td>
+                        <label class="pos-rel">
+                            <input type="checkbox" class="ace" name="db_id" value="{{ pending_approval.id }}"/>
+                            <span class="lbl"></span>
+                        </label>
+                    </td>
+
+                    <td>{{ pending_approval.id }}</td>
+                    <td>{{ pending_approval.event.title }}</td>
+                    <td>{{ pending_approval.event.note }}</td>
+                    <td>
+                        <a href="{{ pending_approval| get_apply_details }}">
+                            点击查看
+                        </a>
+                    </td>
+                    <td>{{ pending_approval.event.apply_user | default_if_none:"" }}</td>
+                    <td>{{ pending_approval.event.created }}</td>
+                    <td>{{ pending_approval | approval_title | safe }}</td>
+                    <td>{{ pending_approval.event.status | approval_status | safe }}</td>
+                    <td>{{ pending_approval.event.handle_user | default_if_none:"" }}</td>
+                    <td>{{ pending_approval.event.handle_date | date }}</td>
+                    <td>
+                        {% if pending_approval.event.status == "1" %}
+                            <div>
+                                <button class="btn btn-minier btn-info"
+                                        onclick="agree({{ pending_approval.id }})">
+                                    通过
+                                </button>
+                                <button class="btn btn-minier btn-danger"
+                                        onclick="refuse({{ pending_approval.id }})">
+                                    拒绝
+                                </button>
+                            </div>
+                        {% endif %}
+                    </td>
+                    </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="15">抱歉，目前没有满足条件的待审批信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/bootbox.js"></script>
+    <script src="/static/customjs/fixt_able.js"></script>
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            FixTable("MyTable", 2);
+        });
+
+        function agree(pending_id) {
+            bootbox.dialog({
+                               message: "<span class='bigger-110'>确定要通过申请？</span>",
+                               buttons: {
+                                   "success": {
+                                       "label": "<i class='ace-icon fa fa-check'></i> 通过",
+                                       "className": "btn-sm btn-success",
+                                       "callback": function () {
+                                           var url = "{% url 'approval:pending_edit' %}";
+                                           $.post(url, {pending_id: pending_id, oper: "agree"}, function (result) {
+                                               layer.open({title: '提示', content: result});
+                                               location.reload()
+                                           });
+                                       }
+                                   },
+                                   "button": {
+                                       "label": "取消",
+                                       "className": "btn-sm"
+                                   }
+                               }
+
+                           });
+        }
+
+        function refuse(pending_id) {
+            bootbox.prompt({
+                               title: "请输入拒绝理由",
+                               buttons: {
+                                   confirm: {
+                                       label: "拒绝",
+                                       className: "btn-danger btn-sm"
+                                   },
+                                   cancel: {
+                                       label: "取消",
+                                       className: "btn-sm"
+                                   }
+                               },
+                               callback: function (result) {
+                                   if (result === null) {
+
+                                   } else {
+                                       var url = "{% url 'approval:pending_edit' %}";
+                                       $.post(url, {
+                                           pending_id: pending_id,
+                                           reson: result,
+                                           oper: "refuse"
+                                       }, function (result) {
+                                           alert(result);
+                                           location.reload()
+                                       });
+                                   }
+                               }
+                           });
+        }
+
+    </script>
+{% endblock %}

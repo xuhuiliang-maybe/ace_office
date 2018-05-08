@@ -1,0 +1,41 @@
+{% extends "base/base.html" %}
+{% load bootstrap_tags %}
+{% block css %} {% endblock %}
+{% block breadcrumb %}
+    <li class="active">信息维护</li>
+{% endblock %}
+{% block page-content %}
+    <div class="page-header">
+        <h1> 信息维护 </h1>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-5">
+                <form action="" method="post">{% csrf_token %}
+                    <blockquote class="layui-elem-quote layui-quote-nm">
+                        确定要删除 "{{ object }}" ?
+                    </blockquote>
+
+                    <input type="hidden" name="referrer" value="{{ referrer }}"/>
+
+                    <button class="layui-btn layui-btn-normal layui-btn" type="submit">
+                        确认
+                    </button>
+
+                    <a class="layui-btn layui-btn-primary layui-btn" onclick="javascript:history.back()">
+                        返回
+                    </a>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block js %} {% endblock %}
+{% block self_js %} {% endblock %}

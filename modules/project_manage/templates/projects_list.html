@@ -1,0 +1,506 @@
+{% extends "base/base.html" %}
+{% load share_module_tags %}
+{% load project_manage_tags %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="active">
+        项目
+        {% if project_info_type == "basic_info" %}基础信息{% endif %}
+        {% if project_info_type == "social_security_info" %}福利信息{% endif %}
+        {% if project_info_type == "settle_accounts_info" %}结算信息{% endif %}
+        {% if project_info_type == "billing_info" %}开票信息{% endif %}
+        {% if project_info_type == "sales_info" %}销售信息{% endif %}
+        {% if project_info_type == "recruitment_unit" %}招聘单价{% endif %}
+    </li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#user_form').submit()" data-rel="tooltip"
+                                    title="搜索项目">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-130"></i>
+                                搜索
+                            </button>
+                            {% if project_info_type == "basic_info" %}
+                                <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增项目"
+                                        onclick="window.location.href='{% url "project_manage:project-add" %}'">
+                                    <i class="ace-icon fa fa-plus-circle bigger-130"></i>
+                                    新增
+                                </button>
+                                <button class="btn btn-xs btn-info" data-rel="tooltip" title="批量删除"
+                                        onclick="batch_delete('{% url "project_manage:project_batch_delete" %}')">
+                                    <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                    批量删除
+                                </button>
+                                <button class="btn btn-xs btn-info"
+                                        onclick="$('#myprojectModal').modal({backdrop: 'static', keyboard: false})"
+                                        data-rel="tooltip" title="导入Excel">
+                                    <i class="ace-icon fa fa-cloud-upload bigger-130"></i>
+                                    导入
+                                </button>
+                                <!--
+                                <button class="btn btn-xs btn-info" id="exportproject" data-rel="tooltip" title="导出Excel">
+                                    <i class="ace-icon fa fa-cloud-download"></i>
+                                    导出
+                                </button>
+                                -->
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="user_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="dept_name" name="dept_name" placeholder="归属部门搜索"
+                                                   onclick="query_dept_param()" value="{{ dept_name }}" readonly/>
+                                            <input type="hidden" id="dept_ids" name="dept_ids" value="{{ dept_ids }}"/>
+                                            <input type="text" id="search_name" name="search_name" placeholder="项目名称"
+                                                   value="{{ search_name }}"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            {% if customer_service == 1 %}
+                <div class="alert alert-block alert-info">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="ace-icon fa fa-times"></i>
+                    </button>
+                    <i class="ace-icon fa fa-info"></i>
+
+                    <strong class="">：
+                        客服部（客服专员、客服主管、外包主管、客服经理），只能查询所在部门信息。
+                    </strong>
+                </div>
+            {% endif %}
+
+            <div class="table-responsive">
+
+                <table class="table table-hover dataTable" id="MyTable">
+                    <thead>
+                    <tr>
+                        <th class="center">
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" name="check_all"/>
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        <th class="center">项目编号</th>
+                        <th class="center">项目简称</th>
+                        <th class="center">项目名称</th>
+                        <th class="center">项目负责人</th>
+                        <th class="center">负责部门</th>
+                        {% if project_info_type == "basic_info" %}
+                            <th class="center">客户名称</th>
+                            <th class="center">业务城市</th>
+                            <th class="center">公司主体</th>
+                            <th class="center">合同类别</th>
+                            <th class="center">项目类别</th>
+                            <th class="center">起始时间</th>
+                            <th class="center">终止时间</th>
+                            <th class="center">目前状态</th>
+                            <th class="center">客服专员</th>
+                            <th class="center">客服主管</th>
+                            <th class="center">外包主管</th>
+                            <th class="center">客服经理</th>
+                            <th class="center">其他负责人</th>
+                        {% endif %}
+                        {% if project_info_type == "sales_info" %}
+                            <th class="center">销售人员</th>
+                            <th class="center">销售类型</th>
+                            <th class="center">派遣提成标准</th>
+                            <th class="center">备注</th>
+                            <th class="center">外包提成标准</th>
+                            <th class="center">备注</th>
+                            <th class="center">代理人事提成标准</th>
+                            <th class="center">备注</th>
+                            <th class="center">代理招聘提成标准</th>
+                            <th class="center">备注</th>
+                            <th class="center">小时工提成标准</th>
+                            <th class="center">备注</th>
+                        {% endif %}
+
+                        {% if project_info_type == "social_security_info" %}
+                            <th class="center">参保地</th>
+                            <th class="center">社保险种</th>
+                            <th class="center">社保账户类型</th>
+                            <th class="center">社保账户名称</th>
+                            <th class="center">社保节点要求</th>
+                            <th class="center">社保结算周期</th>
+                            <th class="center">商保公司</th>
+                            <th class="center">商保结算周期</th>
+                            <th class="center">商保收取标准</th>
+                            <th class="center">商保赔付额度</th>
+                            <th class="center">商保节点要求</th>
+                            <th class="center">公积金地点</th>
+                            <th class="center">比例</th>
+                            <th class="center">基数</th>
+                        {% endif %}
+
+                        {% if project_info_type == "settle_accounts_info" %}
+                            <th class="center">服务费标准</th>
+                            <th class="center">服务费节点要求</th>
+                            <th class="center">残保金收取周期</th>
+                            <th class="center">残保金收取地</th>
+                            <th class="center">提供结算表时间</th>
+                            <th class="center">费用到账时间</th>
+                            <th class="center">工资发放时间</th>
+                            <th class="center">工资发放方式</th>
+                            <th class="center">结算对接人及联系方式</th>
+                            <th class="center">异常结算情况</th>
+                            <th class="center">工资服务费结算周期</th>
+                            <th class="center">其他需要我司代收代付项目</th>
+                        {% endif %}
+
+                        {% if project_info_type == "recruitment_unit" %}
+                            <th class="center">招聘难度系数</th>
+                            <th class="center">1月</th>
+                            <th class="center">2月</th>
+                            <th class="center">3月</th>
+                            <th class="center">4月</th>
+                            <th class="center">5月</th>
+                            <th class="center">6月</th>
+                            <th class="center">7月</th>
+                            <th class="center">8月</th>
+                            <th class="center">9月</th>
+                            <th class="center">10月</th>
+                            <th class="center">11月</th>
+                            <th class="center">12月</th>
+                        {% endif %}
+
+                        {% if project_info_type == "billing_info" %}
+                            <th class="center">发票类型</th>
+                            <th class="center">发票抬头</th>
+                            <th class="center">发票科目</th>
+                            <th class="center">发票开具时间</th>
+                            <th class="center">发票邮寄地址及联系人</th>
+                            <th class="center">是否一般纳税人</th>
+                            <th class="center">纳税人识别号</th>
+                            <th class="center">地址</th>
+                            <th class="center">电话</th>
+                            <th class="center">开户行</th>
+                            <th class="center">账号</th>
+                        {% endif %}
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for project in object_list %}
+                        <tr class="center">
+                            <td>
+                                <label class="pos-rel">
+                                    <input type="checkbox" class="ace" name="db_id" value="{{ project.id }}"/>
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+
+                            <td>
+                                {% if project_info_type == "basic_info" %}
+                                    <a href="{% url "project_manage:project_edit" pk=project.id %}">
+                                {% endif %}
+                                {% if project_info_type == "social_security_info" %}
+                                    <a href="{% url "project_manage:edit_project_social_security" pk=project.id %}">
+                                {% endif %}
+                                {% if project_info_type == "settle_accounts_info" %}
+                                    <a href="{% url "project_manage:edit_project_settle_accounts" pk=project.id %}">
+                                {% endif %}
+                                {% if project_info_type == "billing_info" %}
+                                    <a href="{% url "project_manage:edit_project_billing" pk=project.id %}">
+                                {% endif %}
+                                {% if project_info_type == "sales_info" %}
+                                    <a href="{% url "project_manage:edit_project_sales" pk=project.id %}">
+                                {% endif %}
+                                {% if project_info_type == "recruitment_unit" %}
+                                    <a href="{% url "project_manage:edit_project_recruitment_unit" pk=project.id %}">
+                                {% endif %}
+                                {{ project.number }}
+                                </a>
+                            </td>
+                            <td>{{ project.short_name }}</td>
+                            <td>{{ project.full_name }}</td>
+                            <td>{{ project.principal | default_if_none:"" }}</td>
+                            <td>{{ project.department | default_if_none:"" }}</td>
+
+                            {% if project_info_type == "basic_info" %}
+                                <td>{{ project.customer }}</td>
+                                <td>{{ project.business_city }}</td>
+                                <td>{{ project.company_subject.name }}</td>
+                                <td>{{ project.contract_type.name }}</td>
+                                <td>{{ project.project_type.name }}</td>
+                                <td>{{ project.start_date | date }}</td>
+                                <td>{{ project.end_date | date }}</td>
+                                <td>{{ project.progress_state.name }}</td>
+                                <td>{{ project.customer_service_staff  | default_if_none:"" }}</td>
+                                <td>{{ project.customer_service_charge  | default_if_none:"" }}</td>
+                                <td>{{ project.outsource_director  | default_if_none:"" }}</td>
+                                <td>{{ project.customer_service_director  | default_if_none:"" }}</td>
+                                <td>{{ project.other_responsible_person  | default_if_none:"" }}</td>
+                            {% endif %}
+                            {% if project_info_type == "sales_info" %}
+                                <td>{{ project.salesman | default_if_none:"" }}</td>
+                                <td>{{ project.sales_type.name }}</td>
+                                <td>{{ project.dispatch_commission  | default_if_none:"" }} %</td>
+                                <td>{{ project.remark1 }}</td>
+                                <td>{{ project.outsourc_commission | default_if_none:"" }} %</td>
+                                <td>{{ project.remark2 }}</td>
+                                <td>{{ project.proxy_personnel_commission | default_if_none:"" }} %</td>
+                                <td>{{ project.remark3 }}</td>
+                                <td>{{ project.proxy_recruitment_commission | default_if_none:"" }} %</td>
+                                <td>{{ project.remark4 }}</td>
+                                <td>{{ project.hourly_commission | default_if_none:"" }} %</td>
+                                <td>{{ project.remark5 }}</td>
+                            {% endif %}
+                            {% if project_info_type == "social_security_info" %}
+                                <td>{{ project.insured_place }}</td>
+                                <td>
+                                    {% for one in project.social_security_type.all %} {{ one.name }} {% endfor %}
+                                </td>
+                                <td>{{ project.social_security_account_type.name }}</td>
+                                <td>{{ project.social_security_account_name }}</td>
+                                <td>{{ project.social_security_node_require }}</td>
+                                <td>{{ project.social_security_settlement_cycle }}</td>
+                                <td>
+                                    {% for one in project.business_insurance_company.all %} {{ one.name }} {% endfor %}
+                                </td>
+                                <td>{{ project.business_insurance_settlement_cycle.name }}</td>
+                                <td>{{ project.business_insurance_standard | default_if_none:"" }}</td>
+                                <td>{{ project.business_insurance_payment }}</td>
+                                <td>{{ project.business_insurance_node_require }}</td>
+                                <td>{{ project.accumulation_fund_place_province }}</td>
+                                <td>{{ project.proportion }}</td>
+                                <td>{{ project.radix }}</td>
+                            {% endif %}
+                            {% if project_info_type == "settle_accounts_info" %}
+                                <td>{{ project.service_standard }}</td>
+                                <td>{{ project.service_cost_node_require }}</td>
+                                <td>{{ project.residual_premium_cycle.name }}</td>
+                                <td>{{ project.residual_premium_place }}</td>
+                                <td>{{ project.settlement_report_day }}</td>
+                                <td>{{ project.cost_arrival_day }}</td>
+                                <td>{{ project.wage_grant_day }}</td>
+                                <td>{{ project.wage_grant_type.name }}</td>
+                                <td>{{ project.settlement_person }}</td>
+                                <td>{{ project.abnormal_settlement }}</td>
+                                <td>{{ project.wage_service_cost_settlement_cycle }}</td>
+                                <td>{{ project.other_project }}</td>
+                            {% endif %}
+                            {% if project_info_type == "recruitment_unit" %}
+                                <td>{{ project.recruit_difficulty }}</td>
+                                <td>{{ project.jan | default_if_none:"" }}</td>
+                                <td>{{ project.feb | default_if_none:"" }}</td>
+                                <td>{{ project.mar | default_if_none:"" }}</td>
+                                <td>{{ project.apr | default_if_none:"" }}</td>
+                                <td>{{ project.may | default_if_none:"" }}</td>
+                                <td>{{ project.jun | default_if_none:"" }}</td>
+                                <td>{{ project.jul | default_if_none:"" }}</td>
+                                <td>{{ project.aug | default_if_none:"" }}</td>
+                                <td>{{ project.sep | default_if_none:"" }}</td>
+                                <td>{{ project.oct | default_if_none:"" }}</td>
+                                <td>{{ project.nov | default_if_none:"" }}</td>
+                                <td>{{ project.dec | default_if_none:"" }}</td>
+                            {% endif %}
+                            {% if project_info_type == "billing_info" %}
+                                <td>{{ project.invoice_type.name }}</td>
+                                <td>{{ project.invoice_title }}</td>
+                                <td>{{ project.invoice_subject }}</td>
+                                <td>{{ project.invoice_open_date | default_if_none:"" }}</td>
+                                <td>{{ project.invoice_mail }}</td>
+                                <td>{{ project.get_is_general_taxpayer_display }}</td>
+                                <td>{{ project.taxpayer_identifier }}</td>
+                                <td>{{ project.address }}</td>
+                                <td>{{ project.phone }}</td>
+                                <td>{{ project.bank }}</td>
+                                <td>{{ project.account_number }}</td>
+                            {% endif %}
+                            <td>
+                                <div>
+                                    {% if project_info_type == "basic_info" %}
+                                        <button class="btn btn-minier btn-info"
+                                                onclick="window.location.href='{% url "project_manage:project_edit" pk=project.id %}'">
+                                    {% endif %}
+                                    {% if project_info_type == "social_security_info" %}
+                                        <button class="btn btn-minier btn-info"
+                                                onclick="window.location.href='{% url "project_manage:edit_project_social_security" pk=project.id %}'">
+                                    {% endif %}
+                                    {% if project_info_type == "settle_accounts_info" %}
+                                        <button class="btn btn-minier btn-info"
+                                                onclick="window.location.href='{% url "project_manage:edit_project_settle_accounts" pk=project.id %}'">
+                                    {% endif %}
+                                    {% if project_info_type == "billing_info" %}
+                                        <button class="btn btn-minier btn-info"
+                                                onclick="window.location.href='{% url "project_manage:edit_project_billing" pk=project.id %}'">
+                                    {% endif %}
+                                    {% if project_info_type == "sales_info" %}
+                                        <button class="btn btn-minier btn-info"
+                                                onclick="window.location.href='{% url "project_manage:edit_project_sales" pk=project.id %}'">
+                                    {% endif %}
+                                    {% if project_info_type == "recruitment_unit" %}
+                                        <button class="btn btn-minier btn-info"
+                                                onclick="window.location.href='{% url "project_manage:edit_project_recruitment_unit" pk=project.id %}'">
+                                    {% endif %}
+                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+
+
+                                    <!--just project basic info have delete button-->
+                                    {% if project_info_type == "basic_info" %}
+                                        <button class="btn btn-minier btn-danger"
+                                                onclick="window.location.href='{% url "project_manage:project_delete" pk=project.id %}'">
+                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                        </button>
+                                    {% endif %}
+
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info">
+                            <td colspan="20">抱歉，目前没有满足条件的项目信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+    {% include "department_tree.html" %}
+
+    <!-- 导入项目信息 -->
+    <div id="myprojectModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">
+                        导入项目信息
+                        <small>
+                            以模板格式为准
+                        </small>
+                    </h4>
+                </div>
+
+                <form action="{% url "project_manage:project_load" %}" method="post"
+                      enctype="multipart/form-data" class="form-horizontal" onsubmit="return submit_after('#myprojectModal');">{% csrf_token %}
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <input id="load_info" name="load_info" type="file" required/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-sm" data-last="Finish">
+                            导入
+                        </button>
+                        <button class="btn btn-pink btn-sm" data-dismiss="modal"
+                                onclick="window.location.href='{% url "download" template_name="project_info" %}'">
+                            下载模板
+                        </button>
+                        <button class="btn btn-sm" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times"></i>
+                            取消
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/fuelux/fuelux.tree.js"></script>
+    <script src="/static/customjs/custom_tree.js"></script>
+    <script src="/static/customjs/custom_base.js"></script>
+    <script src="/static/customjs/fixt_able.js"></script>
+{% endblock %}
+{% block modules_js %}
+    <script src="/static/customjs/upload_file.js"></script>
+{% endblock %}
+{% block self_js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            {% if project_info_type != "recruitment_unit" %}
+                FixTable("MyTable", 5);
+            {% endif %}
+        });
+
+        //监听查询条件选择部门
+        select_dept_name = "";
+        select_dept_id = "";
+        $('#tree1').on('selected.fu.tree', function (e, result) {
+            var select_list = result.selected;
+            select_dept_name = "";
+            select_dept_id = "";
+            for (var i = 0; i < select_list.length; i++) {
+                select_dept_name += delHtmlTag(select_list[i].text.replace(/\s/gi,'')) + ",";
+                select_dept_id += select_list[i].value + ",";
+            }
+            select_dept_name = select_dept_name.substring(0,select_dept_name.length-1);
+            select_dept_id = select_dept_id.substring(0,select_dept_id.length-1);
+        });
+
+        function select_dept() {
+            $('#dept_name').val(select_dept_name);
+            $('#dept_ids').val(select_dept_id)
+        }
+
+        //选择部门,查询条件
+        function query_dept_param() {
+            get_all_dept("#tree1", true);
+            $('#myDeptModal').modal({backdrop: 'static', keyboard: false})
+        }
+
+        //监听新增项目选择部门
+        $('#tree2').on('selected.fu.tree', function (e, result) {
+            var dept_name = delHtmlTag(result.selected[0].text.replace(/\s/gi,''));
+            $('#add_user_dept').val(dept_name)
+        });
+
+        /* 导出*/
+        $("#exportproject").click(function () {
+            var select_dept_id = $("#dept_ids").val();
+            var first_name = $("#first_name").val();
+            var export_url = "/organizational/project/export?dept_ids=" + select_dept_id + "&first_name=" + first_name;
+            location.href = export_url;
+        });
+
+    </script>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends "base/base.html" %}
+{% block css %} {% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'approval:loan_list' %}">备用金</a></li>
+    <li class="active">备用金，费用预算明细</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget-main padding-6">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p>
+                            {% if view_type == '1'  and apply_info.status == '1' %}
+                                <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增"
+                                        onclick="location.href='{{ add_url }}'">
+                                    <i class="ace-icon fa fa-plus-circle bigger-130"></i> 新增
+                                </button>
+                            {% endif %}
+                            <button class="btn btn-xs" data-rel="tooltip" title="返回"
+                                    onclick="location.href='{{ return_url }}'">
+                                <i class="ace-icon fa fa-arrow-left bigger-130"></i> 返回
+                            </button>
+                        <div class="alert alert-block alert-info">
+                            <i class="ace-icon fa fa-info"></i>
+                            <strong class="">： {{ apply_info | default_if_none:"" }} </strong>
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <table class="table table-hover dataTable" id="MyTable">
+                    <thead>
+                    <tr>
+                        <th class="center">编号</th>
+                        <th class="center">日期</th>
+                        <th class="center">金额</th>
+                        <th class="center">科目</th>
+                        <th class="center">费用分摊方式</th>
+                        <th class="center">费用分摊对象</th>
+                        <th class="center">费用明细说明</th>
+                        <th class="center">发票情况</th>
+                        <th class="center">领款人</th>
+                        <th class="center">领款部门</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for one_detail in recruited_billing_details_list %}
+                        <tr class="center">
+                            <td>{{ one_detail.id }}</td>
+                            <td>{{ one_detail.dates|date:"Y,F" | default_if_none:"" }}</td>
+                            <td>{{ one_detail.money }}</td>
+                            <td>{{ one_detail.subject.name }}</td>
+                            <td>{{ one_detail.get_cost_sharing_display }}</td>
+                            <td>{{ one_detail.cost_obj }}</td>
+                            <td>{{ one_detail.cost_detail_content }}</td>
+                            <td>{{ one_detail.invoice_state }}</td>
+                            <td>{{ one_detail.payee.first_name | default_if_none:"" }}</td>
+                            <td>{{ one_detail.payee.attribution_dept | default_if_none:"" }}</td>
+                            <td>
+                                {% if view_type == '1'  and apply_info.status == '1' %}
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "approval:recruitedbilling_details_edit" pk=one_detail.id applicants=applicants %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "approval:recruitedbilling_details_delete" pk=one_detail.id applicants=applicants %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="11">抱歉，目前没有满足条件的信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include "base/paginator.html" %}
+
+{% endblock %}
+
+{% block js %}
+    <script src="/static/customjs/fixt_able.js"></script>
+{% endblock %}
+{% block self_js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            FixTable("MyTable", 4);
+        });
+    </script>
+{% endblock %}

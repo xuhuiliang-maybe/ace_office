@@ -1,0 +1,9 @@
+*.pyc
+db.sqlite3
+.idea
+
+
+generate_preview
+mysql_backup
+tmp
+

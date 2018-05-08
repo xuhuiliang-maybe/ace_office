@@ -1,0 +1,819 @@
+{% extends "base/base.html" %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="page-header">
+                <h1>
+                    服务人数
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        在职人数
+                    </small>
+                </h1>
+            </div><!-- 1 page-header -->
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-signal"></i>
+                                目前公司在职人数及各客服部人数占比
+                            </h5>
+
+                            <div class="widget-toolbar no-border">
+                                <div class="inline dropdown-hover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <!-- #section:plugins/charts.flotchart -->
+                                <div id="piechart-placeholder-1-1"></div>
+
+                                <!-- /section:plugins/charts.flotchart -->
+                                <div class="hr hr8 hr-double"></div>
+
+                                <div class="clearfix">
+                                    <!-- #section:custom/extra.grid -->
+                                    <div class="grid2">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp; 公司全部员工
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ all_emp_count }}</h4>
+                                    </div>
+                                    <div class="grid2">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp; 公司全部在职员工
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ is_active_emp_count }}</h4>
+                                    </div>
+
+                                </div>
+                            </div><!-- /.widget-main -->
+                        </div><!-- /.widget-body -->
+                    </div><!-- /.widget-box -->
+                </div><!-- 1.1 /.col -->
+
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-signal"></i>
+                                目前公司在职人数及当前用户负责项目人数占比
+                            </h5>
+
+                            <div class="widget-toolbar no-border">
+                                <div class="inline dropdown-hover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <!-- #section:plugins/charts.flotchart -->
+                                <div id="piechart-placeholder-1-2"></div>
+
+                                <!-- /section:plugins/charts.flotchart -->
+                                <div class="hr hr8 hr-double"></div>
+
+                                <div class="clearfix">
+                                    <!-- #section:custom/extra.grid -->
+
+                                    <div class="grid3">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp;  公司全部员工
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ all_emp_count }}</h4>
+                                    </div>
+                                    <div class="grid3">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp;  公司全部在职员工
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ is_active_emp_count }}</h4>
+                                    </div>
+
+                                    <div class="grid3">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp;  我负责项目员工
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ login_user_emp_count }}</h4>
+                                    </div>
+                                </div>
+                            </div><!-- /.widget-main -->
+                        </div><!-- /.widget-body -->
+                    </div><!-- /.widget-box -->
+                </div><!-- 1.2 /.col -->
+            </div><!-- /.row -->
+
+
+            <div class="space-8"></div>
+
+            <div class="page-header">
+                <h1>
+                    服务人数
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        入职人数
+                    </small>
+                </h1>
+            </div><!-- 2 page-header -->
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-signal"></i>
+                                当月公司整体入职人数，及各客服部入职人数与占比
+                            </h5>
+
+                            <div class="widget-toolbar no-border">
+                                <div class="inline dropdown-hover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <!-- #section:plugins/charts.flotchart -->
+                                <div id="piechart-placeholder-2-1"></div>
+
+                                <!-- /section:plugins/charts.flotchart -->
+                                <div class="hr hr8 hr-double"></div>
+
+                                <div class="clearfix">
+                                    <!-- #section:custom/extra.grid -->
+                                    <div class="grid2">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp; 当月入职员工
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ tist_month_join_count }}</h4>
+                                    </div>
+
+                                </div>
+                            </div><!-- /.widget-main -->
+                        </div><!-- /.widget-body -->
+                    </div><!-- /.widget-box -->
+                </div><!-- 2.1 /.col -->
+
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-signal"></i>
+                                当月，自己负责项目的入职人数，及占比（整个公司占比）
+                            </h5>
+
+                            <div class="widget-toolbar no-border">
+                                <div class="inline dropdown-hover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <!-- #section:plugins/charts.flotchart -->
+                                <div id="piechart-placeholder-2-2"></div>
+
+                                <!-- /section:plugins/charts.flotchart -->
+                                <div class="hr hr8 hr-double"></div>
+
+                                <div class="clearfix">
+                                    <!-- #section:custom/extra.grid -->
+                                    <div class="grid2">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp; 当月入职员工
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ tist_month_join_count }}</h4>
+                                    </div>
+
+                                </div>
+                            </div><!-- /.widget-main -->
+                        </div><!-- /.widget-body -->
+                    </div><!-- /.widget-box -->
+                </div><!-- 2.2 /.col -->
+            </div><!-- /.row -->
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-signal"></i>
+                                昨天整个公司入职人数，及各客服部入职人数与占比
+                            </h5>
+
+                            <div class="widget-toolbar no-border">
+                                <div class="inline dropdown-hover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <!-- #section:plugins/charts.flotchart -->
+                                <div id="piechart-placeholder-2-3"></div>
+
+                                <!-- /section:plugins/charts.flotchart -->
+                                <div class="hr hr8 hr-double"></div>
+
+                                <div class="clearfix">
+                                    <!-- #section:custom/extra.grid -->
+                                    <div class="grid2">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp; 整个公司入职员工
+                                        </span>
+                                        <h4 class="bigger pull-right">0</h4>
+                                    </div>
+
+                                </div>
+                            </div><!-- /.widget-main -->
+                        </div><!-- /.widget-body -->
+                    </div><!-- /.widget-box -->
+                </div><!-- 2.3 /.col -->
+
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-signal"></i>
+                                昨天，自己负责项目的入职人数，及占比（整个公司占比）
+                            </h5>
+
+                            <div class="widget-toolbar no-border">
+                                <div class="inline dropdown-hover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <!-- #section:plugins/charts.flotchart -->
+                                <div id="piechart-placeholder-2-4"></div>
+
+                                <!-- /section:plugins/charts.flotchart -->
+                                <div class="hr hr8 hr-double"></div>
+
+                                <div class="clearfix">
+                                    <!-- #section:custom/extra.grid -->
+                                    <div class="grid2">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp; 昨天整个公司入职员工
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ yesterday_join_count }}</h4>
+                                    </div>
+
+                                </div>
+                            </div><!-- /.widget-main -->
+                        </div><!-- /.widget-body -->
+                    </div><!-- /.widget-box -->
+                </div><!-- 2.4 /.col -->
+            </div><!-- /.row -->
+
+            <div class="space-8"></div>
+
+            <div class="page-header">
+                <h1>
+                    服务人数
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        离职人数
+                    </small>
+                </h1>
+            </div><!-- 3 page-header -->
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-signal"></i>
+                                当月公司整体离职人数，及各客服部离职人数占比
+                            </h5>
+
+                            <div class="widget-toolbar no-border">
+                                <div class="inline dropdown-hover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <!-- #section:plugins/charts.flotchart -->
+                                <div id="piechart-placeholder-3-1"></div>
+
+                                <!-- /section:plugins/charts.flotchart -->
+                                <div class="hr hr8 hr-double"></div>
+
+                                <div class="clearfix">
+                                    <!-- #section:custom/extra.grid -->
+                                    <div class="grid2">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp; 当月整个公司离职员工
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ tist_month_departure_count }}</h4>
+                                    </div>
+
+                                </div>
+                            </div><!-- /.widget-main -->
+                        </div><!-- /.widget-body -->
+                    </div><!-- /.widget-box -->
+                </div><!-- 3.1 /.col -->
+
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-signal"></i>
+                                当月，自己负责项目的离职人数，及占比（整个公司占比）
+                            </h5>
+
+                            <div class="widget-toolbar no-border">
+                                <div class="inline dropdown-hover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <!-- #section:plugins/charts.flotchart -->
+                                <div id="piechart-placeholder-3-2"></div>
+
+                                <!-- /section:plugins/charts.flotchart -->
+                                <div class="hr hr8 hr-double"></div>
+
+                                <div class="clearfix">
+                                    <!-- #section:custom/extra.grid -->
+                                    <div class="grid2">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp; 当月整个公司离职员工
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ tist_month_departure_count }}</h4>
+                                    </div>
+
+                                </div>
+                            </div><!-- /.widget-main -->
+                        </div><!-- /.widget-body -->
+                    </div><!-- /.widget-box -->
+                </div><!-- 3.2 /.col -->
+            </div><!-- /.row -->
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-signal"></i>
+                                昨天整个公司离职人数，及各客服部离职人数占比
+                            </h5>
+
+                            <div class="widget-toolbar no-border">
+                                <div class="inline dropdown-hover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <!-- #section:plugins/charts.flotchart -->
+                                <div id="piechart-placeholder-3-3"></div>
+
+                                <!-- /section:plugins/charts.flotchart -->
+                                <div class="hr hr8 hr-double"></div>
+
+                                <div class="clearfix">
+                                    <!-- #section:custom/extra.grid -->
+                                    <div class="grid2">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp; 当月整个公司离职员工
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ tist_month_departure_count }}</h4>
+                                    </div>
+
+                                </div>
+                            </div><!-- /.widget-main -->
+                        </div><!-- /.widget-body -->
+                    </div><!-- /.widget-box -->
+                </div><!-- 3.3 /.col -->
+
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-signal"></i>
+                                昨天，自己负责项目的离职人数，及占比（整个公司占比）
+                            </h5>
+
+                            <div class="widget-toolbar no-border">
+                                <div class="inline dropdown-hover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <!-- #section:plugins/charts.flotchart -->
+                                <div id="piechart-placeholder-3-4"></div>
+
+                                <!-- /section:plugins/charts.flotchart -->
+                                <div class="hr hr8 hr-double"></div>
+
+                                <div class="clearfix">
+                                    <!-- #section:custom/extra.grid -->
+                                    <div class="grid2">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp; 当月整个公司离职员工
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ tist_month_departure_count }}</h4>
+                                    </div>
+
+                                </div>
+                            </div><!-- /.widget-main -->
+                        </div><!-- /.widget-body -->
+                    </div><!-- /.widget-box -->
+                </div><!-- 3.4 /.col -->
+            </div><!-- /.row -->
+
+            <div class="space-8"></div>
+            <div class="page-header">
+                <h1>
+                    操作失误
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                    </small>
+                </h1>
+            </div><!-- 4 page-header -->
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-signal"></i>
+                                客服部员工占比
+                            </h5>
+
+                            <div class="widget-toolbar no-border">
+                                <div class="inline dropdown-hover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <!-- #section:plugins/charts.flotchart -->
+                                <div id="piechart-placeholder-4-1"></div>
+
+                                <!-- /section:plugins/charts.flotchart -->
+                                <div class="hr hr8 hr-double"></div>
+
+                                <div class="clearfix">
+                                    <!-- #section:custom/extra.grid -->
+                                    <div class="grid2">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp; 当月公司操作失误数
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ tist_month_muff_count }}</h4>
+                                    </div>
+
+                                </div>
+                            </div><!-- /.widget-main -->
+                        </div><!-- /.widget-body -->
+                    </div><!-- /.widget-box -->
+                </div><!-- 4.1 /.col -->
+
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-signal"></i>
+                                我负责项目员工占比
+                            </h5>
+
+                            <div class="widget-toolbar no-border">
+                                <div class="inline dropdown-hover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <!-- #section:plugins/charts.flotchart -->
+                                <div id="piechart-placeholder-4-2"></div>
+
+                                <!-- /section:plugins/charts.flotchart -->
+                                <div class="hr hr8 hr-double"></div>
+
+                                <div class="clearfix">
+                                    <!-- #section:custom/extra.grid -->
+                                    <div class="grid2">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp; 当月操作失误数
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ tist_month_muff_count }}</h4>
+                                    </div>
+
+                                    <div class="grid2">
+                                        <span class="grey">
+                                            <i class="ace-icon fa fa-star fa-2x orange"></i>
+                                            &nbsp;当月我的操作失误数
+                                        </span>
+                                        <h4 class="bigger pull-right">{{ login_user_muff_count }}</h4>
+                                    </div>
+                                </div>
+                            </div><!-- /.widget-main -->
+                        </div><!-- /.widget-body -->
+                    </div><!-- /.widget-box -->
+                </div><!-- 4.2 /.col -->
+            </div><!-- /.row -->
+
+
+            <div class="space-8"></div>
+            <div class="page-header">
+                <h1>
+                    审批统计
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                    </small>
+                </h1>
+            </div><!-- 4 page-header -->
+
+            <div class="col-12">
+                <p>
+                    <button onclick="window_href('{{ self_approval_count_url }}')" class="layui-btn layui-btn-primary layui-btn-big">
+                        已审批 {{ self_approval_count }}
+                    </button>
+                </p>
+
+                <br>
+                <p>
+                    <button onclick="window_href('{{ self_apply_leave_count_url }}')" class="layui-btn layui-btn-big">
+                        请假 {{ self_apply_leave_count }}
+                    </button>
+
+                    <button onclick="window_href('{{ self_apply_loan_count_url }}')" class="layui-btn layui-btn-big">
+                        备用金 {{ self_apply_loan_count }}
+                    </button>
+
+                    <button onclick="window_href('{{ self_apply_writeoffs_count_url }}')" class="layui-btn layui-btn-big">
+                        报销与销账 {{ self_apply_writeoffs_count }}
+                    </button>
+                </p>
+
+                <br>
+                <p>
+                    <button onclick="window_href('{{ self_apply_wage_count_url }}')" class="layui-btn layui-btn-big">
+                        工资与职位调整 {{ self_apply_wage_count }}
+                    </button>
+
+                    <button onclick="window_href('{{ self_apply_wagereplacement_count_url }}')" class="layui-btn layui-btn-big">
+                        工资补发 {{ self_apply_wagereplacement_count }}
+                    </button>
+
+                    <button onclick="window_href('{{ self_apply_billingprepay_count_url }}')" class="layui-btn layui-btn-big">
+                        结算与发薪 {{ self_apply_billingprepay_count }}
+                    </button>
+                </p>
+                <br>
+                <p>
+                    <button onclick="window_href('{{ self_apply_demandturnover_count_url }}')" class="layui-btn layui-btn-big">
+                        管理员需求与离职 {{ self_apply_demandturnover_count }}
+                    </button>
+
+                    <button onclick="window_href('{{ self_apply_temporarywriteoffsbilling_count_url }}')" class="layui-btn layui-btn-big">
+                        临时工销账与开票 {{ self_apply_temporarywriteoffsbilling_count }}
+                    </button>
+
+                    <button onclick="window_href('{{ self_apply_recruitedbilling_count_url }}')" class="layui-btn layui-btn-big">
+                        代招结算与销账 {{ self_apply_recruitedbilling_count }}
+                    </button>
+                </p>
+                <div class="vspace-12-sm"></div>
+
+            </div>
+        </div><!-- /.row -->
+
+        <!-- #section:custom/extra.hr -->
+        <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+
+    {% if request.user.is_superuser %} {% endif %}
+    {% if not request.user.is_superuser %} {% endif %}
+{% endblock %}
+
+{% block js %}
+    <!--[if lte IE 8]>
+    <script src="/static/js/excanvas.js"></script>
+    <![endif]-->
+    <script src="/static/js/jquery-ui.custom.js"></script>
+    <script src="/static/js/jquery.ui.touch-punch.js"></script>
+    <script src="/static/js/flot/jquery.flot.js"></script>
+    <script src="/static/js/flot/jquery.flot.pie.js"></script>
+    <script src="/static/js/flot/jquery.flot.resize.js"></script>
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        {% comment %}        jQuery(function ($) {
+                    var title = 'This is a sticky notice!';
+                    var text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="red">magnis dis parturient</a> montes, nascetur ridiculus mus.';
+                    var image = '/static/avatars/avatar.png';
+                    var sticky = true;
+                    var class_name = 'gritter-info';
+                    setTimeout(function () {
+                        self_gritter_alert(title, text, image, sticky, class_name);
+                    }, 1000);
+                    setTimeout(function () {
+                        var title = 'This is a notice without an image!';
+                        var text = 'This will fade out after a certain amount of time. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="orange">magnis dis parturient</a> montes, nascetur ridiculus mus.';
+                        var image = '';
+                        var sticky = false;
+                        var class_name = 'gritter-success';
+                        self_gritter_alert(title, text, image, sticky, class_name)
+                    }, 2000);
+
+                });{% endcomment %}
+
+        jQuery(function ($) {
+            //flot chart resize plugin, somehow manipulates default browser resize event to optimize it!
+            //but sometimes it brings up errors with normal resize event handlers
+            $.resize.throttleWindow = false;
+
+            function drawPieChart(placeholder, data, position) {
+                $.plot(placeholder, data, {
+                    series: {
+                        pie: {
+                            show: true,
+                            tilt: 0.8,
+                            highlight: {
+                                opacity: 0.25
+                            },
+                            stroke: {
+                                color: '#fff',
+                                width: 2
+                            },
+                            startAngle: 1
+                        }
+                    },
+                    legend: {
+                        show: true,
+                        noColumns: 3,
+                        position: position || "ne",
+                        labelBoxBorderColor: null,
+                        margin: [-30, 15]
+                    },
+                    grid: {
+                        hoverable: true,
+                        clickable: true
+                    }
+                })
+            }
+
+            function is_item(event, pos, item) {
+                if (item) {
+                    if (previousPoint != item.seriesIndex) {
+                        previousPoint = item.seriesIndex;
+                        var tip = item.series['label'] + " : " + item.series['percent'] + '%';
+                        $tooltip.show().children(0).text(tip);
+                    }
+                    $tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
+                } else {
+                    $tooltip.hide();
+                    previousPoint = null;
+                }
+            }
+
+            //pie chart tooltip example
+            var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+            var previousPoint = null;
+
+            var placeholder_1_1 = $('#piechart-placeholder-1-1').css({'width': '90%', 'min-height': '150px'});
+            var data_1_1 = {{ number_of_incumbency_a | safe }};
+            drawPieChart(placeholder_1_1, data_1_1);
+            placeholder_1_1.data('chart', data_1_1);
+            placeholder_1_1.data('draw', drawPieChart);
+            placeholder_1_1.on('plothover', function (event, pos, item) {
+                is_item(event, pos, item);
+            });
+
+            var placeholder_1_2 = $('#piechart-placeholder-1-2').css({'width': '90%', 'min-height': '150px'});
+            var data_1_2 = {{ number_of_incumbency_b | safe }};
+            drawPieChart(placeholder_1_2, data_1_2);
+            placeholder_1_2.data('chart', data_1_2);
+            placeholder_1_2.data('draw', drawPieChart);
+            placeholder_1_2.on('plothover', function (event, pos, item) {
+                is_item(event, pos, item);
+            });
+
+            var placeholder_2_1 = $('#piechart-placeholder-2-1').css({'width': '90%', 'min-height': '150px'});
+            var data_2_1 = {{ number_of_entry_a | safe }};
+            drawPieChart(placeholder_2_1, data_2_1);
+            placeholder_2_1.data('chart', data_2_1);
+            placeholder_2_1.data('draw', drawPieChart);
+            placeholder_2_1.on('plothover', function (event, pos, item) {
+                is_item(event, pos, item);
+            });
+
+            var placeholder_2_2 = $('#piechart-placeholder-2-2').css({'width': '90%', 'min-height': '150px'});
+            var data_2_2 = {{ number_of_entry_b | safe }};
+            drawPieChart(placeholder_2_2, data_2_2);
+            placeholder_2_2.data('chart', data_2_2);
+            placeholder_2_2.data('draw', drawPieChart);
+            placeholder_2_2.on('plothover', function (event, pos, item) {
+                is_item(event, pos, item);
+            });
+
+            var placeholder_2_3 = $('#piechart-placeholder-2-3').css({'width': '90%', 'min-height': '150px'});
+            var data_2_3 = {{ number_of_entry_c | safe }};
+            drawPieChart(placeholder_2_3, data_2_3);
+            placeholder_2_3.data('chart', data_2_3);
+            placeholder_2_3.data('draw', drawPieChart);
+            placeholder_2_3.on('plothover', function (event, pos, item) {
+                is_item(event, pos, item);
+            });
+
+            var placeholder_2_4 = $('#piechart-placeholder-2-4').css({'width': '90%', 'min-height': '150px'});
+            var data_2_4 = {{ number_of_entry_d | safe }};
+            drawPieChart(placeholder_2_4, data_2_4);
+            placeholder_2_4.data('chart', data_2_4);
+            placeholder_2_4.data('draw', drawPieChart);
+            placeholder_2_4.on('plothover', function (event, pos, item) {
+                is_item(event, pos, item);
+            });
+
+            var placeholder_3_1 = $('#piechart-placeholder-3-1').css({'width': '90%', 'min-height': '150px'});
+            var data_3_1 = {{ number_of_departure_a | safe }};
+            drawPieChart(placeholder_3_1, data_3_1);
+            placeholder_3_1.data('chart', data_3_1);
+            placeholder_3_1.data('draw', drawPieChart);
+            placeholder_3_1.on('plothover', function (event, pos, item) {
+                is_item(event, pos, item);
+            });
+
+            var placeholder_3_2 = $('#piechart-placeholder-3-2').css({'width': '90%', 'min-height': '150px'});
+            var data_3_2 = {{ number_of_departure_b | safe }};
+            drawPieChart(placeholder_3_2, data_3_2);
+            placeholder_3_2.data('chart', data_3_2);
+            placeholder_3_2.data('draw', drawPieChart);
+            placeholder_3_2.on('plothover', function (event, pos, item) {
+                is_item(event, pos, item);
+            });
+
+            var placeholder_3_3 = $('#piechart-placeholder-3-3').css({'width': '90%', 'min-height': '150px'});
+            var data_3_3 = {{ number_of_departure_c | safe }};
+            drawPieChart(placeholder_3_3, data_3_3);
+            placeholder_3_3.data('chart', data_3_3);
+            placeholder_3_3.data('draw', drawPieChart);
+            placeholder_3_3.on('plothover', function (event, pos, item) {
+                is_item(event, pos, item);
+            });
+
+            var placeholder_3_4 = $('#piechart-placeholder-3-4').css({'width': '90%', 'min-height': '150px'});
+            var data_3_4 = {{ number_of_departure_d | safe }};
+            drawPieChart(placeholder_3_4, data_3_4);
+            placeholder_3_4.data('chart', data_3_4);
+            placeholder_3_4.data('draw', drawPieChart);
+            placeholder_3_4.on('plothover', function (event, pos, item) {
+                is_item(event, pos, item);
+            });
+
+            var placeholder_4_1 = $('#piechart-placeholder-4-1').css({'width': '90%', 'min-height': '150px'});
+            var data_4_1 = {{ number_of_operational_a | safe }};
+            drawPieChart(placeholder_4_1, data_4_1);
+            placeholder_4_1.data('chart', data_4_1);
+            placeholder_4_1.data('draw', drawPieChart);
+            placeholder_4_1.on('plothover', function (event, pos, item) {
+                is_item(event, pos, item);
+            });
+
+            var placeholder_4_2 = $('#piechart-placeholder-4-2').css({'width': '90%', 'min-height': '150px'});
+            var data_4_2 = {{ number_of_operational_a | safe }};
+            drawPieChart(placeholder_4_2, data_4_2);
+            placeholder_4_2.data('chart', data_4_2);
+            placeholder_4_2.data('draw', drawPieChart);
+            placeholder_4_2.on('plothover', function (event, pos, item) {
+                is_item(event, pos, item);
+            });
+
+        })
+    </script>
+{% endblock %}

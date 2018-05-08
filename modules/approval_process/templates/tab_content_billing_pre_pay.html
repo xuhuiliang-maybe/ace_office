@@ -1,0 +1,125 @@
+{% load approval_process_tags %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="table-responsive">
+
+            <table class="table table-hover dataTable" id="MyTable">
+                <thead>
+                <tr>
+                    <th class="center">
+                        <label class="pos-rel">
+                            <input type="checkbox" class="ace" name="check_all"/>
+                            <span class="lbl"></span>
+                        </label>
+                    </th>
+                    <th class="center">编号</th>
+                    <th class="center">标题</th>
+                    <th class="center">申请说明</th>
+                    <th class="center">申请人</th>
+
+                    <th class="center">结算与发薪月份</th>
+                    <th class="center">结算项目名称</th>
+
+                    <th class="center">结算周期</th>
+                    <th class="center">结算内容</th>
+                    <th class="center">主营业收入</th>
+                    <th class="center">管理费</th>
+                    <th class="center">工资(收)</th>
+                    <th class="center">社保(收)</th>
+                    <th class="center">公积金(收)</th>
+                    <th class="center">工会费(收)</th>
+                    <th class="center">残保金</th>
+                    <th class="center">班车费(收)</th>
+                    <th class="center">餐费(收)</th>
+                    <th class="center">宿舍费(收)</th>
+                    <th class="center">商报(收)</th>
+                    <th class="center">偿/赔偿金(收)</th>
+                    <th class="center">奖金类(收)</th>
+                    <th class="center">其他收入</th>
+                    <th class="center">发放总额</th>
+                    <th class="center">建行</th>
+                    <th class="center">招行</th>
+                    <th class="center">工行</th>
+                    <th class="center">其他银行</th>
+                    <th class="center">备注</th>
+
+                    <th class="center">申请时间</th>
+                    <th class="center">审批人</th>
+                    <th class="center">审批时间</th>
+                    <th class="center">审批回复</th>
+                    <th class="center">审批状态</th>
+                    <th class="center">操作</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for billing_pre_pay in billing_pre_pay_list %}
+                    <tr class="center">
+                        <td>
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" name="db_id" value="{{ billing_pre_pay.id }}"/>
+                                <span class="lbl"></span>
+                            </label>
+                        </td>
+
+                        <td>{{ billing_pre_pay.id }}</td>
+                        <td>{{ billing_pre_pay.title }}</td>
+                        <td>{{ billing_pre_pay.note }}</td>
+                        <td>{{ billing_pre_pay.apply_user | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.billingprepay_month | date }}</td>
+                        <td>{{ billing_pre_pay.project_name.full_name }}</td>
+
+                        <td> {{ billing_pre_pay.billing_date_start | date }} -- {{ billing_pre_pay.billing_date_end | date }} </td>
+                        <td>{{ billing_pre_pay.billing_content | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.main_business_income | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.management_fee | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.wage_receive | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.social_security_receive | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.provident_fund_receive | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.union_fee_receive | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.disablement_gold | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.shuttle_fee_receive | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.meals_receive | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.dormitory_fee_receive | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.daily_receive | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.compensate_reparation_receive | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.bonus_receive | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.other_receive | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.grant_total | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.ccb | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.merchants_bank | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.icbc | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.other_bank | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.remark1 | default_if_none:"" }}</td>
+
+                        <td>{{ billing_pre_pay.created }}</td>
+                        <td>{{ billing_pre_pay.handle_user | default_if_none:"" }}</td>
+                        <td>{{ billing_pre_pay.handle_date | date }}</td>
+                        <td>{{ billing_pre_pay.reason }}</td>
+                        <td>{{ billing_pre_pay.status | approval_status | safe }}</td>
+                        <td>
+                            {% if billing_pre_pay.status == "1" and view_type == "1" %}
+                                <div>
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "approval:billing_pre_pay_edit" pk=billing_pre_pay.id %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "approval:billing_pre_pay_delete" pk=billing_pre_pay.id %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr class="info center">
+                        <td colspan="35">抱歉，目前没有满足条件的信息。</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.span -->
+    </div>
+</div><!-- /.row -->

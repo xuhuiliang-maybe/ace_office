@@ -1,0 +1,9 @@
+{% extends "base/document_edit.html" %}
+
+
+{% block modules_js %}
+    <script type="text/javascript">
+        $("#id_settlement_date").datepicker(datepickerOptionsMonth).attr("readonly", true);
+    </script>
+{% endblock %}
+

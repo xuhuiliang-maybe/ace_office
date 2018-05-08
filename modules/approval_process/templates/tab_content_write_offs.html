@@ -1,0 +1,95 @@
+{% load approval_process_tags %}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="table-responsive">
+
+            <table class="table table-striped table-hover dataTable">
+                <thead>
+                <tr>
+                    <th class="center">
+                        <label class="pos-rel">
+                            <input type="checkbox" class="ace" name="check_all"/>
+                            <span class="lbl"></span>
+                        </label>
+                    </th>
+                    <th class="center">编号</th>
+                    <th class="center">标题</th>
+                    <th class="center">申请说明</th>
+                    <th class="center">申请人</th>
+                    <th class="center">报销/销账总额</th>
+                    <th class="center">已借备用金</th>
+                    <th class="center">备用金说明</th>
+                    <th class="center">差额</th>
+                    <th class="center">销账类型</th>
+                    <!--<th class="center">明细表</th>-->
+                    <th class="center">备注</th>
+                    <th class="center">申请时间</th>
+                    <th class="center">审批人</th>
+                    <th class="center">审批时间</th>
+                    <th class="center">审批回复</th>
+                    <th class="center">审批状态</th>
+                    <th class="center">操作</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for write_offs in write_offs_list %}
+                    <tr class="center">
+                        <td>
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" name="db_id" value="{{ write_offs.id }}"/>
+                                <span class="lbl"></span>
+                            </label>
+                        </td>
+
+                        <td>{{ write_offs.id }}</td>
+                        <td>{{ write_offs.title }}</td>
+                        <td>{{ write_offs.note }}</td>
+                        <td>{{ write_offs.apply_user | default_if_none:"" }}</td>
+                        <td>
+                            <a href="{% url "approval:write_offs_details_list" applicants=write_offs.id view_type=view_type %}">
+                                {{ write_offs.writeoffs_total }}
+                            </a>
+                        </td>
+                        <td>{{ write_offs.borrow_imprest }}</td>
+                        <td>{{ write_offs.imprest_explain }}</td>
+                        <td>{{ write_offs.difference | format_difference }}</td>
+                        <td>{{ write_offs.get_writeoffs_type_display }}</td>
+                        <!--<td>
+                            <a href="{% url "approval:write_offs_details_list" applicants=write_offs.id view_type=view_type %}">
+                                [{{ write_offs | get_write_offs_details }}]
+                            </a>
+                        </td>-->
+                        <td>{{ write_offs.remark | default_if_none:"" }}</td>
+                        <td>{{ write_offs.created }}</td>
+                        <td>{{ write_offs.handle_user | default_if_none:"" }}</td>
+                        <td>{{ write_offs.handle_date | date }}</td>
+                        <td>{{ write_offs.reason }}</td>
+                        <td>{{ write_offs.status | approval_status | safe }}</td>
+                        <td>
+                            {% if write_offs.status == "1" and view_type == "1" %}
+                                <div>
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "approval:write_offs_edit" pk=write_offs.id %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "approval:write_offs_delete" pk=write_offs.id %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr class="info center">
+                        <td colspan="17">抱歉，目前没有满足条件的信息。</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.span -->
+    </div>
+</div><!-- /.row -->

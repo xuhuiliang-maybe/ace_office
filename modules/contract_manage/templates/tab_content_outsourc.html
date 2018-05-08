@@ -1,0 +1,85 @@
+{% load approval_process_tags %}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="table-responsive">
+
+            <table class="table table-striped table-hover dataTable">
+                <thead>
+                <tr>
+                    <th class="center">编号</th>
+                    <th class="center">项目名称</th>
+                    <th class="center">姓名</th>
+                    <th class="center">身份证号</th>
+                    <th class="center">性别</th>
+                    <th class="center">出生日期</th>
+                    <th class="center">名族</th>
+                    <th class="center">住址</th>
+                    <th class="center">联系电话</th>
+                    <th class="center">指定通知接收地址</th>
+                    <th class="center">紧急联系人姓名</th>
+                    <th class="center">紧急联系人电话</th>
+                    <th class="center">合同开始日期</th>
+                    <th class="center">合同结束日期</th>
+                    <th class="center">合同期限</th>
+                    <th class="center">试用期</th>
+                    <th class="center">工作地点</th>
+                    <th class="center">岗位</th>
+                    <th class="center">薪资标准</th>
+                    <th class="center">发薪方式</th>
+                    <th class="center">发薪时间</th>
+                    <th class="center">操作</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for one_info in contract_list %}
+                    <tr class="center">
+                        <td>{{ one_info.id }}</td>
+                        <td>{{ one_info.project_name.full_name }}</td>
+                        <td>{{ one_info.name }}</td>
+                        <td>{{ one_info.identity_card_number }}</td>
+                        <td>{{ one_info.get_sex_display }}</td>
+                        <td>{{ one_info.birthday | date }}</td>
+                        <td>{{ one_info.get_nation_display }}</td>
+                        <td>{{ one_info.address }}</td>
+                        <td>{{ one_info.phone_number }}</td>
+                        <td>{{ one_info.receive_address }}</td>
+                        <td>{{ one_info.emergency_contact_name }}</td>
+                        <td>{{ one_info.emergency_contact_phone }}</td>
+                        <td>{{ one_info.start_date | default_if_none:"" }}</td>
+                        <td>{{ one_info.end_date | default_if_none:"" }}</td>
+                        <td>{{ one_info.get_deadline_display }}</td>
+                        <td>{{ one_info.get_probation_display }}</td>
+                        <td>{{ one_info.workplace }}</td>
+                        <td>{{ one_info.post }}</td>
+                        <td>{{ one_info.payroll_standard }}</td>
+                        <td>{{ one_info.get_payroll_grant_display }}</td>
+                        <td>{{ one_info.grant_date }}</td>
+                        <td>
+                            <div>
+                                <button class="btn btn-minier btn-info" data-rel="tooltip" title="下载"
+                                        onclick="download_contract_outsourc({{ one_info.id }})">
+                                    <i class="ace-icon fa fa-download bigger-120"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr class="info center">
+                        <td colspan="25">抱歉，目前没有满足条件的信息。</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.span -->
+    </div>
+</div><!-- /.row -->
+
+<script>
+    function download_contract_outsourc(contract_id) {
+        window.location.href = '{% url "contract:download_contract" contract_type="2" %}' + "?contractid=" + contract_id;
+        setTimeout("window.location.href = '{% url "contract:download_contract_pdf" %}' + '?contract_type=2'", 2000);
+    }
+</script>

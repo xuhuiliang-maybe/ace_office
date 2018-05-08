@@ -1,0 +1,30 @@
+{% extends "base/document_edit.html" %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        $('#id_attribution_dept').attr("readonly", "true");
+        $('#id_one_level_dept').attr("readonly", "true");
+        $('#id_attribution_dept').on('click', function (ev) {
+            select_dept("#tree1", "#myDeptModal")
+        });
+
+        $('#id_one_level_dept').on('click', function (ev) {
+            select_dept("#tree2", "#myDeptModal-1")
+        });
+
+
+        //监听新增用户选择部门
+        $('#tree1').on('selected.fu.tree', function (e, result) {
+            var dept_name = delHtmlTag(result.selected[0].text.replace(/\s/gi,''));
+            $('#id_attribution_dept').val(dept_name);
+        });
+        $('#tree2').on('selected.fu.tree', function (e, result) {
+            var dept_name = delHtmlTag(result.selected[0].text.replace(/\s/gi,''));
+            $('#id_one_level_dept').val(dept_name);
+        });
+
+        $('#id_address').on('click', function (ev) {
+            address_modal("id_address", true)
+        });
+    </script>
+{% endblock %}

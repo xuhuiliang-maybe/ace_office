@@ -1,0 +1,17 @@
+{% extends "base/document_edit.html" %}
+
+
+{% block modules_js %}
+    <script type="text/javascript">
+        $("#id_birthday").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_start_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_end_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_start_send_deadline").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_end_send_deadline").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_project_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_start_work_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_end_work_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_grant_time").datepicker(datepickerOptions).attr("readonly", true);
+    </script>
+{% endblock %}
+

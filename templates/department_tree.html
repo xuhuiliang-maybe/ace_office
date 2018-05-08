@@ -1,0 +1,66 @@
+<!-- 部门树模态对话框 -->
+<div id="myDeptModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding">
+                <div class="table-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <span class="white">&times;</span>
+                    </button>
+                    点击选择部门信息
+                </div>
+            </div>
+
+            <div class="modal-body no-padding">
+                <div class="widget-main padding-8">
+                    <ul id="tree1"></ul>
+                </div>
+            </div>
+
+            <div class="modal-footer no-margin-top">
+                <button class="btn btn-sm btn-primary" data-dismiss="modal" onclick="select_dept()">
+                    <i class="ace-icon fa fa-check"></i>
+                    确定
+                </button>
+                <button class="btn btn-sm btn-danger" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    取消
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+    <div id="myDeptModal-1" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header no-padding">
+                    <div class="table-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            <span class="white">&times;</span>
+                        </button>
+                        点击选择部门信息
+                    </div>
+                </div>
+
+                <div class="modal-body no-padding">
+                    <div class="widget-main padding-8">
+                        <ul id="tree2"></ul>
+                    </div>
+                </div>
+
+                <div class="modal-footer no-margin-top">
+                    <button class="btn btn-sm btn-primary" data-dismiss="modal">
+                        <i class="ace-icon fa fa-check"></i>
+                        确定
+                    </button>
+                    <button class="btn btn-sm btn-danger" data-dismiss="modal">
+                        <i class="ace-icon fa fa-times"></i>
+                        取消
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>

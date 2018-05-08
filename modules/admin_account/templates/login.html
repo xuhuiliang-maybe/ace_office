@@ -1,0 +1,351 @@
+{% extends "base/base.html" %}
+{% load share_module_tags %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/chosen.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+{% endblock %}
+
+{% block body %}
+    <body class="login-layout">
+    <div class="main-container">
+        <div class="main-content">
+            <div class="row">
+                <div class="space-30"></div>
+                <div class="col-sm-10 col-sm-offset-1">
+                    <div class="login-container">
+                        <div class="center">
+                            <img src="/static/images/laobour1_04.png">
+
+                            <div class="space-6"></div>
+
+                            {% get_system_param "site_name" as site_name %}
+                            <span class="bigger-120">
+                                <span class="blue bolder">{{ site_name }}</span>
+                            </span>
+                        </div>
+
+                        <div class="space-6"></div>
+
+                        <div class="error">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div {% if message.tags %}class="alert alert-block alert-{{ message.tags }}"{% endif %}>
+                                        <button type="button" class="close" data-dismiss="alert">
+                                            <i class="ace-icon fa fa-times"></i>
+                                        </button>
+                                        <strong> Oh snap! </strong> {{ message }}
+                                        <br>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="position-relative">
+                            <div id="login-box" class="login-box visible widget-box no-border">
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <h4 class="header blue lighter bigger">
+                                            <i class="ace-icon fa fa-coffee green"></i>
+                                            登录账户
+                                        </h4>
+
+                                        <div class="space-6"></div>
+                                        <form action="{% url 'admin_account:login' %}" method="post">{% csrf_token %}
+                                            <fieldset>
+                                                <label class="block clearfix">
+                                                    <span class="block input-icon input-icon-right">
+                                                        <input type="text" class="form-control" placeholder="用户名"
+                                                               name="username" value="{{ username }}" required/>
+                                                        <i class="ace-icon fa fa-user"></i>
+                                                    </span>
+                                                </label>
+
+                                                <label class="block clearfix">
+                                                    <span class="block input-icon input-icon-right">
+                                                        <input type="password" class="form-control" placeholder="密码"
+                                                               name="password" value="{{ password }}" required/>
+                                                        <input type="hidden" name="next" value="{{ next }}" />
+                                                        <i class="ace-icon fa fa-lock"></i>
+                                                    </span>
+                                                </label>
+
+                                                <div class="space"></div>
+
+                                                <div class="clearfix">
+                                                    <label class="inline">
+                                                        <input type="checkbox" name="remember_me" id="remember_me"
+                                                               value="1" class="ace"/>
+                                                        <span class="lbl"> 两周内自动登录 </span>
+                                                    </label>
+                                                </div>
+
+                                                <div class="space-4"></div>
+
+                                                <div class="social-login center">
+                                                    <button type="submit" class="btn btn-danger btn-lg btn-block">
+                                                        <strong>立即登录</strong>
+                                                    </button>
+                                                </div>
+
+                                            </fieldset>
+                                        </form>
+                                    </div><!-- /.widget-main -->
+
+                                    <div class="toolbar clearfix">
+                                        <div>
+                                            <a href="#" data-target="#forgot-box" id="forgot-password-link"
+                                               class="forgot-password-link">
+                                                <i class="ace-icon fa fa-arrow-left"></i>
+                                                合同预览
+                                            </a>
+                                        </div>
+
+                                        <div>
+                                            <a href="#" data-target="#signup-box" class="user-signup-link">
+                                                合同查看
+                                                <i class="ace-icon fa fa-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div><!-- /.widget-body -->
+                            </div><!-- /.login-box -->
+
+                            <div id="forgot-box" class="forgot-box widget-box no-border">
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <h4 class="header red lighter bigger">
+                                            <i class="ace-icon fa fa-key"></i>
+                                            检索合同预览码
+                                        </h4>
+
+                                        <div class="space-6"></div>
+                                        <form id="preview" action="{% url 'contract:pdf' %}" method="get">
+                                            <fieldset>
+                                                <label class="block clearfix">
+                                                    <span class="block input-icon input-icon-right">
+                                                        <input type="text" id="preview_code" name="preview_code" class="form-control"
+                                                               placeholder="输入6位数预览码"  required/>
+                                                        <i class="ace-icon fa fa-envelope"></i>
+                                                    </span>
+                                                </label>
+
+                                                <div class="clearfix">
+                                                    <button type="submit"
+                                                            class="width-35 pull-right btn btn-sm btn-danger">
+                                                        <i class="ace-icon fa fa-lightbulb-o"></i>
+                                                        <span class="bigger-110">
+                                                            预览
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                    </div><!-- /.widget-main -->
+
+                                    <div class="toolbar center">
+                                        <a href="#" data-target="#login-box" class="back-to-login-link">
+                                            返回登陆
+                                            <i class="ace-icon fa fa-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div><!-- /.widget-body -->
+                            </div><!-- /.forgot-box -->
+
+                            <div id="signup-box" class="signup-box widget-box no-border">
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <h4 class="header green lighter bigger">
+                                            <i class="ace-icon fa fa-file-text-o"></i>
+                                            合同查看
+                                        </h4>
+
+                                        <div class="space-6"></div>
+                                        <form action="{% url 'contract:list_contract' %}" method="get">
+                                            <fieldset>
+                                                <label class="block clearfix">
+                                                    <span class="block input-icon input-icon-right">
+                                                        <input type="text" id="name" name="name" class="form-control" placeholder="姓名" required/>
+                                                        <i class="ace-icon fa fa-user"></i>
+                                                    </span>
+                                                </label>
+
+                                                <label class="block clearfix">
+                                                    <span class="block input-icon input-icon-right">
+                                                        <input type="text" id="identity_card_number" name="identity_card_number" class="form-control" placeholder="身份证号" required/>
+                                                        <i class="ace-icon fa fa-lock"></i>
+                                                    </span>
+                                                </label>
+
+                                                <div class="clearfix">
+                                                    <button type="submit" class="width-35 pull-right btn btn-sm btn-success">
+                                                        <span class="bigger-110">立即查看</span>
+                                                    </button>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                    </div>
+
+                                    <div class="toolbar center">
+                                        <a href="#" data-target="#login-box" class="back-to-login-link">
+                                            <i class="ace-icon fa fa-arrow-left"></i>
+                                            返回登陆
+                                        </a>
+                                    </div>
+                                </div><!-- /.widget-body -->
+                            </div><!-- /.signup-box -->
+                        </div><!-- /.position-relative -->
+
+                        <div class="navbar-fixed-top align-right">
+                            <br/>
+                            <!--&nbsp;
+                            <a id="btn-login-dark" href="#">暗调</a>
+                            &nbsp;
+                            <span class="blue">/</span>-->
+                            &nbsp;
+                            <a id="btn-login-blur" href="#">模糊</a>
+                            &nbsp;
+                            <span class="blue">/</span>
+                            &nbsp;
+                            <a id="btn-login-light" href="#">明亮</a>
+                            &nbsp; &nbsp; &nbsp;
+                        </div>
+                    </div>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.main-content -->
+    </div><!-- /.main-container -->
+
+    <!-- basic scripts -->
+
+    <!--[if !IE]> -->
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='/static/js/jquery.js'>" + "<" + "/script>");
+    </script>
+
+    <!-- <![endif]-->
+
+    <!--[if IE]>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='/static/js/jquery1x.js'>" + "<" + "/script>");
+</script>
+<![endif]-->
+    <script type="text/javascript">
+        if ('ontouchstart' in document.documentElement) document.write("<script src='/static/js/jquery.mobile.custom.js'>" + "<" + "/script>");
+    </script>
+
+    <script src="/static/customjs/custom_cookie.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- inline scripts related to this page -->
+    <script type="text/javascript">
+
+        jQuery(function ($) {
+            $(document).on('click', '.toolbar a[data-target]', function (e) {
+                e.preventDefault();
+                var target = $(this).data('target');
+                $('.widget-box.visible').removeClass('visible');//hide others
+                $(target).addClass('visible');//show target
+            });
+        });
+
+        function show_target(target) {
+            //#forgot-box
+            //#login-box
+            //#signup-box
+            $('.widget-box.visible').removeClass('visible');//hide others
+            $(target).addClass('visible');//show target
+        }
+
+
+        //you don't need this, just used for changing background
+        jQuery(function ($) {
+
+            var target = "{{ target }}";
+            switch (target) {
+                case '#forgot-box':
+                    show_target(target);
+                    break;
+                case '#signup-box':
+                    show_target(target);
+                    break;
+                default:
+                    break
+            }
+
+            var checked_remember_me = function () {
+                $('#remember_me').attr('checked', 'checked');
+            };
+
+            var remember_me = getCookie("remember_me");
+            switch (remember_me) {
+                case '1':
+                    checked_remember_me();
+                    break;
+                default:
+                    break
+            }
+
+            $('#remember_me').on('click', function (e) {
+                if ($('#remember_me').is(':checked')) {
+                    setCookie('remember_me', '1', 14);
+                }else {
+                    clearCookie("remember_me")
+                }
+            });
+
+
+            var dark = function () {
+                $('body').attr('class', 'login-layout');
+                $('#id-text2').attr('class', 'white');
+                $('#id-company-text').attr('class', 'blue');
+            };
+            var light = function () {
+                $('body').attr('class', 'login-layout light-login');
+                $('#id-text2').attr('class', 'grey');
+                $('#id-company-text').attr('class', 'blue');
+            };
+            var blur = function () {
+                $('body').attr('class', 'login-layout blur-login');
+                $('#id-text2').attr('class', 'white');
+                $('#id-company-text').attr('class', 'light-blue');
+            };
+
+            //根据判断设置背景
+            var loginBg = getCookie("loginBg");
+            switch (loginBg) {
+                case '1':
+                    dark();
+                    setCookie('loginBg', '1', 30);
+                    break;
+                case '2':
+                    light();
+                    setCookie('loginBg', '2', 30);
+                    break;
+                case '3':
+                    blur();
+                    setCookie('loginBg', '3', 30);
+                    break;
+                default:
+                    light();
+            }
+
+            //点击风格按钮，设置cookie
+            $('#btn-login-dark').on('click', function (e) {
+                dark();
+                setCookie('loginBg', '1', 30);
+                e.preventDefault();
+            });
+            $('#btn-login-light').on('click', function (e) {
+                light();
+                setCookie('loginBg', '2', 30);
+                e.preventDefault();
+            });
+            $('#btn-login-blur').on('click', function (e) {
+                setCookie('loginBg', '3', 30);
+                blur();
+                e.preventDefault();
+            });
+
+        });
+    </script>
+    </body>
+{% endblock %}

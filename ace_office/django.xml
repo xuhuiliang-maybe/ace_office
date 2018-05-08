@@ -1,0 +1,19 @@
+<uwsgi>
+    <pythonpath>/var/www/html/ace_office/ace_office</pythonpath>
+    <module>wsgi</module>
+    <mountpoint>/</mountpoint>
+    <master/>
+    <processes>4</processes>
+    <reload-mercy>8</reload-mercy>
+    <max-requests>2000</max-requests>
+    <limit-as>1024</limit-as>
+    <prio>20</prio>
+    <socket>127.0.0.1:9000</socket>
+    <chdir>/var/www/html/ace_office</chdir>
+    <daemonize>/usr/local/nginx/logs/uwsgi.log</daemonize>
+    <procname-master>ace_office_uwsgi</procname-master>
+    <harakiri>120</harakiri>
+    <touch-logreopen>/usr/local/nginx/logs/.touchforlogrotate</touch-logreopen>
+    <no-orphans/>
+    <vacuum/>
+</uwsgi>

@@ -1,0 +1,200 @@
+{% extends "base/base.html" %}
+{% load share_module_tags %}
+{% load recruitment_manage_tags %}
+
+{% block breadcrumb %}
+    <li><a href="#">招聘管理</a></li>
+    <li class="active">个人招聘</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#user_form').submit()" data-rel="tooltip"
+                                    title="搜索">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+
+                            <!--<button class="btn btn-xs btn-info" id="exportprofile" data-rel="tooltip" title="导出Excel">
+                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>
+                                导出
+                            </button>-->
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="user_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="project_name" name="project_name" placeholder="项目名称"
+                                                   value="{{ project_name }}"/>
+                                            <input type="text" id="dept_name" name="dept_name" placeholder="服务部门"
+                                                   onclick="query_dept_param()" value="{{ dept_name }}" readonly/>
+                                            <input type="hidden" id="dept_ids" name="dept_ids" value="{{ dept_ids }}"/>
+                                            <input type="text" id="name" name="name" placeholder="员工姓名"
+                                                   value="{{ name }}"/>
+                                            <input type="text" id="recruitment_attache" name="recruitment_attache"
+                                                   placeholder="招聘人"
+                                                   value="{{ recruitment_attache }}"/>
+                                            <input type="text" id="query_month" name="query_month"
+                                                   placeholder="查询月度" value="{{ query_month }}" readonly/>
+                                            <select name="channel">
+                                                <option value="">招聘渠道</option>
+                                                {% for one_channel in list_channel %}
+                                                    <option value={{ one_channel.0 }} {% if channel == one_channel.0 %}selected="selected"{% endif %}>
+                                                        {{ one_channel.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+
+                <table class="table table-hover dataTable" id="MyTable">
+                    <thead>
+                    <tr>
+                        <th class="center">编号</th>
+                        <th class="center">招聘人员</th>
+                        <th class="center">姓名</th>
+                        <th class="center">项目名称</th>
+                        <th class="center">服务部门</th>
+                        <th class="center">项目负责人</th>
+                        <th class="center">身份证号</th>
+                        <th class="center">目前状态</th>
+                        <th class="center">性别</th>
+                        <th class="center">人员属性</th>
+                        <th class="center">入职日期</th>
+                        <th class="center">离职日期</th>
+                        <th class="center">在职天数</th>
+                        <th class="center">招聘渠道</th>
+                        <th class="center">单价</th>
+                        <th class="center">招聘提成</th>
+                        <th class="center">临时工招聘提成</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for employee in employee_list %}
+                        <tr class="center">
+                            <td>{{ employee.id }}</td>
+                            <td>{{ employee.recruitment_attache | default_if_none:"" }}</td>
+                            <td>{{ employee.name }}</td>
+                            <td>{{ employee.project_name | default_if_none:"" }}</td>
+                            <td>{{ employee.project_name.department.name | default_if_none:"" }}</td>
+                            <td> {{ employee.project_name.principal | default_if_none:"" }}</td>
+                            <td>{{ employee.identity_card_number }}</td>
+                            <td>{{ employee.get_status_display }}</td>
+                            <td>{{ employee.get_sex_display }}</td>
+                            <td>
+                                {% if employee.is_temporary %} 临时工 {% endif %}
+                                {{ employee.person_type | default_if_none:"" }}
+                            </td>
+                            <td>
+                                {% if employee.is_temporary %}
+                                    {{ employee.start_work_date | default_if_none:""| date }}
+                                {% endif %}
+                                {% if not employee.is_temporary %}
+                                    {{ employee.entry_date | default_if_none:""| date }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if employee.is_temporary %}
+                                    {{ employee.end_work_date | default_if_none:""| date }}
+                                {% endif %}
+                                {% if not employee.is_temporary %}
+                                    {{ employee.departure_date | default_if_none:""| date }}
+                                {% endif %}
+                            </td>
+                            <td>{{ employee | work_days }}</td>
+                            <td>{{ employee.get_recruitment_channel_display }}</td>
+                            <td>{{ employee | unit_price }}</td>
+                            <td>{{ employee | recruitment_commission:"employee" }}</td>
+                            <td>{{ employee | recruitment_commission:"temporary" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="19">抱歉，目前没有满足条件的个人招聘信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include "base/paginator.html" %}
+    {% include "department_tree.html" %}
+
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/fuelux/fuelux.tree.js"></script>
+    <script src="/static/customjs/custom_tree.js"></script>
+    <script src="/static/customjs/custom_base.js"></script>
+    <script src="/static/customjs/fixt_able.js"></script>
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            FixTable("MyTable", 4);
+        });
+
+        $("#query_month").datepicker(datepickerOptionsMonth);
+
+        //监听查询条件选择部门
+        select_dept_name = "";
+        select_dept_id = "";
+        $('#tree1').on('selected.fu.tree', function (e, result) {
+            var select_list = result.selected;
+            select_dept_name = "";
+            select_dept_id = "";
+            for (var i = 0; i < select_list.length; i++) {
+                select_dept_name += delHtmlTag(select_list[i].text.replace(/\s/gi,'')) + ",";
+                select_dept_id += select_list[i].value + ",";
+            }
+            select_dept_name = select_dept_name.substring(0,select_dept_name.length-1);
+            select_dept_id = select_dept_id.substring(0,select_dept_id.length-1);
+        });
+
+        function select_dept() {
+            $('#dept_name').val(select_dept_name);
+            $('#dept_ids').val(select_dept_id)
+        }
+
+        //选择部门,查询条件
+        function query_dept_param() {
+            get_all_dept("#tree1", true);
+            $('#myDeptModal').modal({backdrop: 'static', keyboard: false})
+        }
+
+
+    </script>
+{% endblock %}

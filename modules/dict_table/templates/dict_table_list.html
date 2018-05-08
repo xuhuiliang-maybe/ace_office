@@ -1,0 +1,95 @@
+{% extends "base/base.html" %}
+{% load share_module_tags %}
+{% load organizational_structure_tags %}
+
+{% block breadcrumb %}
+    <li><a href="#">字典表</a></li>
+    <li class="active">{{ dict_name }}</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="page-header">
+        <h1>
+            {{ dict_name }}
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                可自定义增加、修改
+            </small>
+        </h1>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <button class="btn btn-primary" onclick="request_add_url()">
+                新增
+            </button>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+
+                <table class="table table-striped table-hover dataTable">
+                    <thead>
+                    <tr>
+                        <th class="center">编号</th>
+                        <th class="center">名称</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for one_dict in dict_table_list %}
+                        <tr class="center">
+                            <td>{{ one_dict.id }}</td>
+                            <td>{{ one_dict.name }}</td>
+                            <td>
+                                <div>
+                                    <button class="btn btn-minier btn-info" type="button"
+                                            onclick="request_edit_url({{ one_dict.id }})">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger" type="button"
+                                            onclick="request_del_url({{ one_dict.id }})">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="center info">
+                            <td colspan="3">抱歉，目前没有 {{ dict_name }}。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+
+
+{% endblock %}
+
+
+{% block self_js %}
+    <script type="text/javascript">
+        var dict_url = "{{ prefix_url }}";
+
+        function request_add_url() {
+            window.location.href = dict_url + "add";
+        }
+
+        function request_edit_url(obj_id) {
+            window.location.href = dict_url + obj_id + "/edit";
+        }
+
+        function request_del_url(obj_id) {
+            window.location.href = dict_url + obj_id + "/delete";
+        }
+    </script>
+{% endblock %}

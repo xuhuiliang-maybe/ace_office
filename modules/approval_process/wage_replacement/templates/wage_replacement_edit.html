@@ -1,0 +1,7 @@
+{% extends "base/document_edit.html" %}
+
+{% block modules_js %}
+    <script type="text/javascript">
+        $("#id_cost_month").datepicker(datepickerOptionsMonth).attr("readonly",true);
+    </script>
+{% endblock %}

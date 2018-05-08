@@ -1,0 +1,162 @@
+{% extends "base/base.html" %}
+{% block css %}
+{% endblock %}
+{% block breadcrumb %}
+    <li class="active"> 结算发薪</li>
+{% endblock %}
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#payroll_form').submit()" data-rel="tooltip"
+                                    title="搜索">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增"
+                                    onclick="window.location.href='{% url "settlement_pay:payroll_add" %}'">
+                                <i class="ace-icon fa fa-plus-circle bigger-130"></i>
+                                新增
+                            </button>
+                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="批量删除"
+                                    onclick="batch_delete('{% url "settlement_pay:payroll_batch_delete" %}')">
+                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                批量删除
+                            </button>
+
+                            {#                            <button class="btn btn-xs btn-info" id="exportprofile" data-rel="tooltip" title="导出Excel">#}
+                            {#                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>#}
+                            {#                                导出#}
+                            {#                            </button>#}
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="payroll_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="pay_month" name="pay_month" placeholder="工资月份"
+                                                   value="{{ pay_month }}" readonly/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+
+                <table class="table table-striped table-hover dataTable">
+                    <thead>
+                    <tr>
+                        <th class="center">
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" name="check_all"/>
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        <th class="center">编号</th>
+                        <th class="center">员工编号</th>
+                        <th class="center">工资月份</th>
+                        <th class="center">岗位工资</th>
+                        <th class="center">浮动工资</th>
+                        <th class="center">全勤奖</th>
+                        <th class="center">奖金</th>
+                        <th class="center">住房补贴</th>
+                        <th class="center">交通补贴</th>
+                        <th class="center">物价补贴</th>
+                        <th class="center">伙食补贴</th>
+                        <th class="center">计时工资</th>
+                        <th class="center">计件工资</th>
+                        <th class="center">应扣工资</th>
+                        <th class="center">备注1</th>
+                        <th class="center">备注2</th>
+                        <th class="center">备注3</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for payroll in payroll_list %}
+                        <tr class="center">
+                            <td>
+                                <label class="pos-rel">
+                                    <input type="checkbox" class="ace" name="db_id" value="{{ payroll.id }}"/>
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+
+                            <td>{{ payroll.id }}</td>
+                            <td>{{ payroll.employee.id }}</td>
+                            <td>{{ payroll.pay_month | date }}</td>
+                            <td>{{ payroll.post_salary | default_if_none:"" }}</td>
+                            <td>{{ payroll.float_salary | default_if_none:"" }}</td>
+                            <td>{{ payroll.full_award | default_if_none:"" }}</td>
+                            <td>{{ payroll.award | default_if_none:"" }}</td>
+                            <td>{{ payroll.hous_subsidy | default_if_none:"" }}</td>
+                            <td>{{ payroll.traffic_subsidy | default_if_none:"" }}</td>
+                            <td>{{ payroll.commodity_subsidy | default_if_none:"" }}</td>
+                            <td>{{ payroll.food_subsidy | default_if_none:"" }}</td>
+                            <td>{{ payroll.time_salary | default_if_none:"" }}</td>
+                            <td>{{ payroll.piece_salary | default_if_none:"" }}</td>
+                            <td>{{ payroll.deducty_salary | default_if_none:"" }}</td>
+                            <td>{{ payroll.remark1 }}</td>
+                            <td>{{ payroll.remark2 }}</td>
+                            <td>{{ payroll.remark3 }}</td>
+                            <td>
+
+                                <div>
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "settlement_pay:payroll_edit" pk=payroll.id %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "settlement_pay:payroll_del" pk=payroll.id %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="19">抱歉，目前没有满足条件的信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        $("#pay_month").datepicker(datepickerOptionsMonth);
+    </script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base/base.html" %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/jquery.jOrgChart.css"/>
+    <link rel="stylesheet" href="/static/css/custom.css"/>
+{% endblock %}
+{% block breadcrumb %}
+    <li><a href="#">组织架构</a></li>
+    <li class="active">结构信息</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="page-header">
+        <h1>
+            部门信息树
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                &nbsp
+                <i class="ace-icon fa fa-paper-plane red"></i>&nbsp个人分摊
+                &nbsp&nbsp&nbsp&nbsp
+                <i class="ace-icon fa fa-paper-plane green"></i>&nbsp部门分摊
+                &nbsp&nbsp&nbsp&nbsp
+                <i class="ace-icon fa fa-paper-plane"></i>&nbsp公司分摊
+            </small>
+        </h1>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="table-responsive center">
+            <div id="chart" class="orgChart"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/jquery-ui.custom.js"></script>
+    <script src="/static/js/jquery.jOrgChart.js"></script>
+{% endblock %}
+
+{% block self_js %}
+    <script>
+        $(function () {
+            $.ajax({
+                url: "",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {action: 'org_select'},
+                success: function (result) {
+                    var showlist = $("<ul id='org' style='display:none'></ul>");
+                    showall(result, showlist);
+                    $("#chart").append(showlist);
+                    $("#org").jOrgChart({
+                        chartElement: '#chart',//指定在某个dom生成jorgchart
+                        dragAndDrop: false //设置是否可拖动
+                    });
+
+                }
+            });
+        });
+
+        //menu_list为json数据
+        //parent为要组合成html的容器
+        function showall(menu_list, parent) {
+            $.each(menu_list, function (index, val) {
+                if (val.childrens) {
+                    var li = $("<li></li>");
+                    //li.append("<span>" + val.name + "</span>"  + "<p><img height=\"50\" width=\"50\" src=\"http://himg.bdimg.com/sys/portrait/item/abdee58fb6e79fa5e7a78b3632378635.jpg\"></p>").append("<ul></ul>").appendTo(parent);
+                    li.append("<span>" + val.name + "</span>").append("<ul></ul>").appendTo(parent);
+                    //递归显示
+                    showall(val.childrens, $(li).children().eq(1));
+                } else {
+                    //$("<li></li>").append("<span>" + val.name + "<p></span>" + "<img height=\"50\" width=\"50\" src=\"http://himg.bdimg.com/sys/portrait/item/abdee58fb6e79fa5e7a78b3632378635.jpg\"></p>").appendTo(parent);
+                    $("<li></li>").append("<span>" + val.name + "</span>").appendTo(parent);
+                }
+            });
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base/document_edit.html" %}
+
+
+{% block modules_js %}
+    <script type="text/javascript">
+        //about employee
+        $("#id_birthday").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_entry_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_social_insurance_increase_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_business_insurance_increase_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_provident_fund_increase_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_contract_begin_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_probation_end_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_contract_end_date").datepicker(datepickerOptions).attr("readonly", true);
+        //$("#id_departure_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_social_insurance_reduce_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_business_insurance_reduce_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_provident_fund_reduce_date").datepicker(datepickerOptions).attr("readonly", true);
+
+        //about temporary
+        $("#id_start_work_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_end_work_date").datepicker(datepickerOptions).attr("readonly", true);
+        $("#id_release_time").datepicker(datepickerOptions).attr("readonly", true);
+
+        var f = $(".form-horizontal").get(0);
+        $(f).validate({
+            rules: {
+                "identity_card_number": {"minlength": 18, "maxlength": 18, "required": true},
+                "register_postcode": {"rangelength": [6, 6], "digits": true},
+                "phone_number": {"rangelength": [7, 18], "digits": true}
+            },
+            messages: {
+                identity_card_number: {
+                    minlength: "请输入至少18个字符。",
+                    required: "字段为必填项。"
+                },
+                register_postcode: {
+                    rangelength: "必须为6个字符的数字。",
+                    digits: "请只输入数字。"
+                },
+                phone_number: {
+                    rangelength: "请输入长7和18个字符之间的值。",
+                    digits: "请只输入数字。"
+                }
+            }
+        });
+
+        $('#id_work_address').on('click', function (ev) {
+            address_modal("id_work_address", false)
+        });
+        $('#id_insured_place').on('click', function (ev) {
+            address_modal("id_insured_place", false)
+        });
+    </script>
+{% endblock %}
+

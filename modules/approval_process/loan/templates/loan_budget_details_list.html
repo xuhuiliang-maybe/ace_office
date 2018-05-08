@@ -1,0 +1,113 @@
+{% extends "base/base.html" %}
+{% block css %} {% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'approval:loan_list' %}">备用金</a></li>
+    <li class="active">备用金，费用预算明细</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget-main padding-6">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p>
+                            {% if view_type == '1'  and apply_info.status == '1' %}
+                                <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增"
+                                        onclick="location.href='{{ add_url }}'">
+                                    <i class="ace-icon fa fa-plus-circle bigger-130"></i> 新增
+                                </button>
+                            {% endif %}
+                            <button class="btn btn-xs" data-rel="tooltip" title="返回"
+                                    onclick="location.href='{{ return_url }}'">
+                                <i class="ace-icon fa fa-arrow-left bigger-130"></i> 返回
+                            </button>
+                        <div class="alert alert-block alert-info">
+                            <i class="ace-icon fa fa-info"></i>
+                            <strong class="">： {{ apply_info | default_if_none:"" }} </strong>
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <table class="table table-hover dataTable" id="MyTable">
+                    <thead>
+                    <tr>
+                        <th class="center">编号</th>
+                        <th class="center">日期</th>
+                        <th class="center">天数</th>
+                        <th class="center">每天人数</th>
+                        <th class="center">每天人均工时</th>
+                        <th class="center">小时工资</th>
+                        <th class="center">人均餐费</th>
+                        <th class="center">交通费</th>
+                        <th class="center">临时工预算合计</th>
+                        <th class="center">数量</th>
+                        <th class="center">单价</th>
+                        <th class="center">其他预算合计</th>
+                        <th class="center">总计</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for one_detail in loan_budget_details_list %}
+                        <tr class="center">
+                            <td>{{ one_detail.id }}</td>
+                            <td>{{ one_detail.date_range | default_if_none:"" }}</td>
+                            <td>{{ one_detail.days }}</td>
+                            <td>{{ one_detail.daily_number }}</td>
+                            <td>{{ one_detail.hours_per_day }}</td>
+                            <td>{{ one_detail.hourly_wage }}</td>
+                            <td>{{ one_detail.meals_per_capita }}</td>
+                            <td>{{ one_detail.traffic_fee }}</td>
+                            <td>{{ one_detail.temporary_total }}</td>
+                            <td>{{ one_detail.amount }}</td>
+                            <td>{{ one_detail.unit_price }}</td>
+                            <td>{{ one_detail.other_total }}</td>
+                            <td>{{ one_detail.all_total }}</td>
+                            <td>
+                                {% if view_type == '1'  and apply_info.status == '1' %}
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "approval:loan_budget_details_edit" pk=one_detail.id applicants=applicants %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "approval:loan_budget_details_delete" pk=one_detail.id applicants=applicants %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="14">抱歉，目前没有满足条件的信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include "base/paginator.html" %}
+
+{% endblock %}
+
+{% block js %}
+    <script src="/static/customjs/fixt_able.js"></script>
+{% endblock %}
+{% block self_js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            FixTable("MyTable", 3);
+        });
+    </script>
+{% endblock %}

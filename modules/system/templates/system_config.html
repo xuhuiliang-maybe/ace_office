@@ -1,0 +1,215 @@
+{% extends "base/base.html" %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/jquery-ui.custom.css"/>
+    <link rel="stylesheet" href="/static/css/bootstrap-editable.css"/>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="#">系统相关</a></li>
+    <li class="active">系统设置</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="tabbable">
+                <!-- #section:pages/faq -->
+                <ul class="nav nav-tabs padding-18 tab-size-bigger" id="myTab">
+                    <li class="active">
+                        <a data-toggle="tab" href="#faq-tab-1">
+                            <i class="blue ace-icon fa fa-cog bigger-120"></i>
+                            常规
+                        </a>
+                    </li>
+
+                    <li>
+                        <a data-toggle="tab" href="#faq-tab-2">
+                            <i class="red ace-icon fa fa-envelope bigger-120"></i>
+                            Email
+                        </a>
+                    </li>
+
+                    <li>
+                        <a data-toggle="tab" href="#faq-tab-3">
+                            <i class="orange ace-icon fa fa-clock-o bigger-120"></i>
+                            定时任务
+                        </a>
+                    </li>
+
+                </ul>
+
+                <!-- /section:pages/faq -->
+                <div class="tab-content no-border padding-24">
+                    <div id="faq-tab-1" class="tab-pane fade in active">
+                        <h4 class="blue">
+                            <i class="ace-icon fa fa-check bigger-110"></i>
+                            设置系统常用属性
+                        </h4>
+
+                        <div class="space-8"></div>
+
+                        <div class="profile-user-info profile-user-info-striped">
+                            {% for routine in param_list %}
+                                {% ifequal routine.param_type "1" %}
+
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">{{ routine.param_display }}</div>
+
+                                        <div class="profile-info-value">
+                                            <span class="editable"
+                                                  id="{{ routine.param_name }}">{{ routine.param_value }}</span>
+                                        </div>
+                                    </div>
+                                {% endifequal %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div id="faq-tab-2" class="tab-pane fade">
+                        <h4 class="blue">
+                            <i class="red ace-icon fa fa-envelope bigger-110"></i>
+                            Email权限设置
+                        </h4>
+
+                        <div class="space-8"></div>
+
+                        <div class="profile-user-info profile-user-info-striped">
+                            {% for routine in param_list %}
+                                {% ifequal routine.param_type "2" %}
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">{{ routine.param_display }}</div>
+
+                                        <div class="profile-info-value">
+                                            <span class="editable" id="{{ routine.param_name }}">
+                                                {{ routine.param_value }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                {% endifequal %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div id="faq-tab-3" class="tab-pane fade">
+                        <h4 class="blue">
+                            <i class="orange ace-icon fa fa-clock-o bigger-110"></i>
+                            定时任务设置
+                        </h4>
+
+                        <div class="space-8"></div>
+
+                        <div class="profile-user-info profile-user-info-striped">
+                            {% for routine in param_list %}
+                                {% ifequal routine.param_type "3" %}
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name">{{ routine.param_display }}</div>
+
+                                        <div class="profile-info-value">
+                                            <span class="editable"
+                                                  id="{{ routine.param_name }}">{{ routine.param_value }}</span>
+                                        </div>
+                                    </div>
+                                {% endifequal %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+{% endblock %}
+
+{% block js %}
+    <!--[if lte IE 8]>
+		  <script src="/static/js/excanvas.js"></script>
+		<![endif]-->
+    <script src="/static/js/jquery-ui.custom.js"></script>
+    <script src="/static/js/jquery.ui.touch-punch.js"></script>
+    <script src="/static/js/jquery.hotkeys.js"></script>
+    <script src="/static/js/bootstrap-wysiwyg.js"></script>
+    <script src="/static/js/fuelux/fuelux.spinner.js"></script>
+    <script src="/static/js/x-editable/bootstrap-editable.js"></script>
+    <script src="/static/js/x-editable/ace-editable.js"></script>
+    <script src="/static/js/jquery.maskedinput.js"></script>
+    <script src="/static/customjs/custom_base.js"></script>
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        jQuery(function ($) {
+            //editables on first profile page
+            $.fn.editable.defaults.mode = 'inline';
+            $.fn.editableform.loading = "<div class='editableform-loading'><i class='ace-icon fa fa-spinner fa-spin fa-2x light-blue'></i></div>";
+            $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="ace-icon fa fa-check"></i></button>' +
+                    '<button type="button" class="btn editable-cancel"><i class="ace-icon fa fa-times"></i></button>';
+
+            //text editable
+            $('#site_name').editable({
+                type: 'text',
+                name: 'site_name',
+                success: function (response, newValue) {
+                    var param_dict = {};
+                    param_dict["name"] = "site_name";
+                    param_dict["newvalue"] = newValue;
+                    change_system_config(param_dict)
+                }
+            });
+
+            $('#company_name').editable({
+                type: 'text',
+                name: 'company_name',
+                success: function (response, newValue) {
+                    var param_dict = {};
+                    param_dict["name"] = "company_name";
+                    param_dict["newvalue"] = newValue;
+                    change_system_config(param_dict)
+                }
+            });
+
+            $('#scheduled_backup').editable({
+                type: 'spinner',
+                name: 'scheduled_backup',
+                spinner: {
+                    min: 0,
+                    max: 365,
+                    step: 1,
+                    on_sides: true
+                    //,nativeUI: true//if true and browser support input[type=number], native browser control will be used
+                },
+                success: function (response, newValue) {
+                    var param_dict = {};
+                    param_dict["name"] = "scheduled_backup";
+                    param_dict["newvalue"] = newValue;
+                    change_system_config(param_dict)
+                }
+            });
+
+            $('#scheduled_clean').editable({
+                type: 'spinner',
+                name: 'scheduled_clean',
+                spinner: {
+                    min: 0,
+                    max: 365,
+                    step: 1,
+                    on_sides: true
+                    //,nativeUI: true//if true and browser support input[type=number], native browser control will be used
+                },
+                success: function (response, newValue) {
+                    var param_dict = {};
+                    param_dict["name"] = "scheduled_clean";
+                    param_dict["newvalue"] = newValue;
+                    change_system_config(param_dict)
+                }
+            });
+        });
+        function change_system_config(param_dict) {
+            var change_url = "{% url "system:config-update" %}";
+            custom_ajax_post(change_url, param_dict)
+        }
+    </script>
+{% endblock %}

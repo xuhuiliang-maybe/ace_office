@@ -1,0 +1,426 @@
+{% extends "base/base.html" %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/jquery-ui.custom.css"/>
+    <link rel="stylesheet" href="/static/css/jquery.gritter.css"/>
+    <link rel="stylesheet" href="/static/css/bootstrap-editable.css"/>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="#">我的地盘</a></li>
+    <li class="active">我的个人信息</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div>
+                <div id="user-profile-1" class="user-profile row">
+                    <div class="col-xs-12 col-sm-3 center">
+                        <div>
+                            <!-- #section:pages/profile.picture -->
+                            <span class="profile-picture">
+                                <img id="avatar" class="editable img-responsive" alt="{{ request.user.first_name }}"
+                                     src="{{ request.user.photo.url }}"/>
+                            </span>
+
+                            <!-- /section:pages/profile.picture -->
+                            <div class="space-4"></div>
+
+                        </div>
+
+                        <div class="space-6"></div>
+
+
+                        <!-- /section:pages/profile.contact -->
+                        <!-- <div class="hr hr12 dotted"></div>-->
+
+                        <!-- #section:custom/extra.grid -->
+                        <!--<div class="clearfix">
+                            <div class="grid2">
+                                <span class="bigger-175 blue">25</span>
+
+                                <br/>
+                                粉丝
+                            </div>
+
+                            <div class="grid2">
+                                <span class="bigger-175 blue">12</span>
+
+                                <br/>
+                                关注
+                            </div>
+                        </div> -->
+
+                        <!-- /section:custom/extra.grid -->
+                        <!--<div class="hr hr16 dotted"></div>-->
+                    </div>
+
+                    <div class="col-xs-12 col-sm-9">
+                        <!--<div class="center">
+                            <span class="btn btn-app btn-sm btn-light no-hover">
+                                <span class="line-height-1 bigger-170 blue"> 0 </span>
+
+                                <br/>
+                                <span class="line-height-1 smaller-90"> -- </span>
+                            </span>
+
+                            <span class="btn btn-app btn-sm btn-yellow no-hover">
+                                <span class="line-height-1 bigger-170"> 0 </span>
+
+                                <br/>
+                                <span class="line-height-1 smaller-90"> -- </span>
+                            </span>
+
+                            <span class="btn btn-app btn-sm btn-pink no-hover">
+                                <span class="line-height-1 bigger-170"> 0 </span>
+
+                                <br/>
+                                <span class="line-height-1 smaller-90"> -- </span>
+                            </span>
+
+                            <span class="btn btn-app btn-sm btn-grey no-hover">
+                                <span class="line-height-1 bigger-170"> 0 </span>
+
+                                <br/>
+                                <span class="line-height-1 smaller-90"> -- </span>
+                            </span>
+
+                            <span class="btn btn-app btn-sm btn-success no-hover">
+                                <span class="line-height-1 bigger-170"> 0 </span>
+
+                                <br/>
+                                <span class="line-height-1 smaller-90"> -- </span>
+                            </span>
+
+                            <span class="btn btn-app btn-sm btn-primary no-hover">
+                                <span class="line-height-1 bigger-170"> 0 </span>
+
+                                <br/>
+                                <span class="line-height-1 smaller-90"> -- </span>
+                            </span>
+                        </div> -->
+
+                        <div class="space-12"></div>
+
+                        <!-- #section:pages/profile.info -->
+                        <div class="profile-user-info profile-user-info-striped">
+                            <div class="profile-info-row">
+                                <div class="profile-info-name"> 姓名</div>
+
+                                <div class="profile-info-value">
+                                    <span class="editable" id="first_name">{{ request.user.first_name }}</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">用户名</div>
+
+                                <div class="profile-info-value">
+                                    <span class="editable" id="username">{{ request.user.username }}</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">办公通讯地址</div>
+
+                                <div class="profile-info-value">
+                                    <span class="editable" id="address">{{ request.user.address }}</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">邮箱</div>
+
+                                <div class="profile-info-value">
+                                    <span class="editable" id="email">{{ request.user.email }}</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">座机号</div>
+
+                                <div class="profile-info-value">
+                                    <span class="editable" id="telephone">{{ request.user.telephone }}</span>
+                                </div>
+                            </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">手机号</div>
+
+                                <div class="profile-info-value">
+                                    <span class="editable" id="mobile_phone">{{ request.user.mobile_phone }}</span>
+                                </div>
+                            </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name"> 注册时间</div>
+
+                                <div class="profile-info-value">
+                                    <span class="editable" id="signup">{{ request.user.date_joined }}</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-row">
+                                <div class="profile-info-name"> 最近登录</div>
+
+                                <div class="profile-info-value">
+                                    <span class="editable" id="login">{{ request.user.last_login }}</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- /section:pages/profile.info -->
+                        <div class="space-20"></div>
+
+                        <!--<div class="widget-box transparent">
+                            <div class="widget-header widget-header-small">
+                                <h4 class="widget-title blue smaller">
+                                    <i class="ace-icon fa fa-rss orange"></i>
+                                    动态
+                                </h4>
+
+                                <div class="widget-toolbar action-buttons">
+                                    <a href="#" data-action="reload">
+                                        <i class="ace-icon fa fa-refresh blue"></i>
+                                    </a>
+                                    &nbsp;
+                                    <a href="#" class="pink">
+                                        <i class="ace-icon fa fa-trash-o"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="widget-main padding-8">
+                                    <!-- #section:pages/profile.feed -->
+                        <!-- <div id="profile-feed-1" class="profile-feed">
+                                        <div class="profile-activity clearfix">
+                                            <div>
+                                                <img class="pull-left" alt="Alex Doe's avatar"
+                                                     src="/static/avatars/avatar5.png"/>
+                                                <a class="user" href="#"> </a>
+                                                更新头像
+                                                <a href="#">浏览</a>
+
+                                                <div class="time">
+                                                    <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                                                    1 小时前
+                                                </div>
+                                            </div>
+
+                                            <div class="tools action-buttons">
+                                                <a href="#" class="blue">
+                                                    <i class="ace-icon fa fa-pencil bigger-125"></i>
+                                                </a>
+
+                                                <a href="#" class="red">
+                                                    <i class="ace-icon fa fa-times bigger-125"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- /section:pages/profile.feed
+                                </div>
+                            </div>
+                        </div>-->
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+    {% include "address_modal.html" %}
+{% endblock %}
+
+{% block js %}
+    <!--[if lte IE 8]>
+<script src="/static/js/excanvas.js"></script>
+<![endif]-->
+    <script src="/static/js/jquery-ui.custom.js"></script>
+    <script src="/static/js/jquery.ui.touch-punch.js"></script>
+    <script src="/static/js/jquery.gritter.js"></script>
+    <script src="/static/js/bootbox.js"></script>
+    <script src="/static/js/jquery.easypiechart.js"></script>
+    <script src="/static/js/jquery.hotkeys.js"></script>
+    <script src="/static/js/bootstrap-wysiwyg.js"></script>
+    <script src="/static/js/fuelux/fuelux.spinner.js"></script>
+    <script src="/static/js/x-editable/bootstrap-editable.js"></script>
+    <script src="/static/js/x-editable/ace-editable.js"></script>
+    <script src="/static/js/jquery.maskedinput.js"></script>
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        jQuery(function ($) {
+
+            //editables on first profile page
+            $.fn.editable.defaults.mode = 'inline';
+            $.fn.editableform.loading = "<div class='editableform-loading'><i class='ace-icon fa fa-spinner fa-spin fa-2x light-blue'></i></div>";
+            $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="ace-icon fa fa-check"></i></button>' +
+                    '<button type="button" class="btn editable-cancel"><i class="ace-icon fa fa-times"></i></button>';
+
+            //editables
+
+            //text editable
+            $('#address').editable({
+                type: 'text',
+                name: 'address',
+                url: '{% url "mysite:personal_edit" %}',
+                pk: "{{ request.user.id }}",
+                success: function (response, newValue) {
+                    layer.open({title: '提示', content: response});
+                }
+            });
+            $('#email').editable({
+                type: 'email',
+                name: 'email',
+                url: '{% url "mysite:personal_edit" %}',
+                pk: "{{ request.user.id }}",
+                success: function (response, newValue) {
+                    alert(response)
+                }
+            });
+            $('#telephone').editable({
+                type: 'text',
+                name: 'telephone',
+                url: '{% url "mysite:personal_edit" %}',
+                pk: "{{ request.user.id }}",
+                success: function (response, newValue) {
+                    layer.open({title: '提示', content: response});
+                }
+            });
+            $('#mobile_phone').editable({
+                type: 'text',
+                name: 'mobile_phone',
+                url: '{% url "mysite:personal_edit" %}',
+                pk: "{{ request.user.id }}",
+                success: function (response, newValue) {
+                    alert(response)
+                }
+            });
+
+            // *** editable avatar *** //
+            try {//ie8 throws some harmless exceptions, so let's catch'em
+
+                //first let's add a fake appendChild method for Image element for browsers that have a problem with this
+                //because editable plugin calls appendChild, and it causes errors on IE at unpredicted points
+                try {
+                    document.createElement('IMG').appendChild(document.createElement('B'));
+                } catch (e) {
+                    Image.prototype.appendChild = function (el) {
+                    }
+                }
+
+                var last_gritter;
+                $('#avatar').editable({
+                    type: 'image',
+                    name: 'avatar',
+                    value: null,
+                    //onblur: 'ignore',  //don't reset or hide editable onblur?!
+                    image: {
+                        //specify ace file input plugin's options here
+                        btn_choose: 'Change Avatar',
+                        droppable: true,
+                        maxSize: 110000,//~100Kb
+
+                        //and a few extra ones here
+                        name: 'avatar',//put the field name here as well, will be used inside the custom plugin
+                        on_error: function (error_type) {//on_error function will be called when the selected file has a problem
+                            if (last_gritter) $.gritter.remove(last_gritter);
+                            if (error_type == 1) {//file format error
+                                last_gritter = $.gritter.add({
+                                    title: 'File is not an image!',
+                                    text: 'Please choose a jpg|gif|png image!',
+                                    class_name: 'gritter-error gritter-center'
+                                });
+                            } else if (error_type == 2) {//file size rror
+                                last_gritter = $.gritter.add({
+                                    title: 'File too big!',
+                                    text: 'Image size should not exceed 100Kb!',
+                                    class_name: 'gritter-error gritter-center'
+                                });
+                            }
+                            else {//other error
+                            }
+                        },
+                        on_success: function () {
+                            $.gritter.removeAll();
+                        }
+                    },
+                    url: function (params) {
+                        // ***UPDATE AVATAR HERE*** //
+                        //for a working upload example you can replace the contents of this function with
+                        //examples/profile-avatar-update.js
+
+                        var deferred = new $.Deferred;
+
+                        var value = $('#avatar').next().find('input[type=hidden]:eq(0)').val();
+                        if (!value || value.length == 0) {
+                            deferred.resolve();
+                            return deferred.promise();
+                        }
+
+
+                        //dummy upload
+                        setTimeout(function () {
+                            if ("FileReader" in window) {
+                                //for browsers that have a thumbnail of selected image
+                                var thumb = $('#avatar').next().find('img').data('thumb');
+                                if (thumb) $('#avatar').get(0).src = thumb;
+                            }
+
+                            deferred.resolve({'status': 'OK'});
+
+                            if (last_gritter) $.gritter.remove(last_gritter);
+                            last_gritter = $.gritter.add({
+                                title: 'Avatar Updated!',
+                                text: 'Uploading to server can be easily implemented. A working example is included with the template.',
+                                class_name: 'gritter-info gritter-center'
+                            });
+
+                        }, parseInt(Math.random() * 800 + 800));
+
+                        return deferred.promise();
+
+                        // ***END OF UPDATE AVATAR HERE*** //
+                    },
+
+                    success: function (response, newValue) {
+                    }
+                })
+            } catch (e) {
+            }
+
+            /**
+             //let's display edit mode by default?
+             var blank_image = true;//somehow you determine if image is initially blank or not, or you just want to display file input at first
+             if(blank_image) {
+					$('#avatar').editable('show').on('hidden', function(e, reason) {
+						if(reason == 'onblur') {
+							$('#avatar').editable('show');
+							return;
+						}
+						$('#avatar').off('hidden');
+					})
+				}
+             */
+
+            $('#profile-feed-1').ace_scroll({height: '250px', mouseWheelLock: true, alwaysVisible: true});
+
+            $('a[ data-original-title]').tooltip();
+
+            $(document).one('ajaxloadstart.page', function (e) {
+                //in ajax mode, remove remaining elements before leaving page
+                try {
+                    $('.editable').editable('destroy');
+                } catch (e) {
+                }
+                $('[class*=select2]').remove();
+            });
+        });
+    </script>
+{% endblock %}

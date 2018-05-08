@@ -1,0 +1,186 @@
+{% extends "base/base.html" %}
+{% block css %}
+{% endblock %}
+{% block breadcrumb %}
+    <li class="active">借款与销账</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#payroll_form').submit()" data-rel="tooltip"
+                                    title="搜索">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+                            <button class="btn btn-xs btn-warning" id="export_info"
+                                    data-rel="tooltip"
+                                    title="导出Excel">
+                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>
+                                导出
+                            </button>
+                            {#                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增"#}
+                            {#                                    onclick="window.location.href='{% url "finance:loans_and_write_offs:add_loansandwriteoffs" %}'">#}
+                            {#                                <i class="ace-icon fa fa-plus-circle bigger-130"></i>#}
+                            {#                                新增#}
+                            {#                            </button>#}
+                            {#                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="批量删除"#}
+                            {#                                    onclick="batch_delete('{% url "settlement_pay:payroll_batch_delete" %}')">#}
+                            {#                                <i class="ace-icon fa fa-trash-o bigger-130"></i>#}
+                            {#                                批量删除#}
+                            {#                            </button>#}
+
+                            {#                            <button class="btn btn-xs btn-info" id="exportprofile" data-rel="tooltip" title="导出Excel">#}
+                            {#                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>#}
+                            {#                                导出#}
+                            {#                            </button>#}
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="payroll_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="name" name="name" placeholder="姓名"
+                                                   value="{{ name }}"/>
+                                            <input type="text" id="start_borrowing_date" name="start_borrowing_date"
+                                                   placeholder="起始借款时间"
+                                                   value="{{ start_borrowing_date }}" readonly/>
+                                            <input type="text" id="end_borrowing_date" name="end_borrowing_date"
+                                                   placeholder="终止借款时间"
+                                                   value="{{ end_borrowing_date }}" readonly/>
+
+                                            <input type="text" id="money" name="money" placeholder="借款金额"
+                                                   value="{{ money }}"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+
+                <table class="table table-striped table-hover dataTable">
+                    <thead>
+                    <tr>
+                        <th class="center">
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" name="check_all"/>
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        <th class="center">编号</th>
+                        <th class="center">姓名</th>
+                        <th class="center">借款时间</th>
+                        <th class="center">借款用途</th>
+                        <th class="center">借款金额</th>
+                        <th class="center">销账金额</th>
+                        <th class="center">销账时间</th>
+                        <th class="center">备注</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for loans_and_write_offs in loans_and_write_offs_list %}
+                        <tr class="center">
+                            <td>
+                                <label class="pos-rel">
+                                    <input type="checkbox" class="ace" name="db_id"
+                                           value="{{ loans_and_write_offs.id }}"/>
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+
+                            <td>{{ loans_and_write_offs.id }}</td>
+                            <td>{{ loans_and_write_offs.loan.apply_user.first_name }}</td>
+                            <td>{{ loans_and_write_offs.loan.borrowing_date | date }}</td>
+                            <td>{{ loans_and_write_offs.loan.note }}</td>
+                            <td>{{ loans_and_write_offs.loan.money }}</td>
+                            <td>{{ loans_and_write_offs.amount_write_offs  | default_if_none:"" }}</td>
+                            <td>{{ loans_and_write_offs.write_offs_date | date | default_if_none:"" }}</td>
+                            <td>{{ loans_and_write_offs.remark | default_if_none:"" }}</td>
+                            <td>
+
+                                <div>
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "finance:loans_and_write_offs:edit_loansandwriteoffs" pk=loans_and_write_offs.id %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "finance:loans_and_write_offs:del_loansandwriteoffs" pk=loans_and_write_offs.id %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="19">抱歉，目前没有满足条件的信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        $("#start_borrowing_date, #end_borrowing_date").datepicker(datepickerOptions).attr("readonly", true);
+
+        /* export*/
+        $("#export_info").click(function () {
+            var name = $("#name").val();
+            var start_borrowing_date = $("#start_borrowing_date").val();
+            var end_borrowing_date = $("#end_borrowing_date").val();
+            var money = $("#money").val();
+            if (name == undefined) {
+                name = ""
+            }
+            if (start_borrowing_date == undefined) {
+                start_borrowing_date = ""
+            }
+            if (end_borrowing_date == undefined) {
+                end_borrowing_date = ""
+            }
+            if (money == undefined) {
+                money = ""
+            }
+            location.href = "{% url 'finance:loans_and_write_offs:export_loansandwriteoffs' %}"
+                    + "?name=" + name
+                    + "&start_borrowing_date=" + start_borrowing_date
+                    + "&end_borrowing_date=" + end_borrowing_date
+                    + "&money=" + money
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "base/base.html" %}
+{% block css %} {% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'approval:wage_replacement_list' %}">工资补发申请</a></li>
+    <li class="active">工资补发申请，明细</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget-main padding-6">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p>
+                            {% if view_type == '1' and apply_info.status == '1' %}
+                                <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增"
+                                        onclick="location.href='{{ add_url }}'">
+                                    <i class="ace-icon fa fa-plus-circle bigger-130"></i> 新增
+                                </button>
+                            {% endif %}
+                            <button class="btn btn-xs" data-rel="tooltip" title="返回"
+                                    onclick="location.href='{{ return_url }}'">
+                                <i class="ace-icon fa fa-arrow-left bigger-130"></i> 返回
+                            </button>
+                        <div class="alert alert-block alert-info">
+                            <i class="ace-icon fa fa-info"></i>
+                            <strong class="">： {{ apply_info | default_if_none:"" }} </strong>
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <table class="table table-hover dataTable">
+                    <thead>
+                    <tr>
+                        <th class="center">编号</th>
+                        <th class="center">付款单位</th>
+                        <th class="center">服务部门</th>
+                        <th class="center">项目名称</th>
+                        <th class="center">姓名</th>
+                        <th class="center">身份证号</th>
+                        <th class="center">银行卡号</th>
+                        <th class="center">开户银行</th>
+                        <th class="center">补发金额</th>
+                        <th class="center">费用月份</th>
+                        <th class="center">补发类型</th>
+                        <th class="center">补发说明</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for one_detail in wage_replacement_detail_list %}
+                        <tr class="center">
+                            <td>{{ one_detail.id }}</td>
+                            <td>{{ one_detail.get_payment_unit_display }}</td>
+                            <td>{{ one_detail.department.name }}</td>
+                            <td>{{ one_detail.project_name.full_name }}</td>
+                            <td>{{ one_detail.name }}</td>
+                            <td>{{ one_detail.identity_card_number }}</td>
+                            <td>{{ one_detail.salary_card_number }}</td>
+                            <td>{{ one_detail.bank_account }}</td>
+                            <td>{{ one_detail.replacement_money }}</td>
+                            <td>{{ one_detail.cost_month |date }}</td>
+                            <td>{{ one_detail.replacement_type }}</td>
+                            <td>{{ one_detail.replacement_explain }}</td>
+                            <td>
+                                {% if view_type == '1' and apply_info.status == '1' %}
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "approval:wage_replacement_details_edit" pk=one_detail.id applicants=applicants %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "approval:wage_replacement_details_delete" pk=one_detail.id applicants=applicants %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="14">抱歉，目前没有满足条件的信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include "base/paginator.html" %}
+
+{% endblock %}
+
+{% block js %} {% endblock %}
+{% block self_js %}
+    <script type="text/javascript">
+    </script>
+{% endblock %}

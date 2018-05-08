@@ -1,0 +1,222 @@
+{% extends "base/base.html" %}
+
+{% block css %}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="#">薪资管理</a></li>
+    <li class="active"> 薪资明细</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#user_form').submit()" data-rel="tooltip"
+                                    title="搜索">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增"
+                                    onclick="window.location.href='{% url "payroll_manage:payroll_detail:payroll_detail_add" %}'">
+                                <i class="ace-icon fa fa-plus-circle bigger-130"></i>
+                                新增
+                            </button>
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="user_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="project_name" name="project_name" placeholder="项目名称"
+                                                   value="{{ project_name }}"/>
+                                            <input type="text" id="settle_accounts_month" name="settle_accounts_month"
+                                                   placeholder="结算月份" value="{{ settle_accounts_month }}" readonly/>
+                                            <select name="service_company" id="service_company">
+                                                <option value=0>服务公司</option>
+                                                {% for company_subject in company_subject_list %}
+                                                    <option value={{ company_subject.id }} {% if service_company ==  company_subject.id %}selected{% endif %}>{{ company_subject.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+
+                <table class="table table-hover dataTable" id="MyTable">
+                    <thead>
+                    <tr>
+                        <th class="center">
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" name="check_all"/>
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        <th class="center">编号</th>
+                        <th class="center">姓名</th>
+                        <th class="center">身份证号</th>
+                        <th class="center">项目名称</th>
+                        <th class="center">服务公司</th>
+                        <th class="center">服务部门</th>
+                        <th class="center">结算月份</th>
+                        <th class="center">应发工资</th>
+                        <th class="center">个人社保</th>
+                        <th class="center">个人公积金</th>
+                        <th class="center">税前调整</th>
+                        <th class="center">税前工资</th>
+                        <th class="center">个税</th>
+                        <th class="center">税率</th>
+                        <th class="center">速算扣除数</th>
+                        <th class="center">税后调整</th>
+                        <th class="center">实发工资</th>
+                        <th class="center">社保单位</th>
+                        <th class="center">公积金单位</th>
+                        <th class="center">社保补缴单位</th>
+                        <th class="center">公积金补缴单位</th>
+                        <th class="center">社保+公积金合计单位</th>
+                        <th class="center">雇主/商保/意外险</th>
+                        <th class="center">残疾人保障金</th>
+                        <th class="center">管理费</th>
+                        <th class="center">合计</th>
+                        <th class="center">备注</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for payroll_detail in payroll_detail_list %}
+                        <tr class="center">
+                            <td>
+                                <label class="pos-rel">
+                                    <input type="checkbox" class="ace" name="db_id" value="{{ payroll_detail.id }}"/>
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+
+                            <td>{{ payroll_detail.id }}</td>
+                            <td>{{ payroll_detail.name }}</td>
+                            <td>{{ payroll_detail.identity_card_number }}</td>
+                            <td>{{ payroll_detail.project_name.full_name | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.project_name.company_subject.name }}</td>
+                            <td>{{ payroll_detail.project_name.department.name }}</td>
+                            <td>{{ payroll_detail.settle_accounts_month | date:"Y, F" }}</td>
+                            <td>{{ payroll_detail.wages_should_be | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.person_social_security | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.person_provident_fund | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.pre_tax_adjustment | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.pre_tax_wage| default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.tax | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.tax_rate | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.quick_deduction | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.tax_adjustments | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.real_hair_wage | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.social_security_unit | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.provident_fund_unit | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.social_security_pay_unit | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.provident_fund_pay_unit | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.social_security_provident_fund_sum_unit | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.employer | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.security_for_disabled | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.management_fee | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.total | default_if_none:"" }}</td>
+                            <td>{{ payroll_detail.remark | default_if_none:"" }}</td>
+                            <td>
+
+                                <div>
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "payroll_manage:payroll_detail:payroll_detail_edit" pk=payroll_detail.id %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "payroll_manage:payroll_detail:payroll_detail_delete" pk=payroll_detail.id %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="28">抱歉，目前没有满足条件的信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include "base/paginator.html" %}
+    {% include "department_tree.html" %}
+
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/fuelux/fuelux.tree.js"></script>
+    <script src="/static/customjs/custom_tree.js"></script>
+    <script src="/static/customjs/custom_base.js"></script>
+    <script src="/static/customjs/fixt_able.js"></script>
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            FixTable("MyTable", 2);
+        });
+
+        $("#settle_accounts_month").datepicker(datepickerOptionsMonth);
+
+        //监听查询条件选择部门
+        select_dept_name = "";
+        select_dept_id = "";
+        $('#tree1').on('selected.fu.tree', function (e, result) {
+            var select_list = result.selected;
+            select_dept_name = "";
+            select_dept_id = "";
+            for (var i = 0; i < select_list.length; i++) {
+                select_dept_name += delHtmlTag(select_list[i].text.replace(/\s/gi,'')) + ",";
+                select_dept_id += select_list[i].value + ",";
+            }
+            select_dept_name = select_dept_name.substring(0,select_dept_name.length-1);
+            select_dept_id = select_dept_id.substring(0,select_dept_id.length-1);
+        });
+
+        function select_dept() {
+            $('#dept_name').val(select_dept_name);
+            $('#dept_ids').val(select_dept_id)
+        }
+
+        //选择部门,查询条件
+        function query_dept_param() {
+            get_all_dept("#tree1", true);
+            $('#myDeptModal').modal({backdrop: 'static', keyboard: false})
+        }
+
+
+    </script>
+{% endblock %}

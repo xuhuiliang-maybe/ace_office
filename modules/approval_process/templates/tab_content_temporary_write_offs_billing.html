@@ -1,0 +1,137 @@
+{% load approval_process_tags %}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="table-responsive">
+
+            <table class="table table-striped table-hover dataTable">
+                <thead>
+                <tr>
+                    <th class="center">
+                        <label class="pos-rel">
+                            <input type="checkbox" class="ace" name="check_all"/>
+                            <span class="lbl"></span>
+                        </label>
+                    </th>
+                    <th class="center">编号</th>
+                    <th class="center">标题</th>
+                    <th class="center">申请说明</th>
+
+                    <th class="center">临时工明细表</th>
+                    <th class="center">结算月份</th>
+                    <th class="center">项目名称</th>
+                    <th class="center">结算周期</th>
+                    <th class="center">结算内容</th>
+                    <th class="center">结算方式</th>
+                    <th class="center">主营业收入</th>
+                    <th class="center">管理费</th>
+                    <th class="center">工资(收)</th>
+                    <th class="center">班车费(收)</th>
+                    <th class="center">餐费(收)</th>
+                    <th class="center">宿舍费(收)</th>
+                    <th class="center">商报(收)</th>
+                    <th class="center">赔付款(收)</th>
+
+                    <th class="center">实际支出</th>
+                    <th class="center">主营业支出</th>
+                    <th class="center">工资(付)</th>
+                    <th class="center">班车费(付)</th>
+                    <th class="center">餐费(付)</th>
+                    <th class="center">商报(付)</th>
+                    <th class="center">赔偿/补偿金(付)</th>
+                    <th class="center">已借备用金</th>
+                    <th class="center">备注</th>
+                    <th class="center">差额</th>
+                    <th class="center">是否开票</th>
+
+                    <th class="center">申请人</th>
+                    <th class="center">申请时间</th>
+                    <th class="center">审批人</th>
+                    <th class="center">审批时间</th>
+                    <th class="center">审批回复</th>
+                    <th class="center">审批状态</th>
+                    <th class="center">操作</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for temporary_write_offs_billing in temporary_write_offs_billing_list %}
+                    <tr class="center">
+                        <td>
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" name="db_id"
+                                       value="{{ temporary_write_offs_billing.id }}"/>
+                                <span class="lbl"></span>
+                            </label>
+                        </td>
+
+                        <td>{{ temporary_write_offs_billing.id }}</td>
+                        <td>{{ temporary_write_offs_billing.title }}</td>
+                        <td>{{ temporary_write_offs_billing.note }}</td>
+
+                        <td>
+                            <a href="{% url "approval:temporary_write_offs_billing_details_list" applicants=temporary_write_offs_billing.id view_type=view_type %}">
+                                {{ temporary_write_offs_billing | get_temporarywriteoffsbillingdetails_count }}
+                            </a>
+                        </td>
+                        <td>{{ temporary_write_offs_billing.billing_month | date }}</td>
+                        <td>{{ temporary_write_offs_billing.project_name.full_name }}</td>
+                        <td>
+                            {{ temporary_write_offs_billing.billing_date_start | date }}
+                            -- {{ temporary_write_offs_billing.billing_date_end | date }}
+                        </td>
+                        <td>{{ temporary_write_offs_billing.billing_content | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.get_billing_type_display | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.main_business_income | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.management_fee | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.wage_receive | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.shuttle_fee_receive | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.meals_receive | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.dormitory_fee_receive | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.daily_receive | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.compensate_reparation_receive | default_if_none:"" }}</td>
+
+                        <td>{{ temporary_write_offs_billing.actual_outlay | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.main_business_outlay | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.wage_outlay | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.shuttle_fee_outlay | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.meals_outlay | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.daily_outlay | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.compensate_reparation_outlay | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.borrow_loan | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.remark1 | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.difference | format_difference | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.is_billing | default_if_none:"" }}</td>
+
+                        <td>{{ temporary_write_offs_billing.apply_user | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.created }}</td>
+                        <td>{{ temporary_write_offs_billing.handle_user | default_if_none:"" }}</td>
+                        <td>{{ temporary_write_offs_billing.handle_date | date }}</td>
+                        <td>{{ temporary_write_offs_billing.reason }}</td>
+                        <td>{{ temporary_write_offs_billing.status | approval_status | safe }}</td>
+                        <td>
+                            {% if temporary_write_offs_billing.status == "1" and view_type == "1" %}
+                                <div>
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "approval:temporary_write_offs_billing_edit" pk=temporary_write_offs_billing.id %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "approval:temporary_write_offs_billing_delete" pk=temporary_write_offs_billing.id %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr class="info center">
+                        <td colspan="35">抱歉，目前没有满足条件的信息。</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.span -->
+    </div>
+</div><!-- /.row -->

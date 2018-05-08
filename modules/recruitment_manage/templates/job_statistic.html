@@ -1,0 +1,125 @@
+{% extends "base/base.html" %}
+{% load share_module_tags %}
+{% load recruitment_manage_tags %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="#">招聘管理</a></li>
+    <li class="active">招聘统计</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#user_form').submit()" data-rel="tooltip"
+                                    title="搜索">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+
+                            <button class="btn btn-xs btn-info" id="export_jobstatistic" data-rel="tooltip"
+                                    title="导出Excel">
+                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>
+                                导出
+                            </button>
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="user_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="project_name" name="project_name"
+                                                   placeholder="项目名称搜索" value="{{ project_name }}"/>
+                                            <input type="text" id="recruitment_attache" name="recruitment_attache"
+                                                   placeholder="招聘人员搜索" value="{{ recruitment_attache }}"/>
+                                            <input type="text" id="query_month" name="query_month"
+                                                   placeholder="查询月度" value="{{ query_month }}" readonly/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+
+                <table class="table table-striped table-hover dataTable">
+                    <thead>
+                    <tr>
+                        <th class="center">招聘人员</th>
+                        <th class="center">项目名称</th>
+                        <th class="center">
+                            招聘人数,
+                            合计：<span class="badge badge-warning">{{ total_recruitment }}</span>
+                        </th>
+                        <th class="center">累计在职天数</th>
+                        <th class="center">招聘提成</th>
+                        <th class="center">临时工招聘提成</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for employee in employee_list %}
+                        <tr class="center">
+                            <td>{{ employee  | get_recruitment_attache | default_if_none:"无" }}</td>
+                            <td>{{ employee | get_project_name | default_if_none:"无" }}</td>
+                            <td>{{ employee | project_emp_count }}</td>
+                            <td>{{ employee | grand_total_work_days }}</td>
+                            <td>{{ employee | grand_total_recruitment_commission:"employee" }}</td>
+                            <td>{{ employee | grand_total_recruitment_commission:"temporary" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="7">抱歉，目前没有满足条件的信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+
+{% endblock %}
+
+{% block js %} {% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        $("#query_month").datepicker(datepickerOptionsMonth);
+
+        /* export jsb statistic*/
+        $("#export_jobstatistic").click(function () {
+            var recruitment_attache = $("#recruitment_attache").val();
+            var project_name = $("#project_name").val();
+
+            location.href = "{{ export_url }}?recruitment_attache=" + recruitment_attache + "&project_name=" + project_name
+        });
+    </script>
+{% endblock %}

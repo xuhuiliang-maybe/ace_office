@@ -1,0 +1,240 @@
+{% extends "base/base.html" %}
+{% load share_module_tags %}
+{% load approval_process_tags %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/chosen.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="#">审批流程</a></li>
+    <li class="active">申请信息模板</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="col-sm-12">
+        {% if view_type == '1' %}
+            <div class="tabbable">
+                <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="menu">
+                    {% if perms.leave.browse_leave %}
+                        <li><a data-toggle="tab" id="show_leave" onclick="href_table('leave')">请假</a></li>
+                    {% endif %}
+                    {% if perms.laon.browse_laon %}
+                        <li><a data-toggle="tab" id="show_loan" onclick="href_table('loan')">备用金</a></li>
+                    {% endif %}
+
+                    {% if perms.write_offs.browse_write_offs %}
+                        <li><a data-toggle="tab" id="show_write_offs" onclick="href_table('write_offs')">报销与销账</a></li>
+                    {% endif %}
+
+                    {% if perms.wage.browse_wage %}
+                        <li><a data-toggle="tab" id="show_wage" onclick="href_table('wage')">工资与职位调整</a></li>
+                    {% endif %}
+
+                    {% if perms.wage_replacement.browse_wage_replacement %}
+                        <li><a data-toggle="tab" id="show_wage_replacement"
+                               onclick="href_table('wage_replacement')">工资补发申请</a></li>
+                    {% endif %}
+
+                    {% if perms.billing_pre_pay.browse_billing_pre_pay %}
+                        <li><a data-toggle="tab" id="show_billing_pre_pay"
+                               onclick="href_table('billing_pre_pay')">结算与发薪</a>
+                        </li>
+                    {% endif %}
+
+                    {% if perms.demand_turnover.browse_demand_turnover %}
+                        <li><a data-toggle="tab" id="show_demand_turnover"
+                               onclick="href_table('demand_turnover')">管理人员需求与离职</a></li>
+                    {% endif %}
+
+                    {% if perms.temporary_write_offs_billing.browse_temporary_write_offs_billing %}
+                        <li>
+                            <a data-toggle="tab" id="show_temporary_write_offs_billing"
+                               onclick="href_table('temporary_write_offs_billing')">
+                                临时工销账与开票
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if perms.recruited_billing.browse_recruited_billing %}
+                        <li>
+                            <a data-toggle="tab" id="show_recruitedbilling"
+                               onclick="href_table('recruitedbilling')">
+                                待招结算与销账
+                            </a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </div>
+        {% endif %}
+
+        <div class="tab-content">
+            <!--content-->
+            {% if apply_type == "none" %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="alert alert-block alert-info">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <i class="ace-icon fa fa-times"></i>
+                            </button>
+                            <i class="ace-icon fa fa-info"></i>
+
+                            <strong class="">： 请点选申请模板，可完成提交申请或查询申请结果。 </strong>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                {% if view_type == "1" %}
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="title" name="title" placeholder="标题搜索"
+                                                   value="{{ title }}"/>
+                                            <input type="text" id="month" name="month" placeholder="月份"
+                                                   value="{{ month }}" readonly/>
+                                            <input type="text" id="dept_name" name="dept_name" placeholder="部门"
+                                                   value="{{ dept_name }}"/>
+                                            {% if apply_type == "billing_pre_pay" %}
+                                                <input type="text" id="project_name" name="project_name"
+                                                       placeholder="项目名称" value="{{ project_name }}"/>
+                                            {% endif %}
+                                            <select name="status">
+                                                <option value="">审批状态</option>
+                                                <option value="1" {% if status == "1" %}selected="selected"{% endif %}>
+                                                    待审批
+                                                </option>
+                                                <option value="2" {% if status == "2" %}selected="selected"{% endif %}>
+                                                    通过
+                                                </option>
+                                                <option value="3" {% if status == "3" %}selected="selected"{% endif %}>
+                                                    拒绝
+                                                </option>
+                                            </select>
+                                            <button class="btn btn-xs btn-success"
+                                                    onclick="href_table('{{ apply_type }}')"
+                                                    data-rel="tooltip" title="搜索">
+                                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i> 搜索
+                                            </button>
+
+                                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增"
+                                                    onclick="location.href='{{ add_url }}'">
+                                                <i class="ace-icon fa fa-plus-circle bigger-130"></i> 新增
+                                            </button>
+
+                                            <button class="btn btn-xs btn-warning" id="export_approval"
+                                                    data-rel="tooltip"
+                                                    title="导出Excel">
+                                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>
+                                                导出
+                                            </button>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.page-header -->
+                {% elif view_type == "2" %}
+                    <button class="btn btn-xs" data-rel="tooltip" title="返回"
+                            onclick="location.href='{% url "approval:pending_list" %}'">
+                        <i class="ace-icon fa fa-arrow-left bigger-130"></i> 返回
+                    </button>
+                {% endif %}
+
+                {% if apply_type == "leave" %}{% include "tab_content_leave.html" %}{% endif %}
+                {% if apply_type == "loan" %}{% include "tab_content_loan.html" %}{% endif %}
+                {% if apply_type == "write_offs" %}{% include "tab_content_write_offs.html" %}{% endif %}
+                {% if apply_type == "wage" %}{% include "tab_content_wage.html" %}{% endif %}
+                {% if apply_type == "wage_replacement" %}{% include "tab_content_wage_replacement.html" %}{% endif %}
+                {% if apply_type == "billing_pre_pay" %}{% include "tab_content_billing_pre_pay.html" %}{% endif %}
+                {% if apply_type == "demand_turnover" %} {% include "tab_content_demand_turnover.html" %}{% endif %}
+                {% if apply_type == "temporary_write_offs_billing" %}
+                    {% include "tab_content_temporary_write_offs_billing.html" %}
+                {% endif %}
+                {% if apply_type == "recruitedbilling" %} {% include "tab_content_recruited_billing.html" %}
+                {% endif %}
+            {% endif %}
+
+            <!--page-->
+            {% if apply_type != "none" %}
+                {% include  "base/paginator.html" %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        $("#menu a[id='show_" + "{{apply_type}}" + "']").parent("li").addClass('active');
+        $("#month").datepicker(datepickerOptionsMonth);
+
+        //选项卡点击
+        function href_table(apply_type) {
+            var title = $("#title").val();
+            var status = $("#status").val();
+            var month = $("#month").val();
+            var dept_name = $("#dept_name").val();
+            var project_name = $("#project_name").val();
+            if (title == undefined) {
+                title = ""
+            }
+            if (status == undefined) {
+                status = ""
+            }
+            if (month == undefined) {
+                month = ""
+            }
+            if (dept_name == undefined) {
+                dept_name = ""
+            }
+            if (project_name == undefined) {
+                project_name = ""
+            }
+            location.href = "/approval/" + apply_type
+                    + "?title=" + title
+                    + "&status=" + status
+                    + "&month=" + month
+                    + "&dept_name=" + dept_name
+                    + "&project_name=" + project_name
+        }
+
+        /* export approval*/
+        $("#export_approval").click(function () {
+            var apply_type = "{{ apply_type }}";
+            var title = $("#title").val();
+            var status = $("#status").val();
+            var month = $("#month").val();
+            var dept_name = $("#dept_name").val();
+            var project_name = $("#project_name").val();
+            if (title == undefined) {
+                title = ""
+            }
+            if (status == undefined) {
+                status = ""
+            }
+            if (month == undefined) {
+                month = ""
+            }
+            if (dept_name == undefined) {
+                dept_name = ""
+            }
+            if (project_name == undefined) {
+                project_name = ""
+            }
+
+            location.href = "{% url 'approval:export_approval' %}"
+                    + "?apply_type=" + apply_type
+                    + "&title=" + title
+                    + "&status=" + status
+                    + "&month=" + month
+                    + "&dept_name=" + dept_name
+                    + "&project_name=" + project_name
+        });
+
+    </script>
+{% endblock %}

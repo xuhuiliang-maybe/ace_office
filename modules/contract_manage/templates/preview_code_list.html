@@ -1,0 +1,155 @@
+{% extends "base/base.html" %}
+{% load contract_manage_tags %}
+{% block css %}
+{% endblock %}
+{% block breadcrumb %}
+    <li>合同管理</li>
+    <li class="active">合同预览</li>
+{% endblock %}
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#query_form').submit()" data-rel="tooltip"
+                                    title="搜索">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="query_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <select name="contract_type">
+                                                <option value="">全部合同</option>
+                                                {% for one_type in list_contract_type %}
+                                                    <option value={{ one_type.0 }} {% if contract_type == one_type.0 %}selected="selected"{% endif %}>
+                                                        {{ one_type.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                            <select name="status">
+                                                <option value="">全部合同</option>
+                                                <option value="1" {% if status == "1" %}selected="selected"{% endif %}>
+                                                    有效
+                                                </option>
+                                                <option value="2" {% if status == "2" %}selected="selected"{% endif %}>
+                                                    失效
+                                                </option>
+                                            </select>
+
+                                            <a data-rel="tooltip" title="生成预览码" href="javascript:void(0);"
+                                               onclick="generate_preview_code('1')">
+                                                <span class="label label-xlg label-light arrowed-in-right">
+                                                    派遣-合同
+                                                </span>
+                                            </a>
+                                            <a data-rel="tooltip" title="生成预览码" href="javascript:void(0);"
+                                               onclick="generate_preview_code('2')">
+                                                <span class='label label-xlg label-info arrowed arrowed-in-right'>
+                                                    外包-合同
+                                                </span>
+                                            </a>
+                                            <a data-rel="tooltip" title="生成预览码" href="javascript:void(0);"
+                                               onclick="generate_preview_code('3')">
+                                                <span class='label label-xlg label-pink arrowed arrowed-in-right'>
+                                                    实习生-合同
+                                                </span>
+                                            </a>
+                                            <a data-rel="tooltip" title="生成预览码" href="javascript:void(0);"
+                                               onclick="generate_preview_code('4')">
+                                                <span class='label label-xlg label-success arrowed arrowed-in-right'>
+                                                    劳务-合同
+                                                </span>
+                                            </a>
+                                            <a data-rel="tooltip" title="生成预览码" href="javascript:void(0);"
+                                               onclick="generate_preview_code('5')">
+                                                <span class='label label-xlg label-purple arrowed arrowed-in-right'>
+                                                    小时工-合同
+                                                </span>
+                                            </a>
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+
+                <table class="table table-striped table-hover dataTable">
+                    <thead>
+                    <tr>
+                        <th class="center">编号</th>
+                        <th class="center">合同类型</th>
+                        <th class="center">预览码</th>
+                        <th class="center">终止预览时间</th>
+                        <th class="center">生成者</th>
+                        <th class="center">已预览次数</th>
+                        <th class="center">状态</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for one_info in preview_code_list %}
+                        <tr class="center">
+                            <td>{{ one_info.id }}</td>
+                            <td>{{ one_info.get_contract_type_display }}</td>
+                            <td>{{ one_info.code }}</td>
+                            <td>{{ one_info.end_time | date:"Y-m-d P" }}</td>
+                            <td>{{ one_info.generate_user.first_name }}</td>
+                            <td>{{ one_info.number }}</td>
+                            <td>{{ one_info.end_time | get_status | safe }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="7">抱歉，目前没有满足条件的信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        function generate_preview_code(contract_type) {
+            var generate_url = "{% url "contract:generate_preview_code" %}";
+            var data = {"contract_type": contract_type};
+            var result = custom_ajax_post(generate_url, data);
+            if (result == 1) {
+                window.location.reload()
+            }
+        }
+    </script>
+{% endblock %}

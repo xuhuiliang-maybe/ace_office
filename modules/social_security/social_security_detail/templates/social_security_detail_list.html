@@ -1,0 +1,324 @@
+{% extends "base/base.html" %}
+{% load share_module_tags %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/jquery-ui.css"/>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="#">社保福利</a></li>
+    <li class="active">社保明细</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#user_form').submit()" data-rel="tooltip"
+                                    title="搜索减员信息">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增减员信息"
+                                    onclick="window.location.href='{% url "social_security_detail:social_security_detail_add" %}'">
+                                <i class="ace-icon fa fa-plus-circle bigger-130"></i>
+                                新增
+                            </button>
+                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="批量删除"
+                                    onclick="batch_delete('{% url "social_security_detail:social_security_detail_batch_delete" %}')">
+                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                批量删除
+                            </button>
+                            <button class="btn btn-xs btn-info"
+                                    onclick="$('#SocialSecurityDetailModal').modal({backdrop: 'static', keyboard: false})"
+                                    data-rel="tooltip" title="导入Excel">
+                                <i class="ace-icon fa fa-cloud-upload bigger-130"></i>
+                                导入
+                            </button>
+                            <button class="btn btn-xs btn-info" id="export_social_security_detail" data-rel="tooltip"
+                                    title="导出Excel">
+                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>
+                                导出
+                            </button>
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="user_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="project_name" name="project_name" placeholder="项目名称"
+                                                   value="{{ project_name }}"/>
+                                            <input type="text" id="department" name="department" placeholder="服务部门"
+                                                   onclick="query_dept_param()" value="{{ department }}" readonly/>
+                                            <input type="text" id="identity_card_number" name="identity_card_number"
+                                                   placeholder="身份证号"
+                                                   value="{{ identity_card_number }}"/>
+                                            <input type="text" id="name" name="name" placeholder="姓名搜索"
+                                                   value="{{ name }}"/>
+                                            <input type="text" id="insured_month" name="insured_month"
+                                                   placeholder="参保月份" value="{{ insured_month }}" readonly/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            {% if customer_service == 1 %}
+                <div class="alert alert-block alert-info">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="ace-icon fa fa-times"></i>
+                    </button>
+                    <i class="ace-icon fa fa-info"></i>
+
+                    <strong class="">：
+                        客服部（客服专员、客服主管、外包主管、客服经理），只能查询所在部门信息。
+                    </strong>
+                </div>
+            {% endif %}
+            <div class="table-responsive">
+
+                <table class="table table-hover dataTable" id="MyTable">
+                    <thead>
+                    <tr>
+                        <th class="center">
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" name="check_all"/>
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        <th class="center">编号</th>
+                        <th class="center">社保电脑号</th>
+                        <th class="center">服务公司</th>
+                        <th class="center">代理公司</th>
+                        <th class="center">姓名</th>
+                        <th class="center">项目名称</th>
+                        <th class="center">户口性质</th>
+                        <th class="center">身份证号</th>
+                        <th class="center">参保地</th>
+                        <th class="center">参保月份</th>
+                        <th class="center">社保公司</th>
+                        <th class="center">公积金公司</th>
+                        <th class="center">公司当月总合计</th>
+                        <th class="center">社保个人</th>
+                        <th class="center">公积金个人</th>
+                        <th class="center">个人当月合计</th>
+                        <th class="center">社保补缴公司</th>
+                        <th class="center">社保补缴个人</th>
+                        <th class="center">公积金补缴公司</th>
+                        <th class="center">公积金补缴个人</th>
+                        <th class="center">滞纳金</th>
+                        <th class="center">大额补助退费</th>
+                        <th class="center">社保退费</th>
+                        <th class="center">公积金退费</th>
+                        <th class="center">雇主责任险</th>
+                        <th class="center">残保金</th>
+                        <th class="center">社保卡费</th>
+                        <th class="center">代理费(支付)</th>
+                        <th class="center">代理费(收入)</th>
+                        <th class="center">招聘费</th>
+                        <th class="center">总额</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for social_security_detail in social_security_detail_list %}
+                        <tr class="center">
+                            <td>
+                                <label class="pos-rel">
+                                    <input type="checkbox" class="ace" name="db_id" value="{{ reduction.id }}"/>
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+
+                            <td>{{ social_security_detail.id }}</td>
+                            <td>{{ social_security_detail.computer_number }}</td>
+                            <td>{{ social_security_detail.project_name.department }}</td>
+                            <td>{{ social_security_detail.proxy_company }}</td>
+                            <td>{{ social_security_detail.name }}</td>
+                            <td>{{ social_security_detail.project_name }}</td>
+                            <td>{{ social_security_detail.account_nature }}</td>
+                            <td>{{ social_security_detail.identity_card_number }}</td>
+                            <td>{{ social_security_detail.insured_address }}</td>
+                            <td>{{ social_security_detail.insured_month | date:"Y, F" }}</td>
+                            <td>{{ social_security_detail.social_security_company | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.provident_fund_company | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.company_month_sum | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.social_security_person | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.provident_fund_person | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.person_month_sum | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.social_security_pay_company | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.social_security_pay_person | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.provident_fund_pay_company | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.provident_fund_pay_person | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.penalty | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.big_subsidy_refunds | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.social_security_refunds | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.provident_fund_refunds | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.employers_liability_insurance | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.disablement_gold | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.social_security_card_fees | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.agency_fees_expenses | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.agency_fees_revenue | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.remarecruitment_fees | default_if_none:"" }}</td>
+                            <td>{{ social_security_detail.lump_sum | default_if_none:"" }}</td>
+                            <td>
+                                <div>
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "social_security_detail:social_security_detail_edit" pk=social_security_detail.id %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "social_security_detail:social_security_detail_delete" pk=social_security_detail.id %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="33">抱歉，目前没有满足条件的信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+    {% include "department_tree.html" %}
+
+    <!-- 导入社保明细 -->
+    <div id="SocialSecurityDetailModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">
+                        导入社保明细
+                        <small>
+                            以模板格式为准
+                        </small>
+                    </h4>
+                </div>
+
+                <form action="{% url "social_security_detail:social_security_detail_load" %}" method="post"
+                      enctype="multipart/form-data" class="form-horizontal" onsubmit="return submit_after('#SocialSecurityDetailModal');">{% csrf_token %}
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <input id="load_info" name="load_info" type="file" required/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-sm" data-last="Finish">
+                            导入
+                        </button>
+
+                        <button class="btn btn-pink btn-sm" data-dismiss="modal"
+                                onclick="window.location.href='{% url "download" template_name="social_security_detail" %}'">
+                            下载模板
+                        </button>
+                        <button class="btn btn-sm" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times"></i>
+                            取消
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/fuelux/fuelux.tree.js"></script>
+    <script src="/static/customjs/custom_tree.js"></script>
+    <script src="/static/customjs/custom_base.js"></script>
+    <script src="/static/customjs/fixt_able.js"></script>
+{% endblock %}
+{% block modules_js %}
+    <script src="/static/customjs/upload_file.js"></script>
+{% endblock %}
+{% block self_js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            FixTable("MyTable", 6);
+        });
+
+        $("#insured_month").datepicker(datepickerOptionsMonth);
+
+        //监听查询条件选择部门
+        select_dept_name = "";
+        select_dept_id = "";
+        $('#tree1').on('selected.fu.tree', function (e, result) {
+            var select_list = result.selected;
+            select_dept_name = "";
+            select_dept_id = "";
+            for (var i = 0; i < select_list.length; i++) {
+                select_dept_name += delHtmlTag(select_list[i].text.replace(/\s/gi,'')) + ",";
+                select_dept_id += select_list[i].value + ",";
+            }
+            select_dept_name = select_dept_name.substring(0,select_dept_name.length-1);
+            select_dept_id = select_dept_id.substring(0,select_dept_id.length-1);
+        });
+
+        function select_dept() {
+            $('#dept_name').val(select_dept_name);
+            $('#dept_ids').val(select_dept_id)
+        }
+
+        //选择部门,查询条件
+        function query_dept_param() {
+            get_all_dept("#tree1", true);
+            $('#myDeptModal').modal({backdrop: 'static', keyboard: false})
+        }
+
+        $("#month").datepicker(datepickerOptionsMonth);
+
+        /* export jsb statistic*/
+        $("#export_social_security_detail").click(function () {
+            var project_name = $("#project_name").val();
+            var department = $("#department").val();
+            var identity_card_number = $("#identity_card_number").val();
+            var name = $("#name").val();
+            var insured_month = $("#insured_month").val();
+
+            location.href = "{{ export_url }}?project_name=" + project_name
+                    + "&department=" + department
+                    + "&identity_card_number=" + identity_card_number
+                    + "&name=" + name
+                    + "&insured_month=" + insured_month
+        });
+
+    </script>
+{% endblock %}

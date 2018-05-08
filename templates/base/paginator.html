@@ -1,0 +1,17 @@
+{% load i18n %}
+<div class="row">
+    <div class="col-xs-12">
+        <ul class="pager">
+            {% if page_obj %}
+                {% if page_obj.paginator.count %}
+                    <li class="previous">
+                        <span style="margin-top: 10px;"> <b> 共 {{ page_obj.paginator.count }} 项</b> </span>
+                    </li>
+                {% endif %}
+            {% endif %}
+            <li>
+                <div id="pager" class="pull-right"></div>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,131 @@
+{% extends "base/base.html" %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/jquery-ui.custom.css"/>
+{% endblock %}
+{% block breadcrumb %}
+    <li><a href="#">组织架构</a></li>
+    <li class="active">部门信息</li>
+{% endblock %}
+
+{% block page-content %}
+    <div class="page-header">
+        <h1>
+            部门信息树
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                &nbsp
+                <i class="ace-icon fa fa-paper-plane red"></i>&nbsp个人分摊
+                &nbsp&nbsp&nbsp&nbsp
+                <i class="ace-icon fa fa-paper-plane green"></i>&nbsp部门分摊
+                &nbsp&nbsp&nbsp&nbsp
+                <i class="ace-icon fa fa-paper-plane"></i>&nbsp公司分摊
+            </small>
+        </h1>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-sm-11">
+            <div class="widget-box widget-color-blue2">
+                <div class="widget-header">
+                    <h4 class="widget-title lighter smaller">
+                        部门信息
+                        <div class="widget-toolbar">
+                            <label>
+                                <div class="pull-right action-buttons">
+                                    <!-- add -->
+                                    <a class="white"
+                                       href="{% url "organizational_structure:departments:departments_add" %}">
+                                        <i class="ace-icon fa fa-plus-circle bigger-130"></i>
+                                    </a>
+                                    <a class="white" href="javascript:void(0);" onclick="edit_dept()">
+                                        <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                    </a>
+                                    <a class="red" href="javascript:void(0);" onclick="del_dept()">
+                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                    </a>
+                                </div>
+                                <span class="lbl middle"></span>
+                            </label>
+                        </div>
+                        <span class="smaller-80"></span>
+                    </h4>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main padding-8">
+                        <ul id="tree1"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/fuelux/fuelux.tree.js"></script>
+    <script src="/static/js/bootbox.js"></script>
+    <script src="/static/customjs/custom_tree.js"></script>
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+
+        $(window).load(function () {//页面加载就绪后获取部门信息
+            get_all_dept("#tree1", false);
+        });
+
+        var select_dept_id = '';
+        $('#tree1').on('selected.fu.tree', function (e, result) {
+            select_dept_id = result.selected[0].value;
+        });
+
+
+        //修改部门信息
+        function edit_dept() {
+            if (select_dept_id) {
+                window.location.href = "/organizational/departments/" + select_dept_id + "/edit"
+            } else {
+                layer.open({icon: 3, title: '提示', content: "请选择要修改的部门！"});
+
+            }
+        }
+
+        //删除部门信息
+        function del_dept() {
+            //获取选中部门id
+            //提交删除部门信息
+            if (select_dept_id) {
+                layer.confirm("删除部门，同时会删除部门相关数据，确认删除？", {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.ajax({
+                        cache: true,
+                        url: "{% url "organizational_structure:departments:departments_del" %}",
+                        type: 'POST',
+                        data: {"dept_id": select_dept_id},
+                        async: false,
+                        success: function (result_data) {
+                            layer.open({icon: 1, title: '提示', content: result_data});
+                            //重载树
+                            reload_dept_tree("#tree1", false)
+                        },
+                        error: function (result_data) {
+                            bootbox.dialog({
+                                message: "<span class='bigger-110'>" + result_data + "</span>",
+                                buttons: {
+                                    "danger": {
+                                        "label": "警告!",
+                                        "className": "btn-sm btn-danger"
+                                    }
+                                }
+                            });
+                        }
+                    });
+                })
+            } else {
+                layer.open({icon: 3, title: '提示', content: "至少选择一个部门！"});
+
+            }
+        }
+    </script>
+{% endblock %}

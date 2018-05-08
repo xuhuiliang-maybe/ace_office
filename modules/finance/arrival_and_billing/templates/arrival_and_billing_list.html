@@ -1,0 +1,177 @@
+{% extends "base/base.html" %}
+{% block css %}
+{% endblock %}
+{% block breadcrumb %}
+    <li class="active"> 到账与开票</li>
+{% endblock %}
+{% block page-content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <i class="menu-icon fa fa-filter"></i>
+                        <h5 class="widget-title">查询内容</h5>
+
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <button class="btn btn-xs btn-info" onclick="$('#payroll_form').submit()" data-rel="tooltip"
+                                    title="搜索">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                搜索
+                            </button>
+                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增"
+                                    onclick="window.location.href='{% url "finance:arrival_and_billing:add_arrivalandbilling" %}'">
+                                <i class="ace-icon fa fa-plus-circle bigger-130"></i>
+                                新增
+                            </button>
+                            <button class="btn btn-xs btn-warning" id="export_info"
+                                    data-rel="tooltip"
+                                    title="导出Excel">
+                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>
+                                导出
+                            </button>
+                            {#                            <button class="btn btn-xs btn-info" data-rel="tooltip" title="批量删除"#}
+                            {#                                    onclick="batch_delete('{% url "settlement_pay:payroll_batch_delete" %}')">#}
+                            {#                                <i class="ace-icon fa fa-trash-o bigger-130"></i>#}
+                            {#                                批量删除#}
+                            {#                            </button>#}
+
+                            {#                            <button class="btn btn-xs btn-info" id="exportprofile" data-rel="tooltip" title="导出Excel">#}
+                            {#                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>#}
+                            {#                                导出#}
+                            {#                            </button>#}
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <form id="payroll_form" class="form-horizontal" method="get">{% csrf_token %}
+                            <div class="widget-main padding-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p>
+                                            <input type="text" id="settlement_date" name="settlement_date"
+                                                   placeholder="结算月份"
+                                                   value="{{ settlement_date }}" readonly/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+
+                <table class="table table-striped table-hover dataTable">
+                    <thead>
+                    <tr>
+                        <th class="center">
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" name="check_all"/>
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        <th class="center">编号</th>
+                        <th class="center">项目名称</th>
+                        <th class="center">结算月份</th>
+                        <th class="center">结算金额（长期业务）</th>
+                        <th class="center">结算金额（临时工）</th>
+                        <th class="center">结算合计</th>
+                        <th class="center">到账金额合计</th>
+                        <th class="center">到账时间</th>
+                        <th class="center">到账情况</th>
+                        <th class="center">开票金额合计</th>
+                        <th class="center">开票时间</th>
+                        <th class="center">开票情况</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for arrival_and_billing in arrival_and_billing_list %}
+                        <tr class="center">
+                            <td>
+                                <label class="pos-rel">
+                                    <input type="checkbox" class="ace" name="db_id"
+                                           value="{{ arrival_and_billing.id }}"/>
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+
+                            <td>{{ arrival_and_billing.id }}</td>
+                            <td>{{ arrival_and_billing.project_name.full_name | default_if_none:"" }}</td>
+                            <td>{{ arrival_and_billing.settlement_date | date:"Y, F" }}</td>
+                            <td>{{ arrival_and_billing.settlement_amount_long | default_if_none:"" }}</td>
+                            <td>{{ arrival_and_billing.settlement_amount_snap | default_if_none:"" }}</td>
+                            <td>{{ arrival_and_billing.settlement_tatol | default_if_none:"" }}</td>
+                            <td>
+                                <a href="{% url 'finance:arrival_and_billing:list_crediteddetails' arrivalandbilling=arrival_and_billing.id %}">
+                                    {{ arrival_and_billing.credited_amount_total | default_if_none:"" }}
+                                </a>
+                            </td>
+                            <td>{{ arrival_and_billing.credited_date| date | default_if_none:"" }}</td>
+                            <td>{{ arrival_and_billing.get_credited_state_display | default_if_none:"" }}</td>
+                            <td>
+                                <a href="{% url 'finance:arrival_and_billing:list_billingdetails' arrivalandbilling=arrival_and_billing.id %}">
+                                    {{ arrival_and_billing.billing_amount_total | default_if_none:"" }}
+                                </a>
+                            </td>
+                            <td>{{ arrival_and_billing.billing_date | default_if_none:"" }}</td>
+                            <td>{{ arrival_and_billing.get_billing_state_display | default_if_none:"" }}</td>
+                            <td>
+
+                                <div>
+                                    <button class="btn btn-minier btn-info"
+                                            onclick="window.location.href='{% url "finance:arrival_and_billing:edit_arrivalandbilling" pk=arrival_and_billing.id %}'">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-minier btn-danger"
+                                            onclick="window.location.href='{% url "finance:arrival_and_billing:del_arrivalandbilling" pk=arrival_and_billing.id %}'">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr class="info center">
+                            <td colspan="19">抱歉，目前没有满足条件的信息。</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.span -->
+        </div>
+    </div><!-- /.row -->
+
+    {% include  "base/paginator.html" %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block self_js %}
+    <script type="text/javascript">
+        $("#settlement_date").datepicker(datepickerOptionsMonth).attr("readonly", true);
+
+        /* export*/
+        $("#export_info").click(function () {
+            var settlement_date = $("#settlement_date").val();
+            if (settlement_date == undefined) {
+                settlement_date = ""
+            }
+            location.href = "{% url 'finance:arrival_and_billing:export_arrivalandbilling' %}" + "?settlement_date=" + settlement_date
+        });
+    </script>
+{% endblock %}

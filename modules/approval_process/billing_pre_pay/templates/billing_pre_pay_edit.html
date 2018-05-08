@@ -1,0 +1,9 @@
+{% extends "base/document_edit.html" %}
+
+{% block modules_js %}
+    <script type="text/javascript">
+        $("#id_billingprepay_month").datepicker(datepickerOptionsMonth).attr("readonly",true);
+        $("#id_billing_date_start").datepicker(datepickerOptions).attr("readonly",true);
+        $("#id_billing_date_end").datepicker(datepickerOptions).attr("readonly",true);
+    </script>
+{% endblock %}
