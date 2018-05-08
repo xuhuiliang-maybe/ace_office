@@ -1,4 +1,4 @@
-[database]
+[database-]
 engine=sqlite3
 dbname=db.sqlite3
 username=
@@ -6,13 +6,21 @@ password=
 host=
 port=
 
+[database]
+engine=mysql
+dbname=aces
+username=root
+password=RootPass123!!!
+port=3306
+host=127.0.0.1
+
 [database-]
 engine=mysql
 dbname=ace
 username=root
-password=root
-port=83306
-host=127.0.0.1
+password=111111
+port=3306
+host=47.93.229.122
 
 [sys]
 memcached=memcached://127.0.0.1:11211/?timeout=86400
