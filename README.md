@@ -8,28 +8,28 @@
     tmp：临时文件，可存放测试文件和导出数据文件
     user_photo：用户头像
 * modules：包含所有模块（app）
-    * 'modules.admin_account',                            # 用户权限
-    * 'modules.home_page',                                # 我的主页
-    * 'modules.mysite',                                   # 我的地盘
-    * 'modules.organizational_structure',                 # 组织架构
-    * 'modules.organizational_structure.departments',     # 部门信息
-    * 'modules.organizational_structure.profiles',        # 管理员信息
-    * 'modules.organizational_structure.structures',      # 组织结构图
-    * 'modules.project_manage',                           # 项目管理
-    * 'modules.employee_info',                            # 员工信息
-    * 'modules.social_security',                          # 社保福利
-    * 'modules.settlement_pay',                           # 结算发薪
-    * 'modules.recruitment_manage',                       # 招聘管理
-    * 'modules.approval_process',                         # 审批流程
-    * 'modules.approval_process.leave',                   # 审批流程，申请请假
-    * 'modules.approval_process.loan',                    # 审批流程，申请借款
-    * 'modules.approval_process.wage',                    # 审批流程，申请涨薪
-    * 'modules.expense_manage',                           # 费用管理
-    * 'modules.personnel_operation',                      # 人事操作质量
-    * 'modules.system',                                   # 系统管理
-    * 'modules.share_module',                             # 公用模块
-    * 'modules.attendance',                               # 考勤,暂缓开通
-    * 'modules.calendards',                               # 日历，暂缓开通
+    * 'modules.admin_account' 用户权限
+    * 'modules.home_page' 我的主页
+    * 'modules.mysite' 我的地盘
+    * 'modules.organizational_structure' 组织架构
+    * 'modules.organizational_structure.departments' 部门信息
+    * 'modules.organizational_structure.profiles' 管理员信息
+    * 'modules.organizational_structure.structures' 组织结构图
+    * 'modules.project_manage' 项目管理
+    * 'modules.employee_info' 员工信息
+    * 'modules.social_security' 社保福利
+    * 'modules.settlement_pay' 结算发薪
+    * 'modules.recruitment_manage' 招聘管理
+    * 'modules.approval_process' 审批流程
+    * 'modules.approval_process.leave' 审批流程，申请请假
+    * 'modules.approval_process.loan' 审批流程，申请借款
+    * 'modules.approval_process.wage' 审批流程，申请涨薪
+    * 'modules.expense_manage' 费用管理
+    * 'modules.personnel_operation' 人事操作质量
+    * 'modules.system' 系统管理
+    * 'modules.share_module' 公用模块
+    * 'modules.attendance' 考勤,暂缓开通
+    * 'modules.calendards' 日历，暂缓开通
 
 
 * static：网站模板用css，js静态文件
