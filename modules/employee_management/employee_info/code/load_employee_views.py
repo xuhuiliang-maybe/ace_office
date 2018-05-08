@@ -116,7 +116,7 @@ class LoadEmployeeView(View):
 						if emp_obj.exists():
 							repeat_num += 1
 							emp_obj.update(
-								salary_card_number=row[5],
+								salary_card_number=row[6],
 								project_name=project_name,
 								birthday=get_excel_date(row[13]),  # 出生年月
 								entry_date=get_excel_date(row[23]),  # 入职日期
