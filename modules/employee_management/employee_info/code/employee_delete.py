@@ -54,7 +54,7 @@ class EmployeesBatchDelete(SuccessMessageMixin, View):
 					if request.user.username == "songxiaodan":
 						employee_obj.all.delete()
 					messages.success(self.request, u"成功删除")
-					result = {"code": -1, "msg": "成功删除"}
+					result = {"code": -1, "msg": u"成功删除"}
 					return HttpResponse(json.dumps(result), content_type="application/json")
 				else:
 					emp_obj_list = employee_obj.all()
@@ -74,11 +74,11 @@ class EmployeesBatchDelete(SuccessMessageMixin, View):
 					traceback.print_exc()
 
 			messages.success(self.request, u"成功删除")
-			result = {"code": -1, "msg": "成功删除"}
+			result = {"code": -1, "msg": u"成功删除"}
 		except:
 			traceback.print_exc()
 			messages.warning(self.request, u"删除操作异常")
-			result = {"code": -1, "msg": "删除异常"}
+			result = {"code": -1, "msg": u"删除异常"}
 
 		return HttpResponse(json.dumps(result), content_type="application/json")
 
@@ -118,7 +118,7 @@ class TemporaryBatchDelete(SuccessMessageMixin, View):
 				if request.user.is_superuser:
 					employee_obj.all().delete()
 					messages.success(self.request, u"成功删除")
-					result = {"code": -1, "msg": "成功删除"}
+					result = {"code": -1, "msg": u"成功删除"}
 					return HttpResponse(json.dumps(result), content_type="application/json")
 				else:
 					emp_obj_list = employee_obj.all()
@@ -137,10 +137,10 @@ class TemporaryBatchDelete(SuccessMessageMixin, View):
 					traceback.print_exc()
 
 			messages.success(self.request, u"成功删除")
-			result = {"code": -1, "msg": "成功删除"}
+			result = {"code": -1, "msg": u"成功删除"}
 		except:
 			traceback.print_exc()
 			messages.warning(self.request, u"删除操作异常")
-			result = {"code": -1, "msg": "删除异常"}
+			result = {"code": -1, "msg": u"删除异常"}
 
 		return HttpResponse(json.dumps(result), content_type="application/json")
