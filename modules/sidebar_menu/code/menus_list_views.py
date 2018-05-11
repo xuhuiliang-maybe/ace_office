@@ -143,10 +143,10 @@ class SidebarMenusList(View):
 				{"permissions": "admin_account.browse_qualityassurance_manage", "show": True,
 				 "text": u"人事操作质量", "icon": "menu-icon fa fa-check-square-o", "url": "",
 				 "menus": [{"permissions": "personnel_operation.browse_qualityassurance", "show": True,
-					    "text": u"个人操作质量", "icon": "", "url": "/personnel/list"},
-					   {"permissions": "admin_account.browse_qualityassurance_gather",
-					    "show": True, "text": u"操作质量汇总", "icon": "",
-					    "url": "/personnel/gather"}, ]},
+				            "text": u"个人操作质量", "icon": "", "url": "/personnel/list"},
+				           {"permissions": "admin_account.browse_qualityassurance_gather",
+				            "show": True, "text": u"操作质量汇总", "icon": "",
+				            "url": "/personnel/gather"}, ]},
 
 				{"permissions": "admin_account.browse_finance", "show": True, "text": u"财务管理",
 				 "icon": "menu-icon fa fa-pencil-square-o",
@@ -242,9 +242,14 @@ class SidebarMenusList(View):
 						continue
 					else:
 						if one_menu.has_key("menus"):
+							sum_sub_menus = len(one_menu["menus"])
+							sum_false = 0
 							for sub in one_menu["menus"]:
 								if not self.user.has_perm(sub["permissions"]):
 									sub["show"] = False
+									sum_false += 1
+							if sum_false == sum_sub_menus:
+								one_menu["show"] = False
 					menu_list_new.append(one_menu)
 			else:
 				return menu_list
