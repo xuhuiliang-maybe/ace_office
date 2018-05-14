@@ -1,4 +1,5 @@
 # coding=utf-8
+import time
 from collections import defaultdict
 
 from django.contrib.auth.decorators import login_required
@@ -9,8 +10,8 @@ from django.views.generic import View
 
 from modules.employee_management.employee_info.models import Employee
 from modules.share_module.download import download_file
-from modules.share_module.export import ExportExcel
 from modules.share_module.formater import *
+from modules.share_module.get_path import *
 from modules.share_module.permissionMixin import class_view_decorator
 from modules.share_module.utils import get_kwargs
 
@@ -297,22 +298,50 @@ class EmployeeExportView(View):
 					rows_list.append(one_row_dict.copy())
 
 			if rows_list:
-				# 实例化导出类
-				export_excel = ExportExcel()
-				export_excel.head_title_list = head_list
-				export_excel.field_name_list = field_list
-				export_excel.data_obj_list = rows_list
-				if employee_type == "employee":
-					export_excel.sheetname = "Employee"
-					export_excel.filename = "Employee"
-				elif employee_type == "temporary":
-					export_excel.sheetname = "Temporary"
-					export_excel.filename = "Temporary"
+				# # 实例化导出类
+				# export_excel = ExportExcel()
+				# export_excel.head_title_list = head_list
+				# export_excel.field_name_list = field_list
+				# export_excel.data_obj_list = rows_list
+				# if employee_type == "employee":
+				# 	export_excel.sheetname = "Employee"
+				# 	export_excel.filename = "Employee"
+				# elif employee_type == "temporary":
+				# 	export_excel.sheetname = "Temporary"
+				# 	export_excel.filename = "Temporary"
+				#
+				# filepath, filename = export_excel.export()
 
-				filepath, filename = export_excel.export()
+				filename = ""
+				if employee_type == "employee":
+					filename = "Employee"
+				elif employee_type == "temporary":
+					filename = "Temporary"
+
+				file_name = filename + "_" + time.strftime("%Y%m%d%H%M%S") + ".txt"
+				tmp_path = get_media_sub_path("tmp")  # 临时文件夹路径
+				filepath = os.path.join(tmp_path, file_name)  # 导出文件路径
+				with open(filepath, "w") as f:  # 格式化字符串还能这么用！
+					f.write(u"序号")
+					f.write("\t")
+					for i in head_list:
+						f.write(i)
+						f.write("\t")
+					f.write("\n")
+					for index, one_row in enumerate(rows_list):
+						f.write(str(index + 1))
+						f.write("\t")
+						for one_field in field_list:
+							info = one_row[one_field]
+
+							if not info:
+								info = "--"
+							f.write(str(info))
+							f.write("\t")
+						f.write("\n")
 
 				# 页面下载导出文件
-				response = download_file(filepath, filename, True)
+				response = download_file(filepath, file_name, True)
 				return response
 			else:
 				# 导出只有表头信息的空文件
