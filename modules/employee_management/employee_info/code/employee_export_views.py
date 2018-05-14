@@ -350,7 +350,6 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
 			f.write(head_str)
 			f.write("\n")
 		# 组装导出数据
-		print type(employee_obj_list)
 		if employee_obj_list.exists():
 			if employee_type == "employee":
 				with open(filepath, "a+") as f:
@@ -485,8 +484,8 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
 		# 上传百度云
 		# 判断文件是否存在
 		if os.path.exists(filepath):
-			os.system("/usr/local/bin/bypy mkdir ExportEmployee")
-			os.system("/usr/local/bin/bypy upload %s ExportEmployee -v" % filepath)
+			os.system("bypy mkdir ExportEmployee")
+			os.system("bypy upload %s ExportEmployee -v" % filepath)
 	except:
 		traceback.print_exc()
 
@@ -569,11 +568,11 @@ class NewEmployeeExportView(View):
 			employee_obj_list = Employee.objects.filter(**kwargs)
 
 			# 组装导出数据
-			pro = Process(target=write_employee_file, args=(employee_type, employee_obj_list, filepath))
-			pro.start()
+			write_employee_file(employee_type, employee_obj_list, filepath)
 
 			if employee_obj_list.exists():
-				messages.success(self.request, u"成功导出员工信息（%s）, 下载地址：11"% file_name)
+				download_path = "链接:https://pan.baidu.com/s/1Y7PWQ2gzfte5f7ELtK3tgg  密码:169c"
+				messages.success(self.request, u"成功导出员工信息（%s）, %s"% (file_name, download_path))
 			else:
 				messages.warning(self.request, u"没有查询到数据，请合理填写查询条件")
 			# if employee_obj_list.exists():
