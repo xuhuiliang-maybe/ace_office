@@ -106,7 +106,7 @@ schedudler = BackgroundScheduler()
 def all_tasks():
 	try:
 		# schedudler.add_job(quote_send_sh_job, 'cron', day_of_week='0-6', hour='0-24', minute='*', second="*/5")
-		schedudler.add_job(export_employee, 'cron', day_of_week='0-6', hour='0', minute='0', second="0")
+		schedudler.add_job(export_employee, 'cron', day_of_week='0-6', hour='1', minute='0', second="0")
 		# schedudler.add_job(delete_backup_job, 'cron', day_of_week='0-6', hour='1', minute='0', second='0')
 		# schedudler.add_job(create_backup_job, 'cron', day_of_week='0-6', hour='2', minute='0', second='0')
 		try:
