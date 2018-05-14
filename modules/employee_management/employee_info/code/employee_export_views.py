@@ -25,40 +25,40 @@ class EmployeeExportView(View):
 		field_list = list()
 		if employee_type == "employee":
 			head_list = [u'姓名（必填）', u'服务部门', u'身份证号（必填）', u'目前状态(在职/离职)', u'项目名称（必填）', u'银行卡号', u'开户银行',
-				     u'部门', u'职务', u'性别(男/女)', u'民族', u'学历', u'出生年月(2016-01-01)', u'员工年龄', u'户口所在地',
-				     u'户口邮编', u'户口性质', u'工作地', u'社保地', u'人员属性', u'合同属性', u'合同主体',
-				     u'入职日期(2016-01-01)', u'#DIV/0!01+', u"社保支付卡", u"开户银行", u'#DIV/0!02+',
-				     u'公积金增员日期(2016-01-01)', u'合同开始日期(2016-01-01)', u'试用期限', u'合同期限', u'试用到期日期(2016-01-01)',
-				     u'合同到期日期(2016-01-01)', u'合同续签次数', u'离职日期(2016-01-01)', u'离职手续', u'离职原因',
-				     u'#DIV/0!01-', u'#DIV/0!02-', u'公积金减员日期(2016-01-01)', u'联系电话', u'紧急联系人',
-				     u'与联系人关系', u'紧急联系人电话', u'招聘渠道', u'招聘人员', u'客服专员', u'客服主管',
-				     u'外包主管', u'客服经理', u'其他负责人']
+			             u'部门', u'职务', u'性别(男/女)', u'民族', u'学历', u'出生年月(2016-01-01)', u'员工年龄', u'户口所在地',
+			             u'户口邮编', u'户口性质', u'工作地', u'社保地', u'人员属性', u'合同属性', u'合同主体',
+			             u'入职日期(2016-01-01)', u'#DIV/0!01+', u"社保支付卡", u"开户银行", u'#DIV/0!02+',
+			             u'公积金增员日期(2016-01-01)', u'合同开始日期(2016-01-01)', u'试用期限', u'合同期限', u'试用到期日期(2016-01-01)',
+			             u'合同到期日期(2016-01-01)', u'合同续签次数', u'离职日期(2016-01-01)', u'离职手续', u'离职原因',
+			             u'#DIV/0!01-', u'#DIV/0!02-', u'公积金减员日期(2016-01-01)', u'联系电话', u'紧急联系人',
+			             u'与联系人关系', u'紧急联系人电话', u'招聘渠道', u'招聘人员', u'客服专员', u'客服主管',
+			             u'外包主管', u'客服经理', u'其他负责人', u"创建时间"]
 			field_list = ["name", "attribution_dept", "identity_card_number", "status", "project_name",
-				      "salary_card_number", "bank_account", "job_dept", "position", "sex", "nation",
-				      "education",
-				      "birthday", "age", "register_address", "register_postcode", "register_type",
-				      "work_address", "insured_place", "person_type", "contract_type",
-				      "contract_subject",
-				      "entry_date", "social_insurance_increase_date", "social_security_payment_card",
-				      "use_bank",
-				      "business_insurance_increase_date", "provident_fund_increase_date",
-				      "contract_begin_date",
-				      "probation_period", "contract_period", "probation_end_date", "contract_end_date",
-				      "contract_renew_times", "departure_date", "departure_procedure",
-				      "departure_cause",
-				      "social_insurance_reduce_date", "business_insurance_reduce_date",
-				      "provident_fund_reduce_date", "phone_number", "contact_person",
-				      "contact_relationship",
-				      "contact_person_phone", "recruitment_channel", "recruitment_attache",
-				      "customer_service_staff", "customer_service_charge", "outsource_director",
-				      "customer_service_director", "other_responsible_person"]
+			              "salary_card_number", "bank_account", "job_dept", "position", "sex", "nation",
+			              "education",
+			              "birthday", "age", "register_address", "register_postcode", "register_type",
+			              "work_address", "insured_place", "person_type", "contract_type",
+			              "contract_subject",
+			              "entry_date", "social_insurance_increase_date", "social_security_payment_card",
+			              "use_bank",
+			              "business_insurance_increase_date", "provident_fund_increase_date",
+			              "contract_begin_date",
+			              "probation_period", "contract_period", "probation_end_date", "contract_end_date",
+			              "contract_renew_times", "departure_date", "departure_procedure",
+			              "departure_cause",
+			              "social_insurance_reduce_date", "business_insurance_reduce_date",
+			              "provident_fund_reduce_date", "phone_number", "contact_person",
+			              "contact_relationship",
+			              "contact_person_phone", "recruitment_channel", "recruitment_attache",
+			              "customer_service_staff", "customer_service_charge", "outsource_director",
+			              "customer_service_director", "other_responsible_person", "create_time"]
 		elif employee_type == "temporary":
 			head_list = [u"姓名", u"性别", u"身份证号", u"项目名称", u"服务部门", u"招聘人员", u"联系电话", u"开始工作日",
-				     u"结束工作日", u"工作天数", u"小时数", u"发放金额", u"发放人", u"发放时间", u"备注1"]
+			             u"结束工作日", u"工作天数", u"小时数", u"发放金额", u"发放人", u"发放时间", u"备注1", u"创建时间"]
 			field_list = ["name", "sex", "identity_card_number", "project_name", "attribution_dept",
-				      "recruitment_attache", "phone_number", "start_work_date",
-				      "end_work_date", "work_days", "hours", "amount_of_payment", "release_user",
-				      "release_time", "remark1"]
+			              "recruitment_attache", "phone_number", "start_work_date",
+			              "end_work_date", "work_days", "hours", "amount_of_payment", "release_user",
+			              "release_time", "remark1", "create_time"]
 
 		try:
 			# 员工查询
@@ -81,7 +81,7 @@ class EmployeeExportView(View):
 
 			if self.start_time and self.end_time:
 				self.start_time += " 00:00:01"
-				self.end_time +=" 23:59:59"
+				self.end_time += " 23:59:59"
 				self.start_time = date_formater(self.start_time, "%Y/%m/%d %X")
 				self.end_time = date_formater(self.end_time, "%Y/%m/%d %X")
 
@@ -125,8 +125,11 @@ class EmployeeExportView(View):
 				for one_employee_obj in employee_obj_list:
 					one_row_dict = defaultdict(str)
 					one_row_dict["name"] = one_employee_obj.name  # 姓名
+					one_row_dict["create_time"] = one_employee_obj.create_time.strftime(
+						"%Y-%m-%d %X") if one_employee_obj.create_time else ""
 					if one_employee_obj.project_name:
-						one_row_dict["attribution_dept"] = one_employee_obj.project_name.department.name if one_employee_obj.project_name.department else ""  # 服务部门
+						one_row_dict[
+							"attribution_dept"] = one_employee_obj.project_name.department.name if one_employee_obj.project_name.department else ""  # 服务部门
 					else:
 						one_row_dict["attribution_dept"] = ""  # 服务部门
 					one_row_dict["identity_card_number"] = one_employee_obj.identity_card_number  # 身份证号
@@ -231,11 +234,13 @@ class EmployeeExportView(View):
 					except:
 						one_row_dict["recruitment_attache"] = ""  # 招聘人员
 					try:
-						one_row_dict["customer_service_staff"] = one_employee_obj.project_name.customer_service_staff.first_name  # 客户专员
+						one_row_dict[
+							"customer_service_staff"] = one_employee_obj.project_name.customer_service_staff.first_name  # 客户专员
 					except:
 						one_row_dict["customer_service_staff"] = ""
 					try:
-						one_row_dict["customer_service_charge"] = one_employee_obj.project_name.customer_service_charge.first_name  # 客服主管
+						one_row_dict[
+							"customer_service_charge"] = one_employee_obj.project_name.customer_service_charge.first_name  # 客服主管
 					except:
 						one_row_dict["customer_service_director"] = ""
 					try:
@@ -249,7 +254,8 @@ class EmployeeExportView(View):
 					except:
 						one_row_dict["customer_service_director"] = ""
 					try:
-						one_row_dict["other_responsible_person"] = one_employee_obj.project_name.other_responsible_person.first_name  # 其他负责人
+						one_row_dict[
+							"other_responsible_person"] = one_employee_obj.project_name.other_responsible_person.first_name  # 其他负责人
 					except:
 						one_row_dict["other_responsible_person"] = ""
 					rows_list.append(one_row_dict.copy())
@@ -257,6 +263,8 @@ class EmployeeExportView(View):
 				for one_employee_obj in employee_obj_list:
 					one_row_dict = defaultdict(str)
 					one_row_dict["name"] = one_employee_obj.name  # 姓名
+					one_row_dict["create_time"] = one_employee_obj.create_time.strftime(
+						"%Y-%m-%d %X") if one_employee_obj.create_time else ""
 					one_row_dict["sex"] = one_employee_obj.get_sex_display()  # 性别
 					one_row_dict[
 						"identity_card_number"] = one_employee_obj.identity_card_number  # 身份证号
