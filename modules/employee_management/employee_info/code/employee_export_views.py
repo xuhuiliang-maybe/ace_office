@@ -567,10 +567,10 @@ class NewEmployeeExportView(View):
 				kwargs.update({"is_temporary": True})
 			employee_obj_list = Employee.objects.filter(**kwargs)
 
-			# 组装导出数据
-			write_employee_file(employee_type, employee_obj_list, filepath)
 
 			if employee_obj_list.exists():
+				# 组装导出数据
+				write_employee_file(employee_type, employee_obj_list, filepath)
 				download_path = "链接:https://pan.baidu.com/s/1Y7PWQ2gzfte5f7ELtK3tgg  密码:169c"
 				messages.success(self.request, u"成功导出员工信息（%s）, %s"% (file_name, download_path))
 			else:
