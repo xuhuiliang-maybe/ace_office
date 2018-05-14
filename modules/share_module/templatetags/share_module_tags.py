@@ -40,6 +40,7 @@ def date_formater(date_str, formatstr):
 	:return:datetime型时间
 	"""
 	try:
+		print date_str
 		if date_str:
 			return datetime.datetime.strptime(date_str, formatstr).replace(tzinfo=timezone.utc)
 		else:

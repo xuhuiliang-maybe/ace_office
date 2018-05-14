@@ -145,6 +145,10 @@
                                                 </select>
                                             {% endif %}
                                         </p>
+                                    <p>
+                                        <input type="text" id="start_time" name="start_time" placeholder="创建起始时间" value="{{ start_time }}" readonly/>
+                                        <input type="text" id="end_time" name="end_time" placeholder="创建终止时间" value="{{ end_time }}" readonly/>
+                                    </p>
                                     </div>
                                 </div>
                             </div>
@@ -251,6 +255,7 @@
                             <th class="center">发放时间</th>
                             <th class="center">备注</th>
                         {% endif %}
+                        <th class="center">创建时间</th>
                         <th class="center">操作</th>
                     </tr>
                     </thead>
@@ -345,6 +350,7 @@
                                 <td>{{ emplyee.release_time | date }}</td>
                                 <td>{{ emplyee.remark1 }}</td>
                             {% endif %}
+                            <td>{{ emplyee.create_time | date:"Y-m-d H:m:s"}}</td>
                             <td>
 
                                 <div>
@@ -472,7 +478,7 @@
             FixTable("MyTable", 7);
         });
 
-        $("#st_release_time, #et_release_time").datepicker(datepickerOptions);
+        $("#st_release_time, #et_release_time, #start_time, #end_time").datepicker(datepickerOptions);
 
         // listener query param, select department
         select_dept_name = "";
@@ -511,15 +517,19 @@
             var identity_card_number = $("#identity_card_number").val();
             var person_type = $("#person_type").val();
             var contract_type = $("#contract_type").val();
+                        var start_time = $("#start_time").val();
+            var end_time = $("#end_time").val();
             location.href = "/employeemanage/export?employee_type=employee&status=" + status
-                    + "&project_name=" + project_name
-                    + "&dept_name=" + dept_name
-                    + "&dept_ids=" + dept_ids
-                    + "&principal=" + principal
-                    + "&name=" + name
-                    + "&identity_card_number=" + identity_card_number
-                    + "&person_type=" + person_type
-                    + "&contract_type=" + contract_type
+                + "&project_name=" + project_name
+                + "&dept_name=" + dept_name
+                + "&dept_ids=" + dept_ids
+                + "&principal=" + principal
+                + "&name=" + name
+                + "&identity_card_number=" + identity_card_number
+                + "&person_type=" + person_type
+                + "&contract_type=" + contract_type
+                + "&start_time=" + start_time
+                + "&end_time=" + end_time
         });
         /* export temporary*/
         $("#exporttemporary").click(function () {
@@ -529,17 +539,20 @@
             var phone_number = $("#phone_number").val();
             var st_release_time = $("#st_release_time").val();
             var et_release_time = $("#et_release_time").val();
+            var start_time = $("#start_time").val();
+            var end_time = $("#end_time").val();
             var recruitment_attache = $("#recruitment_attache").val();
 
             location.href = "/employeemanage/export?employee_type=temporary"
-                    + "&project_name=" + project_name
-                    + "&name=" + name
-                    + "&identity_card_number=" + identity_card_number
-                    + "&phone_number=" + phone_number
-                    + "&st_release_time=" + st_release_time
-                    + "&et_release_time=" + et_release_time
-                    + "&recruitment_attache=" + recruitment_attache
-
+                + "&project_name=" + project_name
+                + "&name=" + name
+                + "&identity_card_number=" + identity_card_number
+                + "&phone_number=" + phone_number
+                + "&st_release_time=" + st_release_time
+                + "&et_release_time=" + et_release_time
+                + "&start_time=" + start_time
+                + "&end_time=" + end_time
+                + "&recruitment_attache=" + recruitment_attache
         });
 
 

@@ -1,5 +1,4 @@
 # coding=utf-8
-import traceback
 from collections import defaultdict
 
 from django.contrib.auth.decorators import login_required
@@ -11,6 +10,7 @@ from django.views.generic import View
 from modules.employee_management.employee_info.models import Employee
 from modules.share_module.download import download_file
 from modules.share_module.export import ExportExcel
+from modules.share_module.formater import *
 from modules.share_module.permissionMixin import class_view_decorator
 from modules.share_module.utils import get_kwargs
 
@@ -76,6 +76,14 @@ class EmployeeExportView(View):
 			recruitment_attache = self.request.GET.get("recruitment_attache", "")  # 招聘人员
 			st_release_time = self.request.GET.get("st_release_time", "")  # 发放起始时间
 			et_release_time = self.request.GET.get("et_release_time", "")  # 发放终止日期
+			self.start_time = self.request.GET.get("start_time", "")  # 创建起始时间
+			self.end_time = self.request.GET.get("end_time", "")  # 创建终止时间
+
+			if self.start_time and self.end_time:
+				self.start_time += " 00:00:01"
+				self.end_time +=" 23:59:59"
+				self.start_time = date_formater(self.start_time, "%Y/%m/%d %X")
+				self.end_time = date_formater(self.end_time, "%Y/%m/%d %X")
 
 			try:
 				user_position = self.request.user.position.name  # 用户岗位
@@ -96,7 +104,9 @@ class EmployeeExportView(View):
 				"phone_number": phone_number,
 				"recruitment_attache__first_name__icontains": recruitment_attache,
 				"release_time__gte": st_release_time,
-				"release_time__lte": et_release_time
+				"release_time__lte": et_release_time,
+				"create_time__gte": self.start_time,
+				"create_time__lte": self.end_time
 			}
 			if dept_name:
 				search_condition.update(
@@ -116,7 +126,7 @@ class EmployeeExportView(View):
 					one_row_dict = defaultdict(str)
 					one_row_dict["name"] = one_employee_obj.name  # 姓名
 					if one_employee_obj.project_name:
-						one_row_dict["attribution_dept"] = one_employee_obj.project_name.department.name  # 服务部门
+						one_row_dict["attribution_dept"] = one_employee_obj.project_name.department.name if one_employee_obj.project_name.department else ""  # 服务部门
 					else:
 						one_row_dict["attribution_dept"] = ""  # 服务部门
 					one_row_dict["identity_card_number"] = one_employee_obj.identity_card_number  # 身份证号

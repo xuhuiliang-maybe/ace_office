@@ -3,10 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.views.generic import ListView
 
+from config.conf_core import PAGINATE
 from modules.employee_management.employee_info.models import *
+from modules.share_module.formater import *
 from modules.share_module.permissionMixin import class_view_decorator
 from modules.share_module.utils import get_kwargs
-from config.conf_core import PAGINATE
 
 
 @class_view_decorator(login_required)
@@ -39,6 +40,16 @@ class EmployeeList(ListView):
 			self.recruitment_attache = self.request.GET.get("recruitment_attache", "")  # 招聘人员
 			self.st_release_time = self.request.GET.get("st_release_time", "")  # 发放起始时间
 			self.et_release_time = self.request.GET.get("et_release_time", "")  # 发放终止日期
+			self.start_time_str = self.request.GET.get("start_time", "")  # 创建起始时间
+			self.end_time_str = self.request.GET.get("end_time", "")  # 创建终止时间
+			self.start_time = self.start_time_str
+			self.end_time = self.end_time_str
+
+			if self.start_time and self.end_time:
+				self.start_time += " 00:00:01"
+				self.end_time +=" 23:59:59"
+				self.start_time = date_formater(self.start_time, "%Y/%m/%d %X")
+				self.end_time = date_formater(self.end_time, "%Y/%m/%d %X")
 
 			# 判断是否是客服部,是，只显示当前用户所属部门下信息
 			self.customer_service = 0
@@ -62,7 +73,9 @@ class EmployeeList(ListView):
 				"phone_number": self.phone_number,
 				"recruitment_attache__first_name__icontains": self.recruitment_attache,
 				"release_time__gte": self.st_release_time,
-				"release_time__lte": self.et_release_time
+				"release_time__lte": self.et_release_time,
+				"create_time__gte": self.start_time,
+				"create_time__lte": self.end_time
 			}
 			if self.dept_name:
 				search_condition.update(
@@ -104,6 +117,8 @@ class EmployeeList(ListView):
 		context["phone_number"] = self.phone_number
 		context["recruitment_attache"] = self.recruitment_attache
 		context["st_release_time"] = self.st_release_time
+		context["start_time"] = self.start_time_str
+		context["end_time"] = self.end_time_str
 		context["et_release_time"] = self.et_release_time
 		context["employee_type"] = self.employee_type
 		return context

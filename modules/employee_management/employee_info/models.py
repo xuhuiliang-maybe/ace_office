@@ -196,6 +196,7 @@ class Employee(models.Model):
 	remark3 = models.CharField(u"备注3", max_length=256, blank=True)
 	remark4 = models.CharField(u"备注4", max_length=256, blank=True)
 	remark5 = models.CharField(u"备注5", max_length=256, blank=True)
+	create_time = models.DateTimeField(verbose_name=u'创建时间', auto_now=True, blank=True, null=True)
 
 	def __str__(self):
 		return self.name  # 对象友好显示名称
