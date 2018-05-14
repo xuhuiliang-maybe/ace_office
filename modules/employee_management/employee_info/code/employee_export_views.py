@@ -476,6 +476,11 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
 						tmp_one.append(one_emp.remark1 if one_emp.remark1 else "--")  # 备注1
 						f.write("\t".join(tmp_one))
 						f.write("\n")
+		# 上传百度云
+		# 判断文件是否存在
+		if os.path.exists(filepath):
+			os.system("/usr/local/bin/bypy mkdir ExportEmployee")
+			os.system("/usr/local/bin/bypy upload %s ExportEmployee -v" % filepath)
 	except:
 		traceback.print_exc()
 

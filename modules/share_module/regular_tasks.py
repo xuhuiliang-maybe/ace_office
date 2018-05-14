@@ -96,12 +96,6 @@ def export_employee():
 		employee_obj_list = Employee.objects.filter(is_temporary=False)
 		employee_type = "employee"
 		write_employee_file(employee_type, employee_obj_list, filepath)
-
-		# 上传百度云
-		# 判断文件是否存在
-		if os.path.exists(filepath):
-			os.system("/usr/local/bin/bypy mkdir ExportEmployee")
-			os.system("/usr/local/bin/bypy upload %s ExportEmployee -v" % filepath)
 	except:
 		traceback.print_exc()
 
