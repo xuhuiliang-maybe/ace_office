@@ -80,14 +80,35 @@ def delete_backup_job():
 		traceback.print_exc()
 
 
+from modules.employee_management.employee_info.code.employee_export_views import write_employee_file
+from modules.employee_management.employee_info.models import Employee
+import time
+
+
+def export_employee():
+	"""定时，导出人员信息
+	:return:
+	"""
+	try:
+		file_name = "Employee" + "_" + time.strftime("%Y%m%d%H%M%S") + ".txt"
+		tmp_path = get_media_sub_path("export_employee")  # 临时文件夹路径
+		filepath = os.path.join(tmp_path, file_name)  # 导出文件路径
+		employee_obj_list = Employee.objects.filter(is_temporary=False)
+		employee_type = "employee"
+		write_employee_file(employee_type, employee_obj_list, filepath)
+	except:
+		traceback.print_exc()
+
+
 schedudler = BackgroundScheduler()
 
 
 def all_tasks():
 	try:
-		schedudler.add_job(quote_send_sh_job, 'cron', day_of_week='0-6', hour='0-24', minute='*', second='*/3')
-		schedudler.add_job(delete_backup_job, 'cron', day_of_week='0-6', hour='1', minute='0', second='0')
-		schedudler.add_job(create_backup_job, 'cron', day_of_week='0-6', hour='2', minute='0', second='0')
+		# schedudler.add_job(quote_send_sh_job, 'cron', day_of_week='0-6', hour='0-24', minute='*', second="*/5")
+		schedudler.add_job(export_employee, 'cron', day_of_week='0-6', hour='0', minute='0', second="0")
+		# schedudler.add_job(delete_backup_job, 'cron', day_of_week='0-6', hour='1', minute='0', second='0')
+		# schedudler.add_job(create_backup_job, 'cron', day_of_week='0-6', hour='2', minute='0', second='0')
 		try:
 			schedudler.start()
 		except (KeyboardInterrupt, SystemExit):

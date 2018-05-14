@@ -324,22 +324,8 @@ class EmployeeExportView(View):
 			traceback.print_exc()
 
 
-@class_view_decorator(login_required)
-@class_view_decorator(permission_required('employee_info.export_employee', raise_exception=True))
-class NewEmployeeExportView(View):
-	def get(self, request, *args, **kwargs):
-
-		employee_type = self.request.GET.get("employee_type", "")
-		filename = ""
-		if employee_type == "employee":
-			filename = "Employee"
-		elif employee_type == "temporary":
-			filename = "Temporary"
-
-		file_name = filename + "_" + time.strftime("%Y%m%d%H%M%S") + ".txt"
-		tmp_path = get_media_sub_path("tmp")  # 临时文件夹路径
-		filepath = os.path.join(tmp_path, file_name)  # 导出文件路径
-
+def write_employee_file(employee_type, employee_obj_list, filepath):
+	try:
 		head_list = list()
 		if employee_type == "employee":
 			head_list = [u"序号", u'姓名（必填）', u'服务部门', u'身份证号（必填）', u'目前状态(在职/离职)', u'项目名称（必填）', u'银行卡号', u'开户银行',
@@ -358,6 +344,157 @@ class NewEmployeeExportView(View):
 		with open(filepath, "w") as f:  # 格式化字符串还能这么用！
 			f.write(head_str)
 			f.write("\n")
+		# 组装导出数据
+		if employee_obj_list.exists():
+			if employee_type == "employee":
+				with open(filepath, "a+") as f:
+					for index, one_emp in enumerate(employee_obj_list):
+						tmp_one = list()
+						tmp_one.append(str(index + 1))
+						tmp_one.append(one_emp.name if one_emp.name else "--")  # 姓名
+						tmp_one.append(
+							one_emp.project_name.department.name if one_emp.project_name and one_emp.project_name.department else "--")  # 服务部门
+						tmp_one.append(
+							one_emp.identity_card_number if one_emp.identity_card_number else "--")  # 身份证号
+						tmp_one.append(one_emp.get_status_display() if one_emp.status else "--")  # 目前状态
+						tmp_one.append(one_emp.project_name.full_name if one_emp.project_name else "--")  # 项目名称
+						tmp_one.append(one_emp.salary_card_number if one_emp.salary_card_number else "--")  # 银行卡号
+						tmp_one.append(one_emp.bank_account if one_emp.bank_account else "--")  # 开户银行
+						tmp_one.append(one_emp.job_dept if one_emp.job_dept else "--")  # 部门
+						tmp_one.append(one_emp.position if one_emp.position else "--")  # 职务
+						tmp_one.append(one_emp.get_sex_display() if one_emp.sex else "--")  # 性别
+						tmp_one.append(one_emp.get_nation_display() if one_emp.nation else "--")  # 民族
+						tmp_one.append(one_emp.get_education_display() if one_emp.education else "--")  # 学历
+						tmp_one.append(one_emp.birthday.strftime("%Y-%m-%d") if one_emp.birthday else '--')  # 出生年月
+						tmp_one.append(str(one_emp.age) if one_emp.age else "--")  # 年龄
+						tmp_one.append(one_emp.register_address if one_emp.register_address else "--")  # 户口所在地
+						tmp_one.append(one_emp.register_postcode if one_emp.register_postcode else "--")  # 户口邮编
+						tmp_one.append(
+							one_emp.get_register_type_display() if one_emp.register_type else "--")  # 户口性质
+						tmp_one.append(one_emp.work_address if one_emp.work_address else "--")  # 工作地
+						tmp_one.append(one_emp.insured_place if one_emp.insured_place else "--")  # 社保地
+						tmp_one.append(one_emp.person_type.name if one_emp.person_type else "--")  # 人员属性
+						tmp_one.append(
+							one_emp.get_contract_type_display() if one_emp.contract_type else "--")  # 合同属性
+						tmp_one.append(one_emp.contract_subject.name if one_emp.contract_subject else "--")  # 合同主体
+						tmp_one.append(
+							one_emp.entry_date.strftime("%Y-%m-%d") if one_emp.entry_date else '--')  # 入职日期
+						tmp_one.append(one_emp.social_insurance_increase_date.strftime(
+							"%Y-%m-%d") if one_emp.social_insurance_increase_date else '--')  # 社保增员日期
+						tmp_one.append(
+							one_emp.social_security_payment_card if one_emp.social_security_payment_card else "--")
+						tmp_one.append(one_emp.use_bank if one_emp.use_bank else "--")
+						tmp_one.append(one_emp.business_insurance_increase_date.strftime(
+							"%Y-%m-%d") if one_emp.business_insurance_increase_date else '--')  # 商保增员日期
+						tmp_one.append(one_emp.provident_fund_increase_date.strftime(
+							"%Y-%m-%d") if one_emp.provident_fund_increase_date else '--')  # 公积金增员日期
+						tmp_one.append(one_emp.contract_begin_date.strftime(
+							"%Y-%m-%d") if one_emp.contract_begin_date else '--')  # 合同开始日期
+						tmp_one.append(str(one_emp.probation_period) if one_emp.probation_period else "--")  # 试用期限
+						tmp_one.append(str(one_emp.contract_period) if one_emp.contract_period else "--")  # 合同期限
+						tmp_one.append(one_emp.probation_end_date.strftime(
+							"%Y-%m-%d") if one_emp.probation_end_date else '--')  # 试用到期日期
+						tmp_one.append(one_emp.contract_end_date.strftime(
+							"%Y-%m-%d") if one_emp.contract_end_date else '--')  # 合同到期日期
+						tmp_one.append(
+							str(one_emp.contract_renew_times) if one_emp.contract_renew_times else "--")  # 合同续签次数
+						tmp_one.append(
+							one_emp.departure_date.strftime("%Y-%m-%d") if one_emp.departure_date else '--')  # 离职日期
+						tmp_one.append(
+							one_emp.get_departure_procedure_display() if one_emp.departure_procedure else "--")  # 离职手续
+						tmp_one.append(one_emp.departure_cause if one_emp.departure_cause else "--")  # 离职原因
+						tmp_one.append(one_emp.social_insurance_reduce_date.strftime(
+							"%Y-%m-%d") if one_emp.social_insurance_reduce_date else '--')  # 社保减员日期
+						tmp_one.append(one_emp.business_insurance_reduce_date.strftime(
+							"%Y-%m-%d") if one_emp.business_insurance_reduce_date else '--')  # 商保减员日期
+						tmp_one.append(one_emp.provident_fund_reduce_date.strftime(
+							"%Y-%m-%d") if one_emp.provident_fund_reduce_date else '--')  # 公积金减员日期
+						tmp_one.append(one_emp.phone_number if one_emp.phone_number else "--")  # 联系电话
+						tmp_one.append(one_emp.contact_person if one_emp.contact_person else "--")  # 紧急联系人
+						tmp_one.append(
+							one_emp.contact_relationship if one_emp.contact_relationship else "--")  # 与联系人关系
+						tmp_one.append(
+							one_emp.contact_person_phone if one_emp.contact_person_phone else "--")  # 紧急联系人电话
+						tmp_one.append(
+							one_emp.get_recruitment_channel_display() if one_emp.recruitment_channel else "--")  # 招聘渠道
+						try:
+							tmp_one.append(one_emp.recruitment_attache.first_name)  # 招聘人员
+						except:
+							tmp_one.append("--")  # 招聘人员
+						try:
+							tmp_one.append(one_emp.project_name.customer_service_staff.first_name)  # 客户专员
+						except:
+							tmp_one.append("--")
+						try:
+							tmp_one.append(one_emp.project_name.customer_service_charge.first_name)  # 客服主管
+						except:
+							tmp_one.append("--")
+						try:
+							tmp_one.append(one_emp.project_name.outsource_director.first_name)  # 外包主管
+						except:
+							tmp_one.append("--")
+						try:
+							tmp_one.append(one_emp.project_name.customer_service_director.first_name)  # 客服经理
+						except:
+							tmp_one.append("--")
+						try:
+							tmp_one.append(one_emp.project_name.other_responsible_person.first_name)  # 其他负责人
+						except:
+							tmp_one.append("--")
+						tmp_one.append(
+							one_emp.create_time.strftime("%Y-%m-%d %X") if one_emp.create_time else "--")  # 创建时间
+						f.write("\t".join(tmp_one))
+						f.write("\n")
+
+			elif employee_type == "temporary":
+				with open(filepath, "a+") as f:
+					for index, one_emp in enumerate(employee_obj_list):
+						tmp_one = list()
+						tmp_one.append(str(index + 1))
+						tmp_one.append(one_emp.name if one_emp.name else "--")  # 姓名
+						tmp_one.append(one_emp.create_time.strftime("%Y-%m-%d %X") if one_emp.create_time else "--")
+						tmp_one.append(one_emp.get_sex_display() if one_emp.sex else "--")  # 性别
+						tmp_one.append(
+							one_emp.identity_card_number if one_emp.identity_card_number else "--")  # 身份证号
+						tmp_one.append(one_emp.project_name.full_name if one_emp.project_name else "--")  # 项目名称
+						tmp_one.append(
+							one_emp.project_name.department.name if one_emp.project_name and one_emp.project_name.department else "--")  # 服务部门
+						tmp_one.append(
+							one_emp.recruitment_attache.first_name if one_emp.recruitment_attache else "--")  # 招聘人员
+						tmp_one.append(one_emp.phone_number if one_emp.phone_number else "--")  # 联系电话
+						tmp_one.append(one_emp.start_work_date.strftime(
+							"%Y-%m-%d") if one_emp.start_work_date else '--')  # 开始工作日
+						tmp_one.append(
+							one_emp.end_work_date.strftime("%Y-%m-%d") if one_emp.end_work_date else '--')  # 结束工作日
+						tmp_one.append(str(one_emp.work_days) if one_emp.work_days else "--")  # 工作天数
+						tmp_one.append(str(one_emp.hours) if one_emp.hours else "--")  # 小时数
+						tmp_one.append(
+							str(one_emp.amount_of_payment) if one_emp.amount_of_payment else "--")  # 发放金额
+						tmp_one.append(one_emp.release_user.first_name if one_emp.release_user else "--")  # 发放人
+						tmp_one.append(
+							one_emp.release_time.strftime("%Y-%m-%d") if one_emp.release_time else '--')  # 发放时间
+						tmp_one.append(one_emp.remark1 if one_emp.remark1 else "--")  # 备注1
+						f.write("\t".join(tmp_one))
+						f.write("\n")
+	except:
+		traceback.print_exc()
+
+
+@class_view_decorator(login_required)
+@class_view_decorator(permission_required('employee_info.export_employee', raise_exception=True))
+class NewEmployeeExportView(View):
+	def get(self, request, *args, **kwargs):
+
+		employee_type = self.request.GET.get("employee_type", "")
+		filename = ""
+		if employee_type == "employee":
+			filename = "Employee"
+		elif employee_type == "temporary":
+			filename = "Temporary"
+
+		file_name = filename + "_" + time.strftime("%Y%m%d%H%M%S") + ".txt"
+		tmp_path = get_media_sub_path("export_employee")  # 临时文件夹路径
+		filepath = os.path.join(tmp_path, file_name)  # 导出文件路径
 
 		try:
 			# 员工查询
@@ -419,141 +556,10 @@ class NewEmployeeExportView(View):
 			employee_obj_list = Employee.objects.filter(**kwargs)
 
 			# 组装导出数据
-			rows_list = list()
+			write_employee_file(employee_type, employee_obj_list, filepath)
 			if employee_obj_list.exists():
-				if employee_type == "employee":
-					with open(filepath, "a+") as f:
-						for index, one_emp in enumerate(employee_obj_list):
-							tmp_one = list()
-							tmp_one.append(str(index + 1))
-							tmp_one.append(one_emp.name if one_emp.name else "--")  # 姓名
-							tmp_one.append(
-								one_emp.project_name.department.name if one_emp.project_name and one_emp.project_name.department else "--")  # 服务部门
-							tmp_one.append(
-								one_emp.identity_card_number if one_emp.identity_card_number else "--")  # 身份证号
-							tmp_one.append(one_emp.get_status_display() if one_emp.status else "--")  # 目前状态
-							tmp_one.append(one_emp.project_name.full_name if one_emp.project_name else "--")  # 项目名称
-							tmp_one.append(one_emp.salary_card_number if one_emp.salary_card_number else "--")  # 银行卡号
-							tmp_one.append(one_emp.bank_account if one_emp.bank_account else "--")  # 开户银行
-							tmp_one.append(one_emp.job_dept if one_emp.job_dept else "--")  # 部门
-							tmp_one.append(one_emp.position if one_emp.position else "--")  # 职务
-							tmp_one.append(one_emp.get_sex_display() if one_emp.sex else "--")  # 性别
-							tmp_one.append(one_emp.get_nation_display() if one_emp.nation else "--")  # 民族
-							tmp_one.append(one_emp.get_education_display() if one_emp.education else "--")  # 学历
-							tmp_one.append(one_emp.birthday.strftime("%Y-%m-%d") if one_emp.birthday else '--')  # 出生年月
-							tmp_one.append(str(one_emp.age) if one_emp.age else "--")  # 年龄
-							tmp_one.append(one_emp.register_address if one_emp.register_address else "--")  # 户口所在地
-							tmp_one.append(one_emp.register_postcode if one_emp.register_postcode else "--")  # 户口邮编
-							tmp_one.append(
-								one_emp.get_register_type_display() if one_emp.register_type else "--")  # 户口性质
-							tmp_one.append(one_emp.work_address if one_emp.work_address else "--")  # 工作地
-							tmp_one.append(one_emp.insured_place if one_emp.insured_place else "--")  # 社保地
-							tmp_one.append(one_emp.person_type.name if one_emp.person_type else "--")  # 人员属性
-							tmp_one.append(
-								one_emp.get_contract_type_display() if one_emp.contract_type else "--")  # 合同属性
-							tmp_one.append(one_emp.contract_subject.name if one_emp.contract_subject else "--")  # 合同主体
-							tmp_one.append(
-								one_emp.entry_date.strftime("%Y-%m-%d") if one_emp.entry_date else '--')  # 入职日期
-							tmp_one.append(one_emp.social_insurance_increase_date.strftime(
-								"%Y-%m-%d") if one_emp.social_insurance_increase_date else '--')  # 社保增员日期
-							tmp_one.append(
-								one_emp.social_security_payment_card if one_emp.social_security_payment_card else "--")
-							tmp_one.append(one_emp.use_bank if one_emp.use_bank else "--")
-							tmp_one.append(one_emp.business_insurance_increase_date.strftime(
-								"%Y-%m-%d") if one_emp.business_insurance_increase_date else '--')  # 商保增员日期
-							tmp_one.append(one_emp.provident_fund_increase_date.strftime(
-								"%Y-%m-%d") if one_emp.provident_fund_increase_date else '--')  # 公积金增员日期
-							tmp_one.append(one_emp.contract_begin_date.strftime(
-								"%Y-%m-%d") if one_emp.contract_begin_date else '--')  # 合同开始日期
-							tmp_one.append(str(one_emp.probation_period) if one_emp.probation_period else "--")  # 试用期限
-							tmp_one.append(str(one_emp.contract_period) if one_emp.contract_period else "--")  # 合同期限
-							tmp_one.append(one_emp.probation_end_date.strftime(
-								"%Y-%m-%d") if one_emp.probation_end_date else '--')  # 试用到期日期
-							tmp_one.append(one_emp.contract_end_date.strftime(
-								"%Y-%m-%d") if one_emp.contract_end_date else '--')  # 合同到期日期
-							tmp_one.append(
-								str(one_emp.contract_renew_times) if one_emp.contract_renew_times else "--")  # 合同续签次数
-							tmp_one.append(
-								one_emp.departure_date.strftime("%Y-%m-%d") if one_emp.departure_date else '--')  # 离职日期
-							tmp_one.append(
-								one_emp.get_departure_procedure_display() if one_emp.departure_procedure else "--")  # 离职手续
-							tmp_one.append(one_emp.departure_cause if one_emp.departure_cause else "--")  # 离职原因
-							tmp_one.append(one_emp.social_insurance_reduce_date.strftime(
-								"%Y-%m-%d") if one_emp.social_insurance_reduce_date else '--')  # 社保减员日期
-							tmp_one.append(one_emp.business_insurance_reduce_date.strftime(
-								"%Y-%m-%d") if one_emp.business_insurance_reduce_date else '--')  # 商保减员日期
-							tmp_one.append(one_emp.provident_fund_reduce_date.strftime(
-								"%Y-%m-%d") if one_emp.provident_fund_reduce_date else '--')  # 公积金减员日期
-							tmp_one.append(one_emp.phone_number if one_emp.phone_number else "--")  # 联系电话
-							tmp_one.append(one_emp.contact_person if one_emp.contact_person else "--")  # 紧急联系人
-							tmp_one.append(
-								one_emp.contact_relationship if one_emp.contact_relationship else "--")  # 与联系人关系
-							tmp_one.append(
-								one_emp.contact_person_phone if one_emp.contact_person_phone else "--")  # 紧急联系人电话
-							tmp_one.append(
-								one_emp.get_recruitment_channel_display() if one_emp.recruitment_channel else "--")  # 招聘渠道
-							try:
-								tmp_one.append(one_emp.recruitment_attache.first_name)  # 招聘人员
-							except:
-								tmp_one.append("--")  # 招聘人员
-							try:
-								tmp_one.append(one_emp.project_name.customer_service_staff.first_name)  # 客户专员
-							except:
-								tmp_one.append("--")
-							try:
-								tmp_one.append(one_emp.project_name.customer_service_charge.first_name)  # 客服主管
-							except:
-								tmp_one.append("--")
-							try:
-								tmp_one.append(one_emp.project_name.outsource_director.first_name)  # 外包主管
-							except:
-								tmp_one.append("--")
-							try:
-								tmp_one.append(one_emp.project_name.customer_service_director.first_name)  # 客服经理
-							except:
-								tmp_one.append("--")
-							try:
-								tmp_one.append(one_emp.project_name.other_responsible_person.first_name)  # 其他负责人
-							except:
-								tmp_one.append("--")
-							tmp_one.append(
-								one_emp.create_time.strftime("%Y-%m-%d %X") if one_emp.create_time else "--")  # 创建时间
-							f.write("\t".join(tmp_one))
-							f.write("\n")
-
-				elif employee_type == "temporary":
-					with open(filepath, "a+") as f:
-						for index, one_emp in enumerate(employee_obj_list):
-							tmp_one = list()
-							tmp_one.append(str(index + 1))
-							tmp_one.append(one_emp.name if one_emp.name else "--")  # 姓名
-							tmp_one.append(one_emp.create_time.strftime("%Y-%m-%d %X") if one_emp.create_time else "--")
-							tmp_one.append(one_emp.get_sex_display() if one_emp.sex else "--")  # 性别
-							tmp_one.append(
-								one_emp.identity_card_number if one_emp.identity_card_number else "--")  # 身份证号
-							tmp_one.append(one_emp.project_name.full_name if one_emp.project_name else "--")  # 项目名称
-							tmp_one.append(
-								one_emp.project_name.department.name if one_emp.project_name and one_emp.project_name.department else "--")  # 服务部门
-							tmp_one.append(
-								one_emp.recruitment_attache.first_name if one_emp.recruitment_attache else "--")  # 招聘人员
-							tmp_one.append(one_emp.phone_number if one_emp.phone_number else "--")  # 联系电话
-							tmp_one.append(one_emp.start_work_date.strftime(
-								"%Y-%m-%d") if one_emp.start_work_date else '--')  # 开始工作日
-							tmp_one.append(
-								one_emp.end_work_date.strftime("%Y-%m-%d") if one_emp.end_work_date else '--')  # 结束工作日
-							tmp_one.append(str(one_emp.work_days) if one_emp.work_days else "--")  # 工作天数
-							tmp_one.append(str(one_emp.hours) if one_emp.hours else "--")  # 小时数
-							tmp_one.append(
-								str(one_emp.amount_of_payment) if one_emp.amount_of_payment else "--")  # 发放金额
-							tmp_one.append(one_emp.release_user.first_name if one_emp.release_user else "--")  # 发放人
-							tmp_one.append(
-								one_emp.release_time.strftime("%Y-%m-%d") if one_emp.release_time else '--')  # 发放时间
-							tmp_one.append(one_emp.remark1 if one_emp.remark1 else "--")  # 备注1
-							f.write("\t".join(tmp_one))
-							f.write("\n")
-
 				# 页面下载导出文件
-				response = download_file(filepath, file_name, True)
+				response = download_file(filepath, file_name, False)
 				return response
 			else:
 				# 导出只有表头信息的空文件
