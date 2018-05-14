@@ -1,9 +1,14 @@
 # coding=utf-8
+import json
+import os
 from collections import defaultdict
+from multiprocessing import Process
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import View
 
@@ -345,6 +350,7 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
 			f.write(head_str)
 			f.write("\n")
 		# 组装导出数据
+		print type(employee_obj_list)
 		if employee_obj_list.exists():
 			if employee_type == "employee":
 				with open(filepath, "a+") as f:
@@ -488,9 +494,9 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
 @class_view_decorator(login_required)
 @class_view_decorator(permission_required('employee_info.export_employee', raise_exception=True))
 class NewEmployeeExportView(View):
-	def get(self, request, *args, **kwargs):
+	def post(self, request, *args, **kwargs):
 
-		employee_type = self.request.GET.get("employee_type", "")
+		employee_type = self.request.POST.get("employee_type", "")
 		filename = ""
 		if employee_type == "employee":
 			filename = "Employee"
@@ -500,25 +506,27 @@ class NewEmployeeExportView(View):
 		file_name = filename + "_" + time.strftime("%Y%m%d%H%M%S") + ".txt"
 		tmp_path = get_media_sub_path("export_employee")  # 临时文件夹路径
 		filepath = os.path.join(tmp_path, file_name)  # 导出文件路径
+		if not os.path.exists(tmp_path):
+			os.makedirs(tmp_path)
 
 		try:
 			# 员工查询
-			status = self.request.GET.get("status", "")  # 目前状态
-			project_name = self.request.GET.get("project_name", "")  # 项目名称
-			dept_name = self.request.GET.get("dept_name", "")  # 服务部门
-			principal = self.request.GET.get("principal", "")  # 项目负责人
-			name = self.request.GET.get("name", "")  # 姓名
-			identity_card_number = self.request.GET.get("identity_card_number", "")  # 身份证号
-			person_type = int(self.request.GET.get("person_type", 0))  # 人员属性
-			contract_type = self.request.GET.get("contract_type", "")  # 合同属性
+			status = self.request.POST.get("status", "")  # 目前状态
+			project_name = self.request.POST.get("project_name", "")  # 项目名称
+			dept_name = self.request.POST.get("dept_name", "")  # 服务部门
+			principal = self.request.POST.get("principal", "")  # 项目负责人
+			name = self.request.POST.get("name", "")  # 姓名
+			identity_card_number = self.request.POST.get("identity_card_number", "")  # 身份证号
+			person_type = int(self.request.POST.get("person_type", 0))  # 人员属性
+			contract_type = self.request.POST.get("contract_type", "")  # 合同属性
 
 			# 临时员工查询
-			phone_number = self.request.GET.get("phone_number", "")  # 联系方式
-			recruitment_attache = self.request.GET.get("recruitment_attache", "")  # 招聘人员
-			st_release_time = self.request.GET.get("st_release_time", "")  # 发放起始时间
-			et_release_time = self.request.GET.get("et_release_time", "")  # 发放终止日期
-			self.start_time = self.request.GET.get("start_time", "")  # 创建起始时间
-			self.end_time = self.request.GET.get("end_time", "")  # 创建终止时间
+			phone_number = self.request.POST.get("phone_number", "")  # 联系方式
+			recruitment_attache = self.request.POST.get("recruitment_attache", "")  # 招聘人员
+			st_release_time = self.request.POST.get("st_release_time", "")  # 发放起始时间
+			et_release_time = self.request.POST.get("et_release_time", "")  # 发放终止日期
+			self.start_time = self.request.POST.get("start_time", "")  # 创建起始时间
+			self.end_time = self.request.POST.get("end_time", "")  # 创建终止时间
 
 			if self.start_time and self.end_time:
 				self.start_time += " 00:00:01"
@@ -561,16 +569,27 @@ class NewEmployeeExportView(View):
 			employee_obj_list = Employee.objects.filter(**kwargs)
 
 			# 组装导出数据
-			write_employee_file(employee_type, employee_obj_list, filepath)
+			pro = Process(target=write_employee_file, args=(employee_type, employee_obj_list, filepath))
+			pro.start()
+
 			if employee_obj_list.exists():
-				# 页面下载导出文件
-				response = download_file(filepath, file_name, False)
-				return response
+				messages.success(self.request, u"成功导出员工信息（%s）, 下载地址：11"% file_name)
 			else:
-				# 导出只有表头信息的空文件
-				if employee_type == "employee":
-					return redirect(reverse('download', args=("employee_info",)))
-				elif employee_type == "temporary":
-					return redirect(reverse('download', args=("temporary_info",)))
+				messages.warning(self.request, u"没有查询到数据，请合理填写查询条件")
+			# if employee_obj_list.exists():
+			# 	# 页面下载导出文件
+			# 	response = download_file(filepath, file_name, False)
+			# 	return response
+			# else:
+			# 	# 导出只有表头信息的空文件
+			# 	if employee_type == "employee":
+			# 		return redirect(reverse('download', args=("employee_info",)))
+			# 	elif employee_type == "temporary":
+			# 		return redirect(reverse('download', args=("temporary_info",)))
 		except:
 			traceback.print_exc()
+		finally:
+			return HttpResponse(
+				json.dumps({"code": 1, "msg": u"导出成功"}),
+				content_type='application/json'
+			)

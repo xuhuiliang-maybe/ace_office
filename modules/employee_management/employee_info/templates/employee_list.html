@@ -507,6 +507,15 @@
         }
 
         /* export employee*/
+        function backup() {
+            var url = "{% url "system:data_backup_add" %}";
+            var data = {};
+            var result = custom_ajax_post(url, data);
+            if (result == 1) {
+                window.location.reload()
+            }
+
+        }
         $("#exportemployee").click(function () {
             var status = $("#status").val();
             var project_name = $("#project_name").val();
@@ -519,17 +528,35 @@
             var contract_type = $("#contract_type").val();
                         var start_time = $("#start_time").val();
             var end_time = $("#end_time").val();
-            location.href = "/employeemanage/export?employee_type=employee&status=" + status
-                + "&project_name=" + project_name
-                + "&dept_name=" + dept_name
-                + "&dept_ids=" + dept_ids
-                + "&principal=" + principal
-                + "&name=" + name
-                + "&identity_card_number=" + identity_card_number
-                + "&person_type=" + person_type
-                + "&contract_type=" + contract_type
-                + "&start_time=" + start_time
-                + "&end_time=" + end_time
+            {#location.href = "/employeemanage/export?employee_type=employee&status=" + status#}
+            {#    + "&project_name=" + project_name#}
+            {#    + "&dept_name=" + dept_name#}
+            {#    + "&dept_ids=" + dept_ids#}
+            {#    + "&principal=" + principal#}
+            {#    + "&name=" + name#}
+            {#    + "&identity_card_number=" + identity_card_number#}
+            {#    + "&person_type=" + person_type#}
+            {#    + "&contract_type=" + contract_type#}
+            {#    + "&start_time=" + start_time#}
+            {#    + "&end_time=" + end_time#}
+            var data = {
+                "employee_type":"employee",
+                "status":status,
+                "project_name":project_name,
+                "dept_name":dept_name,
+                "dept_ids":dept_ids,
+                "principal":principal,
+                "name":name,
+                "identity_card_number":identity_card_number,
+                "person_type":person_type,
+                "contract_type":contract_type,
+                "start_time":start_time,
+                "end_time":end_time
+            };
+            var result = custom_ajax_post("/employeemanage/export", data);
+            if (result == 1) {
+                window.location.reload()
+            }
         });
         /* export temporary*/
         $("#exporttemporary").click(function () {
