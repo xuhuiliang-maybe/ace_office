@@ -494,6 +494,7 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
 @class_view_decorator(permission_required('employee_info.export_employee', raise_exception=True))
 class NewEmployeeExportView(View):
 	def post(self, request, *args, **kwargs):
+		result_dict = {"code": 1, "msg": u"导出成功"}
 
 		employee_type = self.request.POST.get("employee_type", "")
 		filename = ""
@@ -502,7 +503,7 @@ class NewEmployeeExportView(View):
 		elif employee_type == "temporary":
 			filename = "Temporary"
 
-		file_name = filename + "_" + time.strftime("%Y%m%d%H%M%S") + ".txt"
+		file_name = filename + "_" + time.strftime("%Y-%m-%d_%X") + ".txt"
 		tmp_path = get_media_sub_path("export_employee")  # 临时文件夹路径
 		filepath = os.path.join(tmp_path, file_name)  # 导出文件路径
 		if not os.path.exists(tmp_path):
@@ -570,8 +571,8 @@ class NewEmployeeExportView(View):
 			if employee_obj_list.exists():
 				# 组装导出数据
 				write_employee_file(employee_type, employee_obj_list, filepath)
-				download_path = "链接:https://pan.baidu.com/s/1Y7PWQ2gzfte5f7ELtK3tgg  密码:169c"
-				messages.success(self.request, u"成功导出员工信息（%s）, %s"% (file_name, download_path))
+				download_path = "下载链接：https://pan.baidu.com/s/1Y7PWQ2gzfte5f7ELtK3tgg 密码：169c"
+				messages.success(self.request, u"成功导出员工信息（%s）, %s" % (file_name, download_path))
 			else:
 				messages.warning(self.request, u"没有查询到数据，请合理填写查询条件")
 			# if employee_obj_list.exists():
@@ -586,8 +587,10 @@ class NewEmployeeExportView(View):
 			# 		return redirect(reverse('download', args=("temporary_info",)))
 		except:
 			traceback.print_exc()
+			result_dict["msg"] = u"导出异常"
+			result_dict["code"] = 0
 		finally:
 			return HttpResponse(
-				json.dumps({"code": 1, "msg": u"导出成功"}),
+				json.dumps(result_dict),
 				content_type='application/json'
 			)
