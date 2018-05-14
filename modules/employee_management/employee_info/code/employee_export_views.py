@@ -456,11 +456,11 @@ class NewEmployeeExportView(View):
 							tmp_one.append(one_emp.business_insurance_increase_date.strftime("%Y-%m-%d") if one_emp.business_insurance_increase_date else '--')  # 商保增员日期
 							tmp_one.append(one_emp.provident_fund_increase_date.strftime("%Y-%m-%d") if one_emp.provident_fund_increase_date else '--')  # 公积金增员日期
 							tmp_one.append(one_emp.contract_begin_date.strftime("%Y-%m-%d") if one_emp.contract_begin_date else '--')  # 合同开始日期
-							tmp_one.append(one_emp.probation_period if one_emp.probation_period else "--")  # 使用期限
-							tmp_one.append(one_emp.contract_period if one_emp.contract_period else "--")  # 合同期限
+							tmp_one.append(str(one_emp.probation_period) if one_emp.probation_period else "--")  # 试用期限
+							tmp_one.append(str(one_emp.contract_period) if one_emp.contract_period else "--")  # 合同期限
 							tmp_one.append(one_emp.probation_end_date.strftime("%Y-%m-%d") if one_emp.probation_end_date else '--')  # 试用到期日期
 							tmp_one.append(one_emp.contract_end_date.strftime("%Y-%m-%d") if one_emp.contract_end_date else '--')  # 合同到期日期
-							tmp_one.append(one_emp.contract_renew_times if one_emp.contract_renew_times else "--")  # 合同续签次数
+							tmp_one.append(str(one_emp.contract_renew_times) if one_emp.contract_renew_times else "--")  # 合同续签次数
 							tmp_one.append(one_emp.departure_date.strftime("%Y-%m-%d") if one_emp.departure_date else '--')  # 离职日期
 							tmp_one.append(one_emp.get_departure_procedure_display() if one_emp.departure_procedure else "--")  # 离职手续
 							tmp_one.append(one_emp.departure_cause if one_emp.departure_cause else "--")  # 离职原因
@@ -515,9 +515,9 @@ class NewEmployeeExportView(View):
 							tmp_one.append(one_emp.phone_number if one_emp.phone_number else "--")  # 联系电话
 							tmp_one.append(one_emp.start_work_date.strftime("%Y-%m-%d") if one_emp.start_work_date else '--')  # 开始工作日
 							tmp_one.append(one_emp.end_work_date.strftime("%Y-%m-%d") if one_emp.end_work_date else '--')  # 结束工作日
-							tmp_one.append(one_emp.work_days if one_emp.work_days else "--")  # 工作天数
-							tmp_one.append(one_emp.hours if one_emp.hours else "--")  # 小时数
-							tmp_one.append(one_emp.amount_of_payment if one_emp.amount_of_payment else "--")  # 发放金额
+							tmp_one.append(str(one_emp.work_days) if one_emp.work_days else "--")  # 工作天数
+							tmp_one.append(str(one_emp.hours) if one_emp.hours else "--")  # 小时数
+							tmp_one.append(str(one_emp.amount_of_payment) if one_emp.amount_of_payment else "--")  # 发放金额
 							tmp_one.append(one_emp.release_user.first_name if one_emp.release_user else "--")  # 发放人
 							tmp_one.append(one_emp.release_time.strftime("%Y-%m-%d") if one_emp.release_time else '--')  # 发放时间
 							tmp_one.append(one_emp.remark1 if one_emp.remark1 else "--")  # 备注1
