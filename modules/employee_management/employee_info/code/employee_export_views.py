@@ -503,7 +503,7 @@ class NewEmployeeExportView(View):
 		elif employee_type == "temporary":
 			filename = "Temporary"
 
-		file_name = filename + "_" + time.strftime("%Y-%m-%d_%X") + ".txt"
+		file_name = filename + "_" + time.strftime("%Y-%m-%d_%H_%M_%S") + ".txt"
 		tmp_path = get_media_sub_path("export_employee")  # 临时文件夹路径
 		filepath = os.path.join(tmp_path, file_name)  # 导出文件路径
 		if not os.path.exists(tmp_path):
