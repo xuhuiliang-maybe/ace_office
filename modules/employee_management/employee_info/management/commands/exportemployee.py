@@ -16,8 +16,7 @@ class Command(BaseCommand):
 		"""
 		try:
 			print "\n"
-			print "\n"
-			print "Start %s \n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+			print "Start %s" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 			employee_type = "employee"
 			kwargs = dict()
 			if employee_type == "employee":  # 查看员工信息
@@ -35,7 +34,7 @@ class Command(BaseCommand):
 				os.system("bypy upload %s ExportEmployee -v" % file_path)
 
 			print 'Export full employee information to %s；Total %s；%s \n' % (
-			file_name, str(total)), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+				file_name, str(total), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 		except:
 			traceback.print_exc()
