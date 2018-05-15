@@ -10,6 +10,6 @@ if __name__ == "__main__":
 
 	if sys.argv[1] == "runserver":
 		print "Start Time tasks ...."
-	all_tasks()
+	# all_tasks()
 
 	execute_from_command_line(sys.argv)

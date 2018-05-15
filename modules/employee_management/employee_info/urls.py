@@ -22,7 +22,7 @@ urlpatterns = [
 	url(r'^load/employee$', load_employee_views.LoadEmployeeView.as_view(), {"emp_type": "employee"},
 	    name="employee_load"),
 	# 导出
-	url(r'^export$', employee_export_views.NewEmployeeExportView.as_view(), name="employee_export"),
+	url(r'^export$', employee_export_views.EmployeeExportView.as_view(), name="employee_export"),
 
 	# 临时工信息
 	url(r'^add/temporary$', employee_add_views.TemporaryCreate.as_view(), name="temporary_add"),  # 新增

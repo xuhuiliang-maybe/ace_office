@@ -93,7 +93,7 @@ class EmployeeExportView(View):
 			try:
 				user_position = self.request.user.position.name  # 用户岗位
 			except:
-				user_position = ""
+				user_position = "--"
 			position_list = [u"客服专员", u"客服主管", u"外包主管", u"客服经理"]
 			if user_position in position_list:  # 登录用户在客服部，只能查看所在部门员工信息
 				dept_name = self.request.user.attribution_dept
@@ -131,19 +131,19 @@ class EmployeeExportView(View):
 					one_row_dict = defaultdict(str)
 					one_row_dict["name"] = one_emp.name  # 姓名
 					one_row_dict["create_time"] = one_emp.create_time.strftime(
-						"%Y-%m-%d %X") if one_emp.create_time else ""
+						"%Y-%m-%d %X") if one_emp.create_time else "--"
 					if one_emp.project_name:
 						one_row_dict[
-							"attribution_dept"] = one_emp.project_name.department.name if one_emp.project_name.department else ""  # 服务部门
+							"attribution_dept"] = one_emp.project_name.department.name if one_emp.project_name.department else "--"  # 服务部门
 					else:
-						one_row_dict["attribution_dept"] = ""  # 服务部门
+						one_row_dict["attribution_dept"] = "--"  # 服务部门
 					one_row_dict["identity_card_number"] = one_emp.identity_card_number  # 身份证号
 					one_row_dict["status"] = one_emp.get_status_display()  # 目前状态
 					if one_emp.project_name:
 						one_row_dict[
 							"project_name"] = one_emp.project_name.full_name  # 项目名称
 					else:
-						one_row_dict["project_name"] = ""  # 项目名称
+						one_row_dict["project_name"] = "--"  # 项目名称
 					one_row_dict["salary_card_number"] = one_emp.salary_card_number  # 银行卡号
 					one_row_dict["bank_account"] = one_emp.bank_account  # 开户银行
 					one_row_dict["job_dept"] = one_emp.job_dept  # 部门
@@ -156,7 +156,7 @@ class EmployeeExportView(View):
 					if one_emp.age:
 						one_row_dict["age"] = int(one_emp.age)  # 年龄
 					else:
-						one_row_dict["age"] = ""
+						one_row_dict["age"] = "--"
 					one_row_dict["register_address"] = one_emp.register_address  # 户口所在地
 					one_row_dict["register_postcode"] = one_emp.register_postcode  # 户口邮编
 					one_row_dict[
@@ -166,14 +166,14 @@ class EmployeeExportView(View):
 					if one_emp.person_type:
 						one_row_dict["person_type"] = one_emp.person_type.name  # 人员属性
 					else:
-						one_row_dict["person_type"] = ""  # 人员属性
+						one_row_dict["person_type"] = "--"  # 人员属性
 					one_row_dict[
 						"contract_type"] = one_emp.get_contract_type_display()  # 合同属性
 					if one_emp.contract_subject:
 						one_row_dict[
 							"contract_subject"] = one_emp.contract_subject.name  # 合同主体
 					else:
-						one_row_dict["contract_subject"] = ""  # 合同主体
+						one_row_dict["contract_subject"] = "--"  # 合同主体
 					one_row_dict["entry_date"] = one_emp.entry_date.strftime(
 						"%Y-%m-%d") if one_emp.entry_date else ''  # 入职日期
 					one_row_dict[
@@ -195,12 +195,12 @@ class EmployeeExportView(View):
 						one_row_dict["probation_period"] = int(
 							one_emp.probation_period)  # 使用期限
 					else:
-						one_row_dict["probation_period"] = ""
+						one_row_dict["probation_period"] = "--"
 					if one_emp.contract_period:
 						one_row_dict["contract_period"] = int(
 							one_emp.contract_period)  # 合同期限
 					else:
-						one_row_dict["contract_period"] = ""
+						one_row_dict["contract_period"] = "--"
 					one_row_dict[
 						"probation_end_date"] = one_emp.probation_end_date.strftime(
 						"%Y-%m-%d") if one_emp.probation_end_date else ''  # 试用到期日期
@@ -210,7 +210,7 @@ class EmployeeExportView(View):
 						one_row_dict["contract_renew_times"] = int(
 							one_emp.contract_renew_times)  # 合同续签次数
 					else:
-						one_row_dict["contract_renew_times"] = ""
+						one_row_dict["contract_renew_times"] = "--"
 					one_row_dict["departure_date"] = one_emp.departure_date.strftime(
 						"%Y-%m-%d") if one_emp.departure_date else ''  # 离职日期
 					one_row_dict[
@@ -237,39 +237,39 @@ class EmployeeExportView(View):
 						one_row_dict[
 							"recruitment_attache"] = one_emp.recruitment_attache.first_name  # 招聘人员
 					except:
-						one_row_dict["recruitment_attache"] = ""  # 招聘人员
+						one_row_dict["recruitment_attache"] = "--"  # 招聘人员
 					try:
 						one_row_dict[
 							"customer_service_staff"] = one_emp.project_name.customer_service_staff.first_name  # 客户专员
 					except:
-						one_row_dict["customer_service_staff"] = ""
+						one_row_dict["customer_service_staff"] = "--"
 					try:
 						one_row_dict[
 							"customer_service_charge"] = one_emp.project_name.customer_service_charge.first_name  # 客服主管
 					except:
-						one_row_dict["customer_service_director"] = ""
+						one_row_dict["customer_service_director"] = "--"
 					try:
 						one_row_dict[
 							"outsource_director"] = one_emp.project_name.outsource_director.first_name  # 外包主管
 					except:
-						one_row_dict["outsource_director"] = ""
+						one_row_dict["outsource_director"] = "--"
 					try:
 						one_row_dict[
 							"customer_service_director"] = one_emp.project_name.customer_service_director.first_name  # 客服经理
 					except:
-						one_row_dict["customer_service_director"] = ""
+						one_row_dict["customer_service_director"] = "--"
 					try:
 						one_row_dict[
 							"other_responsible_person"] = one_emp.project_name.other_responsible_person.first_name  # 其他负责人
 					except:
-						one_row_dict["other_responsible_person"] = ""
+						one_row_dict["other_responsible_person"] = "--"
 					rows_list.append(one_row_dict.copy())
 			elif employee_type == "temporary":
 				for one_emp in employee_obj_list:
 					one_row_dict = defaultdict(str)
 					one_row_dict["name"] = one_emp.name  # 姓名
 					one_row_dict["create_time"] = one_emp.create_time.strftime(
-						"%Y-%m-%d %X") if one_emp.create_time else ""
+						"%Y-%m-%d %X") if one_emp.create_time else "--"
 					one_row_dict["sex"] = one_emp.get_sex_display()  # 性别
 					one_row_dict[
 						"identity_card_number"] = one_emp.identity_card_number  # 身份证号
@@ -277,12 +277,12 @@ class EmployeeExportView(View):
 						one_row_dict[
 							"project_name"] = one_emp.project_name.full_name  # 项目名称
 					else:
-						one_row_dict["project_name"] = ""  # 项目名称
+						one_row_dict["project_name"] = "--"  # 项目名称
 					one_row_dict["attribution_dept"] = one_emp.project_name.department.name  # 服务部门
 					try:
 						one_row_dict["recruitment_attache"] = one_emp.recruitment_attache.first_name  # 招聘人员
 					except:
-						one_row_dict["recruitment_attache"] = ""  # 招聘人员
+						one_row_dict["recruitment_attache"] = "--"  # 招聘人员
 					one_row_dict["phone_number"] = one_emp.phone_number  # 联系电话
 					one_row_dict["start_work_date"] = one_emp.start_work_date.strftime(
 						"%Y-%m-%d") if one_emp.start_work_date else ''  # 开始工作日
@@ -294,7 +294,7 @@ class EmployeeExportView(View):
 					try:
 						one_row_dict["release_user"] = one_emp.release_user.first_name  # 发放人
 					except:
-						one_row_dict["release_user"] = ""  # 发放人
+						one_row_dict["release_user"] = "--"  # 发放人
 					one_row_dict["release_time"] = one_emp.release_time.strftime(
 						"%Y-%m-%d") if one_emp.release_time else ''  # 发放时间
 					one_row_dict["remark1"] = one_emp.remark1  # 备注1
@@ -537,7 +537,7 @@ class NewEmployeeExportView(View):
 			try:
 				user_position = self.request.user.position.name  # 用户岗位
 			except:
-				user_position = ""
+				user_position = "--"
 			position_list = [u"客服专员", u"客服主管", u"外包主管", u"客服经理"]
 			if user_position in position_list:  # 登录用户在客服部，只能查看所在部门员工信息
 				dept_name = self.request.user.attribution_dept
