@@ -61,7 +61,7 @@ class ExportExcel(object):
 				return ""
 			st = 0
 			c = 0
-			for i in range(len(self.data_obj_list)):
+			for i in xrange(len(self.data_obj_list)):
 				if (i == 50000 * st):
 					c = 0
 					wf = wb.add_sheet(self.sheetname + str(st + 1))
@@ -73,10 +73,10 @@ class ExportExcel(object):
 					wf.col(6).width = 8000
 					wf.col(7).width = 5000
 					wf.col(9).width = 5000
-					st = st + 1
+					st += 1
 
 					wf.write(0, 0, u"序号", f1)
-					for t in range(len(self.head_title_list)):
+					for t in xrange(len(self.head_title_list)):
 						wf.write(0, t + 1, u"" + self.head_title_list[t] + "", f1)
 				wf.write(i + 1, 0, str(i + 1), f2)
 				for j in self.field_name_list:
