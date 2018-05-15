@@ -29,9 +29,12 @@ class Command(BaseCommand):
 
 			# 上传百度云
 			# 判断文件是否存在
+			print os.path.exists(file_path)
 			if os.path.exists(file_path):
 				# os.system("bypy mkdir ExportEmployee")
-				os.system("bypy upload %s ExportEmployee -v" % file_path)
+				aa = os.system("bypy upload %s ExportEmployee -v" % file_path)
+				print "aa", aa
+
 
 			print 'Export full employee information to %s；Total %s；%s \n' % (
 				file_name, str(total), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
