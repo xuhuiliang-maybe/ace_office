@@ -50,6 +50,5 @@ uwsgi -x /var/www/html/ace_office/ace_office/django.xml &
 ```
 * 0 */3 * * /usr/local/nginx/logs/aa_nginx_access_log.sh
 0 */6 * * * /var/www/html/backmysql.sh
-0 2 * * * python /var/www/html/ace_office/manage.py exportemployee
-
+0 2 * * * /var/www/html/ace_office/export.sh >> /tmp/export_emp.log
 ```
