@@ -18,11 +18,11 @@ class Command(BaseCommand):
 			print "\n"
 			print "Start %s" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 			employee_type = "employee"
-			kwargs = dict()
-			if employee_type == "employee":  # 查看员工信息
-				kwargs.update({"is_temporary": False})
-			elif employee_type == "temporary":  # 查看临时工信息
-				kwargs.update({"is_temporary": True})
+			kwargs = {"is_temporary": False}
+			# if employee_type == "employee":  # 查看员工信息
+			# 	kwargs.update({"is_temporary": False})
+			# elif employee_type == "temporary":  # 查看临时工信息
+			# 	kwargs.update({"is_temporary": True})
 			employee_obj_list = Employee.objects.filter(**kwargs)
 			total = employee_obj_list.count()
 			file_path, file_name = write_excel(employee_type, employee_obj_list)
