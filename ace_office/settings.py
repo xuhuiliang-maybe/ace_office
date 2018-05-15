@@ -13,9 +13,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from config.conf_core import *
-from os import environ
-import os
-import os.path
 
 DATABASES = {
 	'default': {
@@ -204,5 +201,3 @@ SERVER_EMAIL = "593548215@qq.com"
 EMAIL_HOST_USER = '593548215@qq.com'
 EMAIL_HOST_PASSWORD = 'xhl,.,.1991'
 EMAIL_PORT = 25
-
-

@@ -8,8 +8,8 @@ if __name__ == "__main__":
 
 	from django.core.management import execute_from_command_line
 
-	if sys.argv[1] == "runserver":
-		print "Start Time tasks ...."
+	# if sys.argv[1] == "runserver":
+	# 	print "Start Time tasks ...."
 	# all_tasks()
 
 	execute_from_command_line(sys.argv)

@@ -1,8 +1,6 @@
 # coding=utf-8
 import json
-import os
 from collections import defaultdict
-from multiprocessing import Process
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -20,14 +18,10 @@ from modules.share_module.permissionMixin import class_view_decorator
 from modules.share_module.utils import get_kwargs
 
 
-@class_view_decorator(login_required)
-@class_view_decorator(permission_required('employee_info.export_employee', raise_exception=True))
-class EmployeeExportView(View):
-	def get(self, request, *args, **kwargs):
-
-		employee_type = self.request.GET.get("employee_type", "")
-		head_list = list()
-		field_list = list()
+def write_excel(employee_type, employee_obj_list):
+	filepath, file_name = "", ""
+	head_list, field_list = [],[]
+	try:
 		if employee_type == "employee":
 			head_list = [u'姓名（必填）', u'服务部门', u'身份证号（必填）', u'目前状态(在职/离职)', u'项目名称（必填）', u'银行卡号', u'开户银行',
 			             u'部门', u'职务', u'性别(男/女)', u'民族', u'学历', u'出生年月(2016-01-01)', u'员工年龄', u'户口所在地',
@@ -65,6 +59,211 @@ class EmployeeExportView(View):
 			              "end_work_date", "work_days", "hours", "amount_of_payment", "release_user",
 			              "release_time", "remark1", "create_time"]
 
+		# 组装导出数据
+		rows_list = list()
+		if employee_type == "employee":
+			for one_emp in employee_obj_list:
+				one_row_dict = defaultdict(str)
+				one_row_dict["name"] = one_emp.name  # 姓名
+				one_row_dict["create_time"] = one_emp.create_time.strftime(
+					"%Y-%m-%d %X") if one_emp.create_time else "--"
+				if one_emp.project_name:
+					one_row_dict[
+						"attribution_dept"] = one_emp.project_name.department.name if one_emp.project_name.department else "--"  # 服务部门
+				else:
+					one_row_dict["attribution_dept"] = "--"  # 服务部门
+				one_row_dict["identity_card_number"] = one_emp.identity_card_number  # 身份证号
+				one_row_dict["status"] = one_emp.get_status_display()  # 目前状态
+				if one_emp.project_name:
+					one_row_dict[
+						"project_name"] = one_emp.project_name.full_name  # 项目名称
+				else:
+					one_row_dict["project_name"] = "--"  # 项目名称
+				one_row_dict["salary_card_number"] = one_emp.salary_card_number  # 银行卡号
+				one_row_dict["bank_account"] = one_emp.bank_account  # 开户银行
+				one_row_dict["job_dept"] = one_emp.job_dept  # 部门
+				one_row_dict["position"] = one_emp.position  # 职务
+				one_row_dict["sex"] = one_emp.get_sex_display()  # 性别
+				one_row_dict["nation"] = one_emp.get_nation_display()  # 民族
+				one_row_dict["education"] = one_emp.get_education_display()  # 学历
+				one_row_dict["birthday"] = one_emp.birthday.strftime(
+					"%Y-%m-%d") if one_emp.birthday else ''  # 出生年月
+				if one_emp.age:
+					one_row_dict["age"] = int(one_emp.age)  # 年龄
+				else:
+					one_row_dict["age"] = "--"
+				one_row_dict["register_address"] = one_emp.register_address  # 户口所在地
+				one_row_dict["register_postcode"] = one_emp.register_postcode  # 户口邮编
+				one_row_dict[
+					"register_type"] = one_emp.get_register_type_display()  # 户口性质
+				one_row_dict["work_address"] = one_emp.work_address  # 工作地
+				one_row_dict["insured_place"] = one_emp.insured_place  # 社保地
+				if one_emp.person_type:
+					one_row_dict["person_type"] = one_emp.person_type.name  # 人员属性
+				else:
+					one_row_dict["person_type"] = "--"  # 人员属性
+				one_row_dict[
+					"contract_type"] = one_emp.get_contract_type_display()  # 合同属性
+				if one_emp.contract_subject:
+					one_row_dict[
+						"contract_subject"] = one_emp.contract_subject.name  # 合同主体
+				else:
+					one_row_dict["contract_subject"] = "--"  # 合同主体
+				one_row_dict["entry_date"] = one_emp.entry_date.strftime(
+					"%Y-%m-%d") if one_emp.entry_date else ''  # 入职日期
+				one_row_dict[
+					"social_insurance_increase_date"] = one_emp.social_insurance_increase_date.strftime(
+					"%Y-%m-%d") if one_emp.social_insurance_increase_date else ''  # 社保增员日期
+				one_row_dict[
+					"social_security_payment_card"] = one_emp.social_security_payment_card
+				one_row_dict["use_bank"] = one_emp.use_bank
+				one_row_dict[
+					"business_insurance_increase_date"] = one_emp.business_insurance_increase_date.strftime(
+					"%Y-%m-%d") if one_emp.business_insurance_increase_date else ''  # 商保增员日期
+				one_row_dict[
+					"provident_fund_increase_date"] = one_emp.provident_fund_increase_date.strftime(
+					"%Y-%m-%d") if one_emp.provident_fund_increase_date else ''  # 公积金增员日期
+				one_row_dict[
+					"contract_begin_date"] = one_emp.contract_begin_date.strftime(
+					"%Y-%m-%d") if one_emp.contract_begin_date else ''  # 合同开始日期
+				if one_emp.probation_period:
+					one_row_dict["probation_period"] = int(
+						one_emp.probation_period)  # 使用期限
+				else:
+					one_row_dict["probation_period"] = "--"
+				if one_emp.contract_period:
+					one_row_dict["contract_period"] = int(
+						one_emp.contract_period)  # 合同期限
+				else:
+					one_row_dict["contract_period"] = "--"
+				one_row_dict[
+					"probation_end_date"] = one_emp.probation_end_date.strftime(
+					"%Y-%m-%d") if one_emp.probation_end_date else ''  # 试用到期日期
+				one_row_dict["contract_end_date"] = one_emp.contract_end_date.strftime(
+					"%Y-%m-%d") if one_emp.contract_end_date else ''  # 合同到期日期
+				if one_emp.contract_renew_times:
+					one_row_dict["contract_renew_times"] = int(
+						one_emp.contract_renew_times)  # 合同续签次数
+				else:
+					one_row_dict["contract_renew_times"] = "--"
+				one_row_dict["departure_date"] = one_emp.departure_date.strftime(
+					"%Y-%m-%d") if one_emp.departure_date else ''  # 离职日期
+				one_row_dict[
+					"departure_procedure"] = one_emp.get_departure_procedure_display()  # 离职手续
+				one_row_dict["departure_cause"] = one_emp.departure_cause  # 离职原因
+				one_row_dict[
+					"social_insurance_reduce_date"] = one_emp.social_insurance_reduce_date.strftime(
+					"%Y-%m-%d") if one_emp.social_insurance_reduce_date else ''  # 社保减员日期
+				one_row_dict[
+					"business_insurance_reduce_date"] = one_emp.business_insurance_reduce_date.strftime(
+					"%Y-%m-%d") if one_emp.business_insurance_reduce_date else ''  # 商保减员日期
+				one_row_dict[
+					"provident_fund_reduce_date"] = one_emp.provident_fund_reduce_date.strftime(
+					"%Y-%m-%d") if one_emp.provident_fund_reduce_date else ''  # 公积金减员日期
+				one_row_dict["phone_number"] = one_emp.phone_number  # 联系电话
+				one_row_dict["contact_person"] = one_emp.contact_person  # 紧急联系人
+				one_row_dict[
+					"contact_relationship"] = one_emp.contact_relationship  # 与联系人关系
+				one_row_dict[
+					"contact_person_phone"] = one_emp.contact_person_phone  # 紧急联系人电话
+				one_row_dict[
+					"recruitment_channel"] = one_emp.get_recruitment_channel_display()  # 招聘渠道
+				try:
+					one_row_dict[
+						"recruitment_attache"] = one_emp.recruitment_attache.first_name  # 招聘人员
+				except:
+					one_row_dict["recruitment_attache"] = "--"  # 招聘人员
+				try:
+					one_row_dict[
+						"customer_service_staff"] = one_emp.project_name.customer_service_staff.first_name  # 客户专员
+				except:
+					one_row_dict["customer_service_staff"] = "--"
+				try:
+					one_row_dict[
+						"customer_service_charge"] = one_emp.project_name.customer_service_charge.first_name  # 客服主管
+				except:
+					one_row_dict["customer_service_director"] = "--"
+				try:
+					one_row_dict[
+						"outsource_director"] = one_emp.project_name.outsource_director.first_name  # 外包主管
+				except:
+					one_row_dict["outsource_director"] = "--"
+				try:
+					one_row_dict[
+						"customer_service_director"] = one_emp.project_name.customer_service_director.first_name  # 客服经理
+				except:
+					one_row_dict["customer_service_director"] = "--"
+				try:
+					one_row_dict[
+						"other_responsible_person"] = one_emp.project_name.other_responsible_person.first_name  # 其他负责人
+				except:
+					one_row_dict["other_responsible_person"] = "--"
+				rows_list.append(one_row_dict.copy())
+		elif employee_type == "temporary":
+			for one_emp in employee_obj_list:
+				one_row_dict = defaultdict(str)
+				one_row_dict["name"] = one_emp.name  # 姓名
+				one_row_dict["create_time"] = one_emp.create_time.strftime(
+					"%Y-%m-%d %X") if one_emp.create_time else "--"
+				one_row_dict["sex"] = one_emp.get_sex_display()  # 性别
+				one_row_dict[
+					"identity_card_number"] = one_emp.identity_card_number  # 身份证号
+				if one_emp.project_name:
+					one_row_dict[
+						"project_name"] = one_emp.project_name.full_name  # 项目名称
+				else:
+					one_row_dict["project_name"] = "--"  # 项目名称
+				one_row_dict["attribution_dept"] = one_emp.project_name.department.name  # 服务部门
+				try:
+					one_row_dict["recruitment_attache"] = one_emp.recruitment_attache.first_name  # 招聘人员
+				except:
+					one_row_dict["recruitment_attache"] = "--"  # 招聘人员
+				one_row_dict["phone_number"] = one_emp.phone_number  # 联系电话
+				one_row_dict["start_work_date"] = one_emp.start_work_date.strftime(
+					"%Y-%m-%d") if one_emp.start_work_date else ''  # 开始工作日
+				one_row_dict["end_work_date"] = one_emp.end_work_date.strftime(
+					"%Y-%m-%d") if one_emp.end_work_date else ''  # 结束工作日
+				one_row_dict["work_days"] = one_emp.work_days  # 工作天数
+				one_row_dict["hours"] = one_emp.hours  # 小时数
+				one_row_dict["amount_of_payment"] = one_emp.amount_of_payment  # 发放金额
+				try:
+					one_row_dict["release_user"] = one_emp.release_user.first_name  # 发放人
+				except:
+					one_row_dict["release_user"] = "--"  # 发放人
+				one_row_dict["release_time"] = one_emp.release_time.strftime(
+					"%Y-%m-%d") if one_emp.release_time else ''  # 发放时间
+				one_row_dict["remark1"] = one_emp.remark1  # 备注1
+
+				rows_list.append(one_row_dict.copy())
+
+		if rows_list:
+			# 实例化导出类
+			export_excel = ExportExcel()
+			export_excel.path = "export_employee"
+			export_excel.head_title_list = head_list
+			export_excel.field_name_list = field_list
+			export_excel.data_obj_list = rows_list
+			if employee_type == "employee":
+				export_excel.sheetname = "Employee"
+				export_excel.filename = "Employee"
+			elif employee_type == "temporary":
+				export_excel.sheetname = "Temporary"
+				export_excel.filename = "Temporary"
+
+			filepath, file_name = export_excel.export()
+
+	except:
+		traceback.print_exc()
+	finally:
+		return filepath, file_name
+
+
+@class_view_decorator(login_required)
+@class_view_decorator(permission_required('employee_info.export_employee', raise_exception=True))
+class EmployeeExportView(View):
+	def get(self, request, *args, **kwargs):
+
+		employee_type = self.request.GET.get("employee_type", "")
 		try:
 			# 员工查询
 			status = self.request.GET.get("status", "")  # 目前状态
@@ -124,200 +323,11 @@ class EmployeeExportView(View):
 				kwargs.update({"is_temporary": True})
 			employee_obj_list = Employee.objects.filter(**kwargs)
 
-			# 组装导出数据
-			rows_list = list()
-			if employee_type == "employee":
-				for one_emp in employee_obj_list:
-					one_row_dict = defaultdict(str)
-					one_row_dict["name"] = one_emp.name  # 姓名
-					one_row_dict["create_time"] = one_emp.create_time.strftime(
-						"%Y-%m-%d %X") if one_emp.create_time else "--"
-					if one_emp.project_name:
-						one_row_dict[
-							"attribution_dept"] = one_emp.project_name.department.name if one_emp.project_name.department else "--"  # 服务部门
-					else:
-						one_row_dict["attribution_dept"] = "--"  # 服务部门
-					one_row_dict["identity_card_number"] = one_emp.identity_card_number  # 身份证号
-					one_row_dict["status"] = one_emp.get_status_display()  # 目前状态
-					if one_emp.project_name:
-						one_row_dict[
-							"project_name"] = one_emp.project_name.full_name  # 项目名称
-					else:
-						one_row_dict["project_name"] = "--"  # 项目名称
-					one_row_dict["salary_card_number"] = one_emp.salary_card_number  # 银行卡号
-					one_row_dict["bank_account"] = one_emp.bank_account  # 开户银行
-					one_row_dict["job_dept"] = one_emp.job_dept  # 部门
-					one_row_dict["position"] = one_emp.position  # 职务
-					one_row_dict["sex"] = one_emp.get_sex_display()  # 性别
-					one_row_dict["nation"] = one_emp.get_nation_display()  # 民族
-					one_row_dict["education"] = one_emp.get_education_display()  # 学历
-					one_row_dict["birthday"] = one_emp.birthday.strftime(
-						"%Y-%m-%d") if one_emp.birthday else ''  # 出生年月
-					if one_emp.age:
-						one_row_dict["age"] = int(one_emp.age)  # 年龄
-					else:
-						one_row_dict["age"] = "--"
-					one_row_dict["register_address"] = one_emp.register_address  # 户口所在地
-					one_row_dict["register_postcode"] = one_emp.register_postcode  # 户口邮编
-					one_row_dict[
-						"register_type"] = one_emp.get_register_type_display()  # 户口性质
-					one_row_dict["work_address"] = one_emp.work_address  # 工作地
-					one_row_dict["insured_place"] = one_emp.insured_place  # 社保地
-					if one_emp.person_type:
-						one_row_dict["person_type"] = one_emp.person_type.name  # 人员属性
-					else:
-						one_row_dict["person_type"] = "--"  # 人员属性
-					one_row_dict[
-						"contract_type"] = one_emp.get_contract_type_display()  # 合同属性
-					if one_emp.contract_subject:
-						one_row_dict[
-							"contract_subject"] = one_emp.contract_subject.name  # 合同主体
-					else:
-						one_row_dict["contract_subject"] = "--"  # 合同主体
-					one_row_dict["entry_date"] = one_emp.entry_date.strftime(
-						"%Y-%m-%d") if one_emp.entry_date else ''  # 入职日期
-					one_row_dict[
-						"social_insurance_increase_date"] = one_emp.social_insurance_increase_date.strftime(
-						"%Y-%m-%d") if one_emp.social_insurance_increase_date else ''  # 社保增员日期
-					one_row_dict[
-						"social_security_payment_card"] = one_emp.social_security_payment_card
-					one_row_dict["use_bank"] = one_emp.use_bank
-					one_row_dict[
-						"business_insurance_increase_date"] = one_emp.business_insurance_increase_date.strftime(
-						"%Y-%m-%d") if one_emp.business_insurance_increase_date else ''  # 商保增员日期
-					one_row_dict[
-						"provident_fund_increase_date"] = one_emp.provident_fund_increase_date.strftime(
-						"%Y-%m-%d") if one_emp.provident_fund_increase_date else ''  # 公积金增员日期
-					one_row_dict[
-						"contract_begin_date"] = one_emp.contract_begin_date.strftime(
-						"%Y-%m-%d") if one_emp.contract_begin_date else ''  # 合同开始日期
-					if one_emp.probation_period:
-						one_row_dict["probation_period"] = int(
-							one_emp.probation_period)  # 使用期限
-					else:
-						one_row_dict["probation_period"] = "--"
-					if one_emp.contract_period:
-						one_row_dict["contract_period"] = int(
-							one_emp.contract_period)  # 合同期限
-					else:
-						one_row_dict["contract_period"] = "--"
-					one_row_dict[
-						"probation_end_date"] = one_emp.probation_end_date.strftime(
-						"%Y-%m-%d") if one_emp.probation_end_date else ''  # 试用到期日期
-					one_row_dict["contract_end_date"] = one_emp.contract_end_date.strftime(
-						"%Y-%m-%d") if one_emp.contract_end_date else ''  # 合同到期日期
-					if one_emp.contract_renew_times:
-						one_row_dict["contract_renew_times"] = int(
-							one_emp.contract_renew_times)  # 合同续签次数
-					else:
-						one_row_dict["contract_renew_times"] = "--"
-					one_row_dict["departure_date"] = one_emp.departure_date.strftime(
-						"%Y-%m-%d") if one_emp.departure_date else ''  # 离职日期
-					one_row_dict[
-						"departure_procedure"] = one_emp.get_departure_procedure_display()  # 离职手续
-					one_row_dict["departure_cause"] = one_emp.departure_cause  # 离职原因
-					one_row_dict[
-						"social_insurance_reduce_date"] = one_emp.social_insurance_reduce_date.strftime(
-						"%Y-%m-%d") if one_emp.social_insurance_reduce_date else ''  # 社保减员日期
-					one_row_dict[
-						"business_insurance_reduce_date"] = one_emp.business_insurance_reduce_date.strftime(
-						"%Y-%m-%d") if one_emp.business_insurance_reduce_date else ''  # 商保减员日期
-					one_row_dict[
-						"provident_fund_reduce_date"] = one_emp.provident_fund_reduce_date.strftime(
-						"%Y-%m-%d") if one_emp.provident_fund_reduce_date else ''  # 公积金减员日期
-					one_row_dict["phone_number"] = one_emp.phone_number  # 联系电话
-					one_row_dict["contact_person"] = one_emp.contact_person  # 紧急联系人
-					one_row_dict[
-						"contact_relationship"] = one_emp.contact_relationship  # 与联系人关系
-					one_row_dict[
-						"contact_person_phone"] = one_emp.contact_person_phone  # 紧急联系人电话
-					one_row_dict[
-						"recruitment_channel"] = one_emp.get_recruitment_channel_display()  # 招聘渠道
-					try:
-						one_row_dict[
-							"recruitment_attache"] = one_emp.recruitment_attache.first_name  # 招聘人员
-					except:
-						one_row_dict["recruitment_attache"] = "--"  # 招聘人员
-					try:
-						one_row_dict[
-							"customer_service_staff"] = one_emp.project_name.customer_service_staff.first_name  # 客户专员
-					except:
-						one_row_dict["customer_service_staff"] = "--"
-					try:
-						one_row_dict[
-							"customer_service_charge"] = one_emp.project_name.customer_service_charge.first_name  # 客服主管
-					except:
-						one_row_dict["customer_service_director"] = "--"
-					try:
-						one_row_dict[
-							"outsource_director"] = one_emp.project_name.outsource_director.first_name  # 外包主管
-					except:
-						one_row_dict["outsource_director"] = "--"
-					try:
-						one_row_dict[
-							"customer_service_director"] = one_emp.project_name.customer_service_director.first_name  # 客服经理
-					except:
-						one_row_dict["customer_service_director"] = "--"
-					try:
-						one_row_dict[
-							"other_responsible_person"] = one_emp.project_name.other_responsible_person.first_name  # 其他负责人
-					except:
-						one_row_dict["other_responsible_person"] = "--"
-					rows_list.append(one_row_dict.copy())
-			elif employee_type == "temporary":
-				for one_emp in employee_obj_list:
-					one_row_dict = defaultdict(str)
-					one_row_dict["name"] = one_emp.name  # 姓名
-					one_row_dict["create_time"] = one_emp.create_time.strftime(
-						"%Y-%m-%d %X") if one_emp.create_time else "--"
-					one_row_dict["sex"] = one_emp.get_sex_display()  # 性别
-					one_row_dict[
-						"identity_card_number"] = one_emp.identity_card_number  # 身份证号
-					if one_emp.project_name:
-						one_row_dict[
-							"project_name"] = one_emp.project_name.full_name  # 项目名称
-					else:
-						one_row_dict["project_name"] = "--"  # 项目名称
-					one_row_dict["attribution_dept"] = one_emp.project_name.department.name  # 服务部门
-					try:
-						one_row_dict["recruitment_attache"] = one_emp.recruitment_attache.first_name  # 招聘人员
-					except:
-						one_row_dict["recruitment_attache"] = "--"  # 招聘人员
-					one_row_dict["phone_number"] = one_emp.phone_number  # 联系电话
-					one_row_dict["start_work_date"] = one_emp.start_work_date.strftime(
-						"%Y-%m-%d") if one_emp.start_work_date else ''  # 开始工作日
-					one_row_dict["end_work_date"] = one_emp.end_work_date.strftime(
-						"%Y-%m-%d") if one_emp.end_work_date else ''  # 结束工作日
-					one_row_dict["work_days"] = one_emp.work_days  # 工作天数
-					one_row_dict["hours"] = one_emp.hours  # 小时数
-					one_row_dict["amount_of_payment"] = one_emp.amount_of_payment  # 发放金额
-					try:
-						one_row_dict["release_user"] = one_emp.release_user.first_name  # 发放人
-					except:
-						one_row_dict["release_user"] = "--"  # 发放人
-					one_row_dict["release_time"] = one_emp.release_time.strftime(
-						"%Y-%m-%d") if one_emp.release_time else ''  # 发放时间
-					one_row_dict["remark1"] = one_emp.remark1  # 备注1
+			filepath, file_name = write_excel(employee_type, employee_obj_list)
 
-					rows_list.append(one_row_dict.copy())
-
-			if rows_list:
-				# 实例化导出类
-				export_excel = ExportExcel()
-				export_excel.head_title_list = head_list
-				export_excel.field_name_list = field_list
-				export_excel.data_obj_list = rows_list
-				if employee_type == "employee":
-					export_excel.sheetname = "Employee"
-					export_excel.filename = "Employee"
-				elif employee_type == "temporary":
-					export_excel.sheetname = "Temporary"
-					export_excel.filename = "Temporary"
-
-				filepath, file_name = export_excel.export()
-
+			if filepath and file_name:
 				# 页面下载导出文件
-				response = download_file(filepath, file_name, True)
+				response = download_file(filepath, file_name, False)
 				return response
 			else:
 				# 导出只有表头信息的空文件
@@ -575,16 +585,16 @@ class NewEmployeeExportView(View):
 				messages.success(self.request, u"成功导出员工信息（%s）, %s" % (file_name, download_path))
 			else:
 				messages.warning(self.request, u"没有查询到数据，请合理填写查询条件")
-			# if employee_obj_list.exists():
-			# 	# 页面下载导出文件
-			# 	response = download_file(filepath, file_name, False)
-			# 	return response
-			# else:
-			# 	# 导出只有表头信息的空文件
-			# 	if employee_type == "employee":
-			# 		return redirect(reverse('download', args=("employee_info",)))
-			# 	elif employee_type == "temporary":
-			# 		return redirect(reverse('download', args=("temporary_info",)))
+		# if employee_obj_list.exists():
+		# 	# 页面下载导出文件
+		# 	response = download_file(filepath, file_name, False)
+		# 	return response
+		# else:
+		# 	# 导出只有表头信息的空文件
+		# 	if employee_type == "employee":
+		# 		return redirect(reverse('download', args=("employee_info",)))
+		# 	elif employee_type == "temporary":
+		# 		return redirect(reverse('download', args=("temporary_info",)))
 		except:
 			traceback.print_exc()
 			result_dict["msg"] = u"导出异常"
