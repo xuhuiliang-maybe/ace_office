@@ -32,7 +32,7 @@ class Command(BaseCommand):
 			print os.path.exists(file_path)
 			if os.path.exists(file_path):
 				# os.system("bypy mkdir ExportEmployee")
-				aa = os.system("bypy upload %s ExportEmployee -v" % file_path)
+				aa = os.system("/usr/local/bin/bypy upload %s ExportEmployee -v" % file_path)
 				print "aa", aa
 
 
