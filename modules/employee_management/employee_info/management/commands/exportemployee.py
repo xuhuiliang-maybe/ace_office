@@ -36,8 +36,9 @@ class Command(BaseCommand):
 				print "aa", aa
 
 
-			print 'Export full employee information to %s；Total %s；%s \n' % (
-				file_name, str(total), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+			print "Total %s" % str(total)
+			print 'Export full employee information to %s \n' % (file_name)
+			print "End %s \n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 		except:
 			traceback.print_exc()
