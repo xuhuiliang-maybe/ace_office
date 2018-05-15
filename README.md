@@ -45,5 +45,11 @@ setuptools
 ```
 pip install -r requirements.txt
 uwsgi -x /var/www/html/ace_office/ace_office/django.xml &
-0 2 * * * python /var/www/html/ace_office/manage.py exportemployee >> /tmp/export_employee.log
+```
+* 定时任务
+```
+* 0 */3 * * /usr/local/nginx/logs/aa_nginx_access_log.sh
+0 */6 * * * /var/www/html/backmysql.sh
+0 2 * * * python /var/www/html/ace_office/manage.py exportemployee
+
 ```
