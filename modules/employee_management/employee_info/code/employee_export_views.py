@@ -20,13 +20,13 @@ from modules.share_module.utils import get_kwargs
 
 def write_excel(employee_type, employee_obj_list):
 	filepath, file_name = "", ""
-	head_list, field_list = [],[]
+	head_list, field_list = [], []
 	try:
 		if employee_type == "employee":
 			head_list = [u'姓名（必填）', u'服务部门', u'身份证号（必填）', u'目前状态(在职/离职)', u'项目名称（必填）', u'银行卡号', u'开户银行',
 			             u'部门', u'职务', u'性别(男/女)', u'民族', u'学历', u'出生年月(2016-01-01)', u'员工年龄', u'户口所在地',
 			             u'户口邮编', u'户口性质', u'工作地', u'社保地', u'人员属性', u'合同属性', u'合同主体',
-			             u'入职日期(2016-01-01)', u'#DIV/0!01+', u"社保支付卡", u"开户银行", u'#DIV/0!02+',
+			             u'入职日期(2016-01-01)', u'调出时间(2016-01-01)', u'转入时间(2016-01-01)', u'#DIV/0!01+', u"社保支付卡", u"开户银行", u'#DIV/0!02+',
 			             u'公积金增员日期(2016-01-01)', u'合同开始日期(2016-01-01)', u'试用期限', u'合同期限', u'试用到期日期(2016-01-01)',
 			             u'合同到期日期(2016-01-01)', u'合同续签次数', u'离职日期(2016-01-01)', u'离职手续', u'离职原因',
 			             u'#DIV/0!01-', u'#DIV/0!02-', u'公积金减员日期(2016-01-01)', u'联系电话', u'紧急联系人',
@@ -38,7 +38,7 @@ def write_excel(employee_type, employee_obj_list):
 			              "birthday", "age", "register_address", "register_postcode", "register_type",
 			              "work_address", "insured_place", "person_type", "contract_type",
 			              "contract_subject",
-			              "entry_date", "social_insurance_increase_date", "social_security_payment_card",
+			              "entry_date", "call_out_time", "into_time", "social_insurance_increase_date", "social_security_payment_card",
 			              "use_bank",
 			              "business_insurance_increase_date", "provident_fund_increase_date",
 			              "contract_begin_date",
@@ -109,8 +109,9 @@ def write_excel(employee_type, employee_obj_list):
 						"contract_subject"] = one_emp.contract_subject.name  # 合同主体
 				else:
 					one_row_dict["contract_subject"] = "--"  # 合同主体
-				one_row_dict["entry_date"] = one_emp.entry_date.strftime(
-					"%Y-%m-%d") if one_emp.entry_date else ''  # 入职日期
+				one_row_dict["entry_date"] = one_emp.entry_date.strftime("%Y-%m-%d") if one_emp.entry_date else ''  # 入职日期
+				one_row_dict["call_out_time"] = one_emp.call_out_time.strftime("%Y-%m-%d") if one_emp.call_out_time else ''  # 调出时间
+				one_row_dict["into_time"] = one_emp.into_time.strftime("%Y-%m-%d") if one_emp.into_time else ''  # 转入时间
 				one_row_dict[
 					"social_insurance_increase_date"] = one_emp.social_insurance_increase_date.strftime(
 					"%Y-%m-%d") if one_emp.social_insurance_increase_date else ''  # 社保增员日期
@@ -346,7 +347,8 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
 			head_list = [u"序号", u'姓名（必填）', u'服务部门', u'身份证号（必填）', u'目前状态(在职/离职)', u'项目名称（必填）', u'银行卡号', u'开户银行',
 			             u'部门', u'职务', u'性别(男/女)', u'民族', u'学历', u'出生年月(2016-01-01)', u'员工年龄', u'户口所在地',
 			             u'户口邮编', u'户口性质', u'工作地', u'社保地', u'人员属性', u'合同属性', u'合同主体',
-			             u'入职日期(2016-01-01)', u'#DIV/0!01+', u"社保支付卡", u"开户银行", u'#DIV/0!02+',
+			             u'入职日期(2016-01-01)', u'调出时间(2016-01-01)', u'转入时间(2016-01-01)', u'#DIV/0!01+', u"社保支付卡",
+			             u"开户银行", u'#DIV/0!02+',
 			             u'公积金增员日期(2016-01-01)', u'合同开始日期(2016-01-01)', u'试用期限', u'合同期限', u'试用到期日期(2016-01-01)',
 			             u'合同到期日期(2016-01-01)', u'合同续签次数', u'离职日期(2016-01-01)', u'离职手续', u'离职原因',
 			             u'#DIV/0!01-', u'#DIV/0!02-', u'公积金减员日期(2016-01-01)', u'联系电话', u'紧急联系人',
@@ -392,8 +394,10 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
 						tmp_one.append(
 							one_emp.get_contract_type_display() if one_emp.contract_type else "--")  # 合同属性
 						tmp_one.append(one_emp.contract_subject.name if one_emp.contract_subject else "--")  # 合同主体
+						tmp_one.append(one_emp.entry_date.strftime("%Y-%m-%d") if one_emp.entry_date else '--')  # 入职日期
 						tmp_one.append(
-							one_emp.entry_date.strftime("%Y-%m-%d") if one_emp.entry_date else '--')  # 入职日期
+							one_emp.call_out_time.strftime("%Y-%m-%d") if one_emp.call_out_time else '--')  # 调出时间
+						tmp_one.append(one_emp.into_time.strftime("%Y-%m-%d") if one_emp.into_time else '--')  # 转入时间
 						tmp_one.append(one_emp.social_insurance_increase_date.strftime(
 							"%Y-%m-%d") if one_emp.social_insurance_increase_date else '--')  # 社保增员日期
 						tmp_one.append(

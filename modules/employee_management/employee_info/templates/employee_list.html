@@ -214,6 +214,8 @@
                             <th class="center">合同属性</th>
                             <th class="center">合同主体</th>
                             <th class="center">入职时间(加入时间)</th>
+                            <th class="center">调出时间</th>
+                            <th class="center">转入时间</th>
                             <th class="center">#DIV/0!01+</th>
                             <th class="center">社保支付卡</th>
                             <th class="center">开户银行</th>
@@ -285,7 +287,7 @@
                             <td>{{ emplyee.identity_card_number }}</td>
                             <td>{{ emplyee.project_name | default_if_none:"" }}</td>
                             <td>{{ emplyee.project_name.principal | default_if_none:"" }}</td>
-                            <td>{{ emplyee.project_name.department }}</td>
+                            <td>{{ emplyee.project_name.department | default_if_none:"" }}</td>
                             <td>{{ emplyee.recruitment_attache | default_if_none:"" }}</td>
 
                             <!--员工信息-->
@@ -294,7 +296,7 @@
                                 <td>{{ emplyee.get_status_display }}</td>
                                 <td>{{ emplyee.salary_card_number }}</td>
                                 <td>{{ emplyee.bank_account }}</td>
-                                <td>{{ emplyee.job_dept }}</td>
+                                <td>{{ emplyee.job_dept | default_if_none:""}}</td>
                                 <td>{{ emplyee.position }}</td>
                                 <td>{{ emplyee.get_nation_display }}</td>
                                 <td>{{ emplyee.get_education_display }}</td>
@@ -309,6 +311,8 @@
                                 <td>{{ emplyee.get_contract_type_display }}</td>
                                 <td>{{ emplyee.contract_subject | default_if_none:"" }}</td>
                                 <td>{{ emplyee.entry_date | date }}</td>
+                                <td>{{ emplyee.call_out_time | date }}</td>
+                                <td>{{ emplyee.into_time | date }}</td>
                                 <td>{{ emplyee.social_insurance_increase_date | date }}</td>
                                 <td>{{ emplyee.social_security_payment_card | default_if_none:"" }}</td>
                                 <td>{{ emplyee.use_bank | default_if_none:"" }}</td>
@@ -382,10 +386,10 @@
                     {% empty %}
                         <tr class="info">
                             {% if employee_type == "temporary" %}
-                                <td colspan="20">
+                                <td colspan="2">
                             {% endif %}
                             {% if employee_type == "employee" %}
-                                <td colspan="55">
+                                <td colspan="57">
                             {% endif %}
                             抱歉，目前没有满足条件的信息。
                             </td>

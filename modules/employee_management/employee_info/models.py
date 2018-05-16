@@ -158,6 +158,8 @@ class Employee(models.Model):
 	contract_subject = models.ForeignKey(CompanySubject, blank=True, null=True, on_delete=models.SET_NULL,
 	                                     verbose_name=u"合同主体")
 	entry_date = models.DateField(u"入职日期", default=timezone.now, null=True, blank=True)
+	call_out_time = models.DateField(verbose_name=u'调出时间', blank=True, null=True)
+	into_time = models.DateField(verbose_name=u'转入时间', blank=True, null=True)
 	social_insurance_increase_date = models.DateField(u"#DIV/0!01+", blank=True, null=True)
 	social_security_payment_card = models.CharField(u"社保支付卡", max_length=255, blank=True, null=True)
 	use_bank = models.CharField(u"开户银行", max_length=255, blank=True, null=True)
@@ -197,6 +199,7 @@ class Employee(models.Model):
 	remark4 = models.CharField(u"备注4", max_length=256, blank=True)
 	remark5 = models.CharField(u"备注5", max_length=256, blank=True)
 	create_time = models.DateTimeField(verbose_name=u'创建时间', auto_now=True, blank=True, null=True)
+
 
 	def __str__(self):
 		return self.name  # 对象友好显示名称
@@ -241,7 +244,7 @@ class EmployeeForm(forms.ModelForm):
 			"recruitment_attache", "status", "salary_card_number", "job_dept", "bank_account", "position",
 			"nation", "education", "birthday", "age", "register_address", "register_postcode",
 			"register_type", "work_address", "insured_place", "person_type", "contract_type",
-			"contract_subject", "entry_date", "social_insurance_increase_date",
+			"contract_subject", "entry_date", "call_out_time", "into_time", "social_insurance_increase_date",
 			"social_security_payment_card", "use_bank", "business_insurance_increase_date",
 			"provident_fund_increase_date", "contract_begin_date", "probation_period",
 			"contract_period", "probation_end_date", "contract_end_date", "contract_renew_times",

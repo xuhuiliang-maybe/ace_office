@@ -92,7 +92,6 @@ class LoadEmployeeView(View):
 			contract_type_dict = self.get_choice_dict(CONTRACT_CHOICES)  # 合同属性
 			departure_procedure_dict = self.get_choice_dict(DIMISSION_PROCEDURE_CHOICES)  # 离职手续
 
-
 			messages_warning = ""
 			for rowindex in xrange(1, nrows):  # 默认略过标题行,从第一行开始
 				row = table.row_values(rowindex)
@@ -120,70 +119,68 @@ class LoadEmployeeView(View):
 								project_name=project_name,
 								birthday=get_excel_date(row[13]),  # 出生年月
 								entry_date=get_excel_date(row[23]),  # 入职日期
-								social_insurance_increase_date=get_excel_date(row[24]),  # 社保增员日期
-								provident_fund_increase_date=get_excel_date(row[28]),  # 公积金增员日期
-								contract_begin_date=get_excel_date(row[29]),  # 合同开始日期
-								departure_date=get_excel_date(row[35]),  # 离职日期
-								social_insurance_reduce_date=get_excel_date(row[38]),  # 社保减员日期
-								business_insurance_reduce_date=get_excel_date(row[39]),  # 商保减员日期
-								provident_fund_reduce_date=get_excel_date(row[40]),  # 公积金减员日期
+								call_out_time=get_excel_date(row[24]),  # 调出日期
+								into_time=get_excel_date(row[25]),  # 转入日期
+
+								social_insurance_increase_date=get_excel_date(row[26]),  # 社保增员日期
+								provident_fund_increase_date=get_excel_date(row[30]),  # 公积金增员日期
+								contract_begin_date=get_excel_date(row[32]),  # 合同开始日期
+								departure_date=get_excel_date(row[37]),  # 离职日期
+								social_insurance_reduce_date=get_excel_date(row[40]),  # 社保减员日期
+								business_insurance_reduce_date=get_excel_date(row[41]),  # 商保减员日期
+								provident_fund_reduce_date=get_excel_date(row[42]),  # 公积金减员日期
 							)
 							continue
 
 						create_result = Employee.objects.create(
-								name=row[1],  # 姓名
-								identity_card_number=row[3],  # 身份证号
-								status=is_work_dict.get(row[4], "1"),  # 目前状态
-								project_name=project_name,  # 项目名称
-								salary_card_number=row[6],  # 银行卡号
-								bank_account=row[7],  # 开户银行
-								job_dept=row[8],  # 部门
-								position=row[9],  # 职务
-								sex=gender_dict.get(row[10], ""),  # 性别
-								nation=nation_dict.get(row[11], "1"),  # 民族
-								education=education_dict.get(row[12], ""),  # 学历
-								birthday=get_excel_date(row[13]),  # 出生年月
-								age=get_excel_int(row[14]),  # 员工年龄
-								register_address=row[15],  # 户口所在地
-								register_postcode=str(get_excel_int(row[16], True)),  # 户口邮编
-								register_type=registertype_dict.get(row[17], ""),  # 户口性质
-								work_address=row[18],  # 工作地
-								insured_place=row[19],  # 社保地
-								person_type=ContractType.get_dict_item_by_name(row[20]),  # 人员属性
-								contract_type=contract_type_dict.get(row[21], ""),  # 合同属性
-								contract_subject=CompanySubject.get_dict_item_by_name(row[22]),
-								# 合同主体
-								entry_date=get_excel_date(row[23]),  # 入职日期
-								social_insurance_increase_date=get_excel_date(row[24]),
-								# 社保增员日期
-								social_security_payment_card=row[25],  # 社保支付卡
-								use_bank=row[26],  # 开户银行
-								business_insurance_increase_date=get_excel_date(row[27]),
-								# 商保增员日期
-								provident_fund_increase_date=get_excel_date(row[28]),  # 公积金增员日期
-								contract_begin_date=get_excel_date(row[29]),  # 合同开始日期
-								probation_period=get_excel_int(row[30]),  # 试用期限
-								contract_period=get_excel_int(row[31]),  # 合同期限
-								probation_end_date=get_excel_date(row[32]),  # 试用期日期
-								contract_end_date=get_excel_date(row[33]),  # 合同到期日期
-								contract_renew_times=get_excel_int(row[34]),  # 合同续签次数
-								departure_date=get_excel_date(row[35]),  # 离职日期
-								departure_procedure=departure_procedure_dict.get(row[36], ""),
-								# 离职手续
-								departure_cause=row[37],  # 离职原因
-								social_insurance_reduce_date=get_excel_date(row[38]),  # 社保减员日期
-								business_insurance_reduce_date=get_excel_date(row[39]),
-								# 商保减员日期
-								provident_fund_reduce_date=get_excel_date(row[40]),  # 公积金减员日期
-								phone_number=str(get_excel_int(row[41], True)),  # 联系电话
-								contact_person=row[42],  # 紧急联系人
-								contact_relationship=row[43],  # 与联系人关系
-								contact_person_phone=str(get_excel_int(row[44], True)),  # 紧急联系人电话
-								recruitment_channel=recruitment_channel_dict.get(row[45], ""),
-								# 招聘渠道
-								recruitment_attache=Profile.get_user_by_username_or_first_name(row[46]),
-								# 招聘人员
-							)
+							name=row[1],  # 姓名
+							identity_card_number=row[3],  # 身份证号
+							status=is_work_dict.get(row[4], "1"),  # 目前状态
+							project_name=project_name,  # 项目名称
+							salary_card_number=row[6],  # 银行卡号
+							bank_account=row[7],  # 开户银行
+							job_dept=row[8],  # 部门
+							position=row[9],  # 职务
+							sex=gender_dict.get(row[10], ""),  # 性别
+							nation=nation_dict.get(row[11], "1"),  # 民族
+							education=education_dict.get(row[12], ""),  # 学历
+							birthday=get_excel_date(row[13]),  # 出生年月
+							age=get_excel_int(row[14]),  # 员工年龄
+							register_address=row[15],  # 户口所在地
+							register_postcode=str(get_excel_int(row[16], True)),  # 户口邮编
+							register_type=registertype_dict.get(row[17], ""),  # 户口性质
+							work_address=row[18],  # 工作地
+							insured_place=row[19],  # 社保地
+							person_type=ContractType.get_dict_item_by_name(row[20]),  # 人员属性
+							contract_type=contract_type_dict.get(row[21], ""),  # 合同属性
+							contract_subject=CompanySubject.get_dict_item_by_name(row[22]),# 合同主体
+							entry_date=get_excel_date(row[23]),  # 入职日期
+							call_out_time=get_excel_date(row[24]),  # 调出日期
+							into_time=get_excel_date(row[25]),  # 转入日期
+							social_insurance_increase_date=get_excel_date(row[26]),# 社保增员日期
+							social_security_payment_card=row[27],  # 社保支付卡
+							use_bank=row[28],  # 开户银行
+							business_insurance_increase_date=get_excel_date(row[29]),# 商保增员日期
+							provident_fund_increase_date=get_excel_date(row[30]),  # 公积金增员日期
+							contract_begin_date=get_excel_date(row[31]),  # 合同开始日期
+							probation_period=get_excel_int(row[32]),  # 试用期限
+							contract_period=get_excel_int(row[33]),  # 合同期限
+							probation_end_date=get_excel_date(row[34]),  # 试用期日期
+							contract_end_date=get_excel_date(row[35]),  # 合同到期日期
+							contract_renew_times=get_excel_int(row[36]),  # 合同续签次数
+							departure_date=get_excel_date(row[37]),  # 离职日期
+							departure_procedure=departure_procedure_dict.get(row[38], ""),# 离职手续
+							departure_cause=row[39],  # 离职原因
+							social_insurance_reduce_date=get_excel_date(row[40]),  # 社保减员日期
+							business_insurance_reduce_date=get_excel_date(row[41]),# 商保减员日期
+							provident_fund_reduce_date=get_excel_date(row[42]),  # 公积金减员日期
+							phone_number=str(get_excel_int(row[43], True)),  # 联系电话
+							contact_person=row[44],  # 紧急联系人
+							contact_relationship=row[45],  # 与联系人关系
+							contact_person_phone=str(get_excel_int(row[46], True)),  # 紧急联系人电话
+							recruitment_channel=recruitment_channel_dict.get(row[47], ""),# 招聘渠道
+							recruitment_attache=Profile.get_user_by_username_or_first_name(row[48]),# 招聘人员
+						)
 						import_num += 1
 					except:
 						messages_warning += str(rowindex) + ","
@@ -258,7 +255,7 @@ class LoadEmployeeView(View):
 							identity_card_number=row[2],  # 身份证号
 							project_name=project_name,  # 项目名称
 							job_dept=row[4],  # 服务部门
-							recruitment_attache=Profile.get_user_by_username_or_first_name(row[5]),# 招聘人员
+							recruitment_attache=Profile.get_user_by_username_or_first_name(row[5]),  # 招聘人员
 							phone_number=row[6],  # 联系电话
 							start_work_date=get_excel_date(row[7]),  # 开始工作日
 							end_work_date=get_excel_date(row[8]),  # 结束工作日
