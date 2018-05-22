@@ -200,7 +200,6 @@ class Employee(models.Model):
 	remark5 = models.CharField(u"备注5", max_length=256, blank=True)
 	create_time = models.DateTimeField(verbose_name=u'创建时间', auto_now=True, blank=True, null=True)
 
-
 	def __str__(self):
 		return self.name  # 对象友好显示名称
 
@@ -232,7 +231,7 @@ class EmployeeForm(forms.ModelForm):
 		identity_card_number = self.cleaned_data['identity_card_number']
 		status = self.cleaned_data['status']
 		name = self.cleaned_data['name']
-		user_obj = Employee.objects.filter(identity_card_number=identity_card_number, status="1").exclude(name=name)
+		user_obj = Employee.objects.filter(identity_card_number=identity_card_number, status="1")  # .exclude(name=name)
 		if user_obj.exists() and status == "1":
 			# 身份证相同并在职，不予录入
 			self.add_error('identity_card_number', u"相同身份证号并且在职的员工信息已经存在!")
