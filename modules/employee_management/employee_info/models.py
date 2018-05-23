@@ -224,17 +224,16 @@ class Employee(models.Model):
 
 # 自定义验证
 class EmployeeForm(forms.ModelForm):
-	def clean(self):
-		cleaned_data = super(EmployeeForm, self).clean()
-
-		# 校验身份证号，有在职员工有相同身份证号，不能同时存在，阻止录入，有相同身份证已离职可录入
-		identity_card_number = self.cleaned_data['identity_card_number']
-		status = self.cleaned_data['status']
-		name = self.cleaned_data['name']
-		user_obj = Employee.objects.filter(identity_card_number=identity_card_number, status="1")  # .exclude(name=name)
-		if user_obj.exists() and status == "1":
-			# 身份证相同并在职，不予录入
-			self.add_error('identity_card_number', u"相同身份证号并且在职的员工信息已经存在!")
+	# def clean(self):
+	# 	cleaned_data = super(EmployeeForm, self).clean()
+	# 	# 校验身份证号，有在职员工有相同身份证号，不能同时存在，阻止录入，有相同身份证已离职可录入
+	# 	identity_card_number = self.cleaned_data['identity_card_number']
+	# 	status = self.cleaned_data['status']
+	# 	name = self.cleaned_data['name']
+	# 	user_obj = Employee.objects.filter(identity_card_number=identity_card_number, status="1").exclude(name=name)
+	# 	if user_obj.exists() and status == "1":
+	# 		# 身份证相同并在职，不予录入
+	# 		self.add_error('identity_card_number', u"相同身份证号并且在职的员工信息已经存在!")
 
 	class Meta:
 		model = Employee

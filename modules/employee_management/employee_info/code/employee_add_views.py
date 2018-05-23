@@ -58,6 +58,15 @@ class EmployeeCreate(SuccessMessageMixin, CreateView):
 					messages.warning(self.request, u"请选择您所负责的“项目名称”")
 					return super(EmployeeCreate, self).form_invalid(form)
 
+			# 校验身份证号，有在职员工有相同身份证号，不能同时存在，阻止录入，有相同身份证已离职可录入
+			identity_card_number = self.request.POST.get('identity_card_number')
+			status = self.request.POST.get('status')
+			user_obj = Employee.objects.filter(identity_card_number=identity_card_number, status="1")
+			if user_obj.exists() and status == "1":
+				# 身份证相同并在职，不予录入
+				messages.warning(self.request, u"相同身份证号并且在职的员工信息已经存在!")
+				return super(EmployeeCreate, self).form_invalid(form)
+
 			# 根据身份证号计算年龄
 			now_year = datetime.datetime.now().year
 			id_card = self.request.POST.get("identity_card_number", "")  # 身份证号
