@@ -45,6 +45,7 @@ class EmployeeUpdate(SuccessMessageMixin, UpdateView):
 	def form_valid(self, form):
 
 		login_user = self.request.user
+		pk_id = self.kwargs.get("pk")
 
 		# 非超级用户校验是否负责添加项目
 		if not login_user.is_superuser:
@@ -65,13 +66,11 @@ class EmployeeUpdate(SuccessMessageMixin, UpdateView):
 		# 校验身份证号，有在职员工有相同身份证号，不能同时存在，阻止录入，有相同身份证已离职可录入
 		identity_card_number = self.request.POST.get('identity_card_number')
 		status = self.request.POST.get('status')
-		name = self.request.POST.get('name')
-		user_obj = Employee.objects.filter(identity_card_number=identity_card_number, status="1").exclude(name=name)
+		user_obj = Employee.objects.filter(identity_card_number=identity_card_number, status="1").exclude(id=pk_id)
 		if user_obj.exists() and status == "1":
 			# 身份证相同并在职，不予录入
 			messages.warning(self.request, u"相同身份证号并且在职的员工信息已经存在!")
 			return super(EmployeeUpdate, self).form_invalid(form)
-
 
 		now_year = datetime.datetime.now().year
 		id_card = self.request.POST.get("identity_card_number", "")
