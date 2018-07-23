@@ -96,7 +96,7 @@ class LoadEmployeeView(View):
 			for rowindex in xrange(1, nrows):  # 默认略过标题行,从第一行开始
 				row = table.row_values(rowindex)
 				if row:
-					if not row[4]:
+					if not row[5]:
 						no_project_num += 1
 						continue
 

@@ -201,7 +201,7 @@ class Employee(models.Model):
 	create_time = models.DateTimeField(verbose_name=u'创建时间', auto_now=True, blank=True, null=True)
 
 	def __str__(self):
-		return self.name  # 对象友好显示名称
+		return self.name
 
 	class Meta:
 		verbose_name = u"员工信息"
