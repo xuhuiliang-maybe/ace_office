@@ -115,7 +115,8 @@ class LoadEmployeeView(View):
 						if emp_obj.exists():
 							repeat_num += 1
 							emp_obj.update(
-								salary_card_number=row[6],
+								salary_card_number=row[6],  # 银行卡号
+								bank_account=row[7],  # 开户银行
 								project_name=project_name,
 								birthday=get_excel_date(row[13]),  # 出生年月
 								entry_date=get_excel_date(row[23]),  # 入职日期
@@ -153,14 +154,14 @@ class LoadEmployeeView(View):
 							insured_place=row[19],  # 社保地
 							person_type=ContractType.get_dict_item_by_name(row[20]),  # 人员属性
 							contract_type=contract_type_dict.get(row[21], ""),  # 合同属性
-							contract_subject=CompanySubject.get_dict_item_by_name(row[22]),# 合同主体
+							contract_subject=CompanySubject.get_dict_item_by_name(row[22]),  # 合同主体
 							entry_date=get_excel_date(row[23]),  # 入职日期
 							call_out_time=get_excel_date(row[24]),  # 调出日期
 							into_time=get_excel_date(row[25]),  # 转入日期
-							social_insurance_increase_date=get_excel_date(row[26]),# 社保增员日期
+							social_insurance_increase_date=get_excel_date(row[26]),  # 社保增员日期
 							social_security_payment_card=row[27],  # 社保支付卡
 							use_bank=row[28],  # 开户银行
-							business_insurance_increase_date=get_excel_date(row[29]),# 商保增员日期
+							business_insurance_increase_date=get_excel_date(row[29]),  # 商保增员日期
 							provident_fund_increase_date=get_excel_date(row[30]),  # 公积金增员日期
 							contract_begin_date=get_excel_date(row[31]),  # 合同开始日期
 							probation_period=get_excel_int(row[32]),  # 试用期限
@@ -169,17 +170,17 @@ class LoadEmployeeView(View):
 							contract_end_date=get_excel_date(row[35]),  # 合同到期日期
 							contract_renew_times=get_excel_int(row[36]),  # 合同续签次数
 							departure_date=get_excel_date(row[37]),  # 离职日期
-							departure_procedure=departure_procedure_dict.get(row[38], ""),# 离职手续
+							departure_procedure=departure_procedure_dict.get(row[38], ""),  # 离职手续
 							departure_cause=row[39],  # 离职原因
 							social_insurance_reduce_date=get_excel_date(row[40]),  # 社保减员日期
-							business_insurance_reduce_date=get_excel_date(row[41]),# 商保减员日期
+							business_insurance_reduce_date=get_excel_date(row[41]),  # 商保减员日期
 							provident_fund_reduce_date=get_excel_date(row[42]),  # 公积金减员日期
 							phone_number=str(get_excel_int(row[43], True)),  # 联系电话
 							contact_person=row[44],  # 紧急联系人
 							contact_relationship=row[45],  # 与联系人关系
 							contact_person_phone=str(get_excel_int(row[46], True)),  # 紧急联系人电话
-							recruitment_channel=recruitment_channel_dict.get(row[47], ""),# 招聘渠道
-							recruitment_attache=Profile.get_user_by_username_or_first_name(row[48]),# 招聘人员
+							recruitment_channel=recruitment_channel_dict.get(row[47], ""),  # 招聘渠道
+							recruitment_attache=Profile.get_user_by_username_or_first_name(row[48]),  # 招聘人员
 						)
 						import_num += 1
 					except:
