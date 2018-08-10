@@ -36,6 +36,7 @@ CONTRACT_CHOICES = (
 	('3', u'劳务'),
 	('4', u'派遣'),
 	('5', u'外包'),
+	('6', u'代理'),
 )
 
 RECRUITMENTCHANNEL_CHOICES = (
