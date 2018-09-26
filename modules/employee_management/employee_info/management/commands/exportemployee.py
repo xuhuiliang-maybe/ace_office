@@ -29,10 +29,15 @@ class Command(BaseCommand):
 
 			# 上传百度云
 			# 判断文件是否存在
+			print file_path
+			print os.path.exists(file_path)
+
 			if os.path.exists(file_path):
 				# os.system("bypy mkdir ExportEmployee")
 				# os.system("/usr/local/bin/bypy upload %s ExportEmployee -v" % file_path)
-				os.system("/var/www/html/bpcs_uploader/bpcs_uploader.php upload %s ExportEmployee/%s" % (file_path, file_name))
+				command_str = "/var/www/html/bpcs_uploader/bpcs_uploader.php upload %s ExportEmployee/%s" % (file_path, file_name)
+				print command_str
+				os.system(command_str)
 			print "Total %s" % str(total)
 			print file_name
 			print "End %s \n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
