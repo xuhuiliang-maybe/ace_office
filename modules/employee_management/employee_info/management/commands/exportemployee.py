@@ -48,3 +48,7 @@ class Command(BaseCommand):
 		except:
 			traceback.print_exc()
 			raise CommandError(traceback.format_exc())
+
+"""
+链接: https://pan.baidu.com/s/1pKfFJvLuwGxcfTGF0LvjNQ 提取码: iysd
+"""
