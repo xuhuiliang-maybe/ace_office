@@ -31,7 +31,8 @@ class Command(BaseCommand):
 			# 判断文件是否存在
 			if os.path.exists(file_path):
 				# os.system("bypy mkdir ExportEmployee")
-				os.system("/usr/local/bin/bypy upload %s ExportEmployee -v" % file_path)
+				# os.system("/usr/local/bin/bypy upload %s ExportEmployee -v" % file_path)
+				os.system("/var/www/html/bpcs_uploader/bpcs_uploader.php upload %s ExportEmployee/%s" % file_path, file_name)
 			print "Total %s" % str(total)
 			print file_name
 			print "End %s \n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
