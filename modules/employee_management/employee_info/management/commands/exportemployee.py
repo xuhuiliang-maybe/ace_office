@@ -34,6 +34,7 @@ class Command(BaseCommand):
 			print file_path
 			print os.path.exists(file_path)
 
+			gc.collect()
 			if os.path.exists(file_path):
 				# os.system("bypy mkdir ExportEmployee")
 				# os.system("/usr/local/bin/bypy upload %s ExportEmployee -v" % file_path)
@@ -41,7 +42,6 @@ class Command(BaseCommand):
 					file_path, file_name)
 				print command_str
 				p = subprocess.call(command_str, close_fds=True)
-				gc.collect()
 				print p
 			print "Total %s" % str(total)
 			print file_name
