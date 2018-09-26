@@ -1,11 +1,12 @@
 # coding=utf-8
+import gc
+import subprocess
+
 from django.core.management.base import BaseCommand, CommandError
 
 from modules.employee_management.employee_info.code.employee_export_views import *
 from modules.share_module.export import *
 from modules.share_module.formater import *
-import subprocess
-import datetime
 
 
 class Command(BaseCommand):
@@ -37,9 +38,10 @@ class Command(BaseCommand):
 				# os.system("bypy mkdir ExportEmployee")
 				# os.system("/usr/local/bin/bypy upload %s ExportEmployee -v" % file_path)
 				command_str = "/var/www/html/bpcs_uploader/bpcs_uploader.php upload %s ExportEmployee/%s" % (
-				file_path, file_name)
+					file_path, file_name)
 				print command_str
 				p = subprocess.call(command_str, close_fds=True)
+				gc.collect()
 				print p
 			print "Total %s" % str(total)
 			print file_name
