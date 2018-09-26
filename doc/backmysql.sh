@@ -29,9 +29,13 @@ end=`date +%Y-%m-%d_%H:%M:%S`
 echo -e "结束执行备份：$end mysql$file.sql\n" >> $filedir/auto_backup.log
 
 #备份到百度云盘
-/usr/local/bin/bypy mkdir bangtai_db_backup/$file_path
-/usr/local/bin/bypy upload $filedir/mysql$file.sql bangtai_db_backup/$file_path -v
-/usr/local/bin/bypy upload $filedir/auto_backup.log bangtai_db_backup/$file_path -v
+#/usr/local/bin/bypy mkdir bangtai_db_backup/$file_path
+#/usr/local/bin/bypy upload $filedir/mysql$file.sql bangtai_db_backup/$file_path -v
+#/usr/local/bin/bypy upload $filedir/auto_backup.log bangtai_db_backup/$file_path -v
+
+# bpcs_uploader 备份到百度云盘
+/var/www/html/bpcs_uploader/bpcs_uploader.php upload $filedir/mysql$file.sql bangtai_db_backup/$file_path/mysql$file.sql
+/var/www/html/bpcs_uploader/bpcs_uploader.php upload $filedir/auto_backup.log bangtai_db_backup/$file_path/auto_backup.log
 
 fi
 
