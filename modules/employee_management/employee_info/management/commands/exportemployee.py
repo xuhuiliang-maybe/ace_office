@@ -31,8 +31,7 @@ class Command(BaseCommand):
 
 			# 上传百度云
 			# 判断文件是否存在
-			print file_path
-			print os.path.exists(file_path)
+			print file_path, os.path.exists(file_path)
 
 			gc.collect()
 			if os.path.exists(file_path):
