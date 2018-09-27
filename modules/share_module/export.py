@@ -29,7 +29,7 @@ class ExportExcel(object):
 		self.path = path
 
 	def export(self):
-		name = self.filename + "_" + time.strftime("%Y%m%d%H%M%S") + ".xls"
+		name = self.filename + "_" + time.strftime("%Y-%m-%d_%H_%M_%S") + ".xls"
 		tmp_path = get_media_sub_path(self.path)  # 临时文件夹路径
 		path = os.path.join(tmp_path, name)  # 导出文件路径
 
