@@ -47,25 +47,25 @@ function address_modal(id_string, disable_area) {
 
 function custom_ajax_post_new(url, param) {
     $.ajax({
-               async: false,
-               url: url,
-               type: 'POST',
-               dataType: 'JSON',
-               data: param,
+        async: false,
+        url: url,
+        type: 'POST',
+        dataType: 'JSON',
+        data: param,
 
-               success: function (data, textStatus) {
-                   code = data.code;
-                   var msg = data.msg;
-                   layer.open({title: '提示', content: msg});
-               },
-               error: function (XMLHttpRequest, textStatus, errorThrown) {
-                   console.log(XMLHttpRequest);
-                   console.log(textStatus);
-                   console.log(errorThrown);
-                   layer.open({icon: 7, title: '提示', content: "异常"});
-                   code = 0
-               }
-           });
+        success: function (data, textStatus) {
+            code = data.code;
+            var msg = data.msg;
+            layer.open({title: '提示', content: msg});
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest);
+            console.log(textStatus);
+            console.log(errorThrown);
+            layer.open({icon: 7, title: '提示', content: "异常"});
+            code = 0
+        }
+    });
     return code
 }
 
@@ -73,28 +73,28 @@ function custom_ajax_post(url, param) {
     var load_index = layer.load(0, {shade: [0.1, '#fff']});
     var result = 0;
     $.ajax({
-               async: false,
-               url: url,
-               type: 'POST',
-               dataType: 'JSON',
-               data: param,
+        async: false,
+        url: url,
+        type: 'POST',
+        dataType: 'JSON',
+        data: param,
 
-               success: function (data, textStatus) {
-                   var code = data.code;
-                   var msg = data.msg;
-                   layer.close(load_index);
-                   layer.open({title: '提示', content: msg});
-                   result = 1
-               },
-               error: function (XMLHttpRequest, textStatus, errorThrown) {
-                   console.log(XMLHttpRequest);
-                   console.log(textStatus);
-                   console.log(errorThrown);
-                   layer.close(load_index);
-                   layer.open({icon: 7, title: '提示', content: "异常"});
-                   result = 0
-               }
-           });
+        success: function (data, textStatus) {
+            var code = data.code;
+            var msg = data.msg;
+            layer.close(load_index);
+            layer.open({title: '提示', content: msg});
+            result = 1
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest);
+            console.log(textStatus);
+            console.log(errorThrown);
+            layer.close(load_index);
+            layer.open({icon: 7, title: '提示', content: "异常"});
+            result = 0
+        }
+    });
     return result
 }
 
@@ -143,7 +143,7 @@ function batch_oper(url, oper_type) {
         layer.open({icon: 3, title: '提示', content: "至少选择一条数据"});
     } else {
         var data = {};
-        ids = ids.substring(0,ids.length-1);
+        ids = ids.substring(0, ids.length - 1);
         data["pk"] = ids;
         data["oper_type"] = "batch_oper";
         data["filed"] = oper_type;
@@ -164,3 +164,20 @@ function submit_after(id_str) {
     var load_index = layer.load(0, {shade: [0.1, '#fff']});
 }
 
+function stringToDate(dateStr, separator) {
+    if (!separator) {
+        separator = "-";
+    }
+    var dateArr = dateStr.split(separator);
+    var year = parseInt(dateArr[0]);
+    var month;
+    //处理月份为04这样的情况
+    if (dateArr[1].indexOf("0") == 0) {
+        month = parseInt(dateArr[1].substring(1));
+    } else {
+        month = parseInt(dateArr[1]);
+    }
+    var day = parseInt(dateArr[2]);
+    var date = new Date(year, month - 1, day);
+    return date;
+}
