@@ -540,7 +540,7 @@
             if (status || project_name || dept_name || dept_ids || principal || name || identity_card_number || person_type || contract_type || start_time || end_time) {
                 if (start_time && end_time) {
                     var start = stringToDate(start_time, "/");
-                    var end = stringToDate(start_time, "/");
+                    var end = stringToDate(end_time, "/");
                     if (end < start) {
                         layer.open({icon: 3, title: '提示', content: "终止时间不能小于起始时间"});
                     } else {
@@ -584,7 +584,7 @@
             if (project_name || name || identity_card_number || phone_number || st_release_time || et_release_time || start_time || end_time || recruitment_attache) {
                 if (start_time && end_time) {
                     var start = stringToDate(start_time, "/");
-                    var end = stringToDate(start_time, "/");
+                    var end = stringToDate(end_time, "/");
                     if (end < start) {
                         layer.open({icon: 3, title: '提示', content: "终止时间不能小于起始时间"});
                     } else {
