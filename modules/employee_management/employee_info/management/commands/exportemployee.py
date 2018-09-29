@@ -39,10 +39,8 @@ class Command(BaseCommand):
 				# os.system("/usr/local/bin/bypy upload %s ExportEmployee -v" % file_path)
 				command_str = "/var/www/html/bpcs_uploader/bpcs_uploader.php upload %s ExportEmployee/%s" % (
 					file_path, file_name)
-				print command_str
 				os.system(command_str)
 			print "Total %s" % str(total)
-			print file_name
 			print "End %s \n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 		except:
