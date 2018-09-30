@@ -538,32 +538,18 @@
             var end_time = $("#end_time").val();
 
             if (project_name || dept_name || dept_ids || principal || name || identity_card_number || start_time || end_time) {
-                if (start_time && end_time) {
-                    var start = stringToDate(start_time, "/");
-                    var end = stringToDate(end_time, "/");
-                    if (end < start) {
-                        layer.open({icon: 3, title: '提示', content: "终止时间不能小于起始时间"});
-                    } else {
-                        if ((end - start) > 31) {
-                            layer.open({icon: 3, title: '提示', content: "时间间隔不能大于31天"});
-                        } else {
-                            location.href = "/employeemanage/export?employee_type=employee&status=" + status
-                                + "&project_name=" + project_name
-                                + "&dept_name=" + dept_name
-                                + "&dept_ids=" + dept_ids
-                                + "&principal=" + principal
-                                + "&name=" + name
-                                + "&identity_card_number=" + identity_card_number
-                                + "&person_type=" + person_type
-                                + "&contract_type=" + contract_type
-                                + "&start_time=" + start_time
-                                + "&end_time=" + end_time;
-                        }
-                    }
-                } else {
-                    layer.open({icon: 3, title: '提示', content: "必须填写员工创建起始时间和终止时间，间隔不能大于31天"});
+                location.href = "/employeemanage/export?employee_type=employee&status=" + status
+                    + "&project_name=" + project_name
+                    + "&dept_name=" + dept_name
+                    + "&dept_ids=" + dept_ids
+                    + "&principal=" + principal
+                    + "&name=" + name
+                    + "&identity_card_number=" + identity_card_number
+                    + "&person_type=" + person_type
+                    + "&contract_type=" + contract_type
+                    + "&start_time=" + start_time
+                    + "&end_time=" + end_time;
 
-                }
             } else {
                 layer.open({icon: 3, title: '提示', content: "至少使用一个过滤条件"});
             }
@@ -582,31 +568,16 @@
             var recruitment_attache = $("#recruitment_attache").val();
 
             if (project_name || name || identity_card_number || phone_number || st_release_time || et_release_time || start_time || end_time || recruitment_attache) {
-                if (start_time && end_time) {
-                    var start = stringToDate(start_time, "/");
-                    var end = stringToDate(end_time, "/");
-                    if (end < start) {
-                        layer.open({icon: 3, title: '提示', content: "终止时间不能小于起始时间"});
-                    } else {
-                        if ((end - start) > 31) {
-                            layer.open({icon: 3, title: '提示', content: "时间间隔不能大于31天"});
-                        } else {
-                            location.href = "/employeemanage/export?employee_type=temporary"
-                                + "&project_name=" + project_name
-                                + "&name=" + name
-                                + "&identity_card_number=" + identity_card_number
-                                + "&phone_number=" + phone_number
-                                + "&st_release_time=" + st_release_time
-                                + "&et_release_time=" + et_release_time
-                                + "&start_time=" + start_time
-                                + "&end_time=" + end_time
-                                + "&recruitment_attache=" + recruitment_attache;
-                        }
-                    }
-                } else {
-                    layer.open({icon: 3, title: '提示', content: "必须填写员工创建起始时间和终止时间，间隔不能大于31天"});
-
-                }
+                location.href = "/employeemanage/export?employee_type=temporary"
+                    + "&project_name=" + project_name
+                    + "&name=" + name
+                    + "&identity_card_number=" + identity_card_number
+                    + "&phone_number=" + phone_number
+                    + "&st_release_time=" + st_release_time
+                    + "&et_release_time=" + et_release_time
+                    + "&start_time=" + start_time
+                    + "&end_time=" + end_time
+                    + "&recruitment_attache=" + recruitment_attache;
             } else {
                 layer.open({icon: 3, title: '提示', content: "至少使用一个过滤条件"});
             }
