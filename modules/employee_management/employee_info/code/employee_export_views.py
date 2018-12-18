@@ -15,7 +15,7 @@ from modules.share_module.download import download_file
 from modules.share_module.export import *
 from modules.share_module.formater import *
 from modules.share_module.permissionMixin import class_view_decorator
-from modules.share_module.utils import get_kwargs
+from modules.share_module.utils import get_kwargs, get_strftime
 
 
 def write_excel(employee_type, employee_obj_list):
@@ -65,8 +65,7 @@ def write_excel(employee_type, employee_obj_list):
 			for one_emp in employee_obj_list:
 				one_row_dict = defaultdict(str)
 				one_row_dict["name"] = one_emp.name  # 姓名
-				one_row_dict["create_time"] = one_emp.create_time.strftime(
-					"%Y-%m-%d %X") if one_emp.create_time else "--"
+				one_row_dict["create_time"] = get_strftime(one_emp.create_time, "%Y-%m-%d %X") if one_emp.create_time else "--"
 				if one_emp.project_name:
 					one_row_dict[
 						"attribution_dept"] = one_emp.project_name.department.name if one_emp.project_name.department else "--"  # 服务部门
@@ -86,8 +85,7 @@ def write_excel(employee_type, employee_obj_list):
 				one_row_dict["sex"] = one_emp.get_sex_display()  # 性别
 				one_row_dict["nation"] = one_emp.get_nation_display()  # 民族
 				one_row_dict["education"] = one_emp.get_education_display()  # 学历
-				one_row_dict["birthday"] = one_emp.birthday.strftime(
-					"%Y-%m-%d") if one_emp.birthday else ''  # 出生年月
+				one_row_dict["birthday"] = get_strftime(one_emp.birthday, "%Y-%m-%d") if one_emp.birthday else ''  # 出生年月
 				if one_emp.age:
 					one_row_dict["age"] = int(one_emp.age)  # 年龄
 				else:
@@ -109,24 +107,16 @@ def write_excel(employee_type, employee_obj_list):
 						"contract_subject"] = one_emp.contract_subject.name  # 合同主体
 				else:
 					one_row_dict["contract_subject"] = "--"  # 合同主体
-				one_row_dict["entry_date"] = one_emp.entry_date.strftime("%Y-%m-%d") if one_emp.entry_date else ''  # 入职日期
-				one_row_dict["call_out_time"] = one_emp.call_out_time.strftime("%Y-%m-%d") if one_emp.call_out_time else ''  # 调出时间
-				one_row_dict["into_time"] = one_emp.into_time.strftime("%Y-%m-%d") if one_emp.into_time else ''  # 转入时间
-				one_row_dict[
-					"social_insurance_increase_date"] = one_emp.social_insurance_increase_date.strftime(
-					"%Y-%m-%d") if one_emp.social_insurance_increase_date else ''  # 社保增员日期
+				one_row_dict["entry_date"] = get_strftime(one_emp.entry_date, "%Y-%m-%d") if one_emp.entry_date else ''  # 入职日期
+				one_row_dict["call_out_time"] = get_strftime(one_emp.call_out_time, "%Y-%m-%d") if one_emp.call_out_time else ''  # 调出时间
+				one_row_dict["into_time"] = get_strftime(one_emp.into_time, "%Y-%m-%d") if one_emp.into_time else ''  # 转入时间
+				one_row_dict["social_insurance_increase_date"] = get_strftime(one_emp.social_insurance_increase_date, "%Y-%m-%d") if one_emp.social_insurance_increase_date else ''  # 社保增员日期
 				one_row_dict[
 					"social_security_payment_card"] = one_emp.social_security_payment_card
 				one_row_dict["use_bank"] = one_emp.use_bank
-				one_row_dict[
-					"business_insurance_increase_date"] = one_emp.business_insurance_increase_date.strftime(
-					"%Y-%m-%d") if one_emp.business_insurance_increase_date else ''  # 商保增员日期
-				one_row_dict[
-					"provident_fund_increase_date"] = one_emp.provident_fund_increase_date.strftime(
-					"%Y-%m-%d") if one_emp.provident_fund_increase_date else ''  # 公积金增员日期
-				one_row_dict[
-					"contract_begin_date"] = one_emp.contract_begin_date.strftime(
-					"%Y-%m-%d") if one_emp.contract_begin_date else ''  # 合同开始日期
+				one_row_dict["business_insurance_increase_date"] = get_strftime(one_emp.business_insurance_increase_date, "%Y-%m-%d") if one_emp.business_insurance_increase_date else ''  # 商保增员日期
+				one_row_dict["provident_fund_increase_date"] = get_strftime(one_emp.provident_fund_increase_date, "%Y-%m-%d") if one_emp.provident_fund_increase_date else ''  # 公积金增员日期
+				one_row_dict["contract_begin_date"] = get_strftime(one_emp.contract_begin_date, "%Y-%m-%d") if one_emp.contract_begin_date else ''  # 合同开始日期
 				if one_emp.probation_period:
 					one_row_dict["probation_period"] = int(
 						one_emp.probation_period)  # 使用期限
@@ -137,30 +127,22 @@ def write_excel(employee_type, employee_obj_list):
 						one_emp.contract_period)  # 合同期限
 				else:
 					one_row_dict["contract_period"] = "--"
-				one_row_dict[
-					"probation_end_date"] = one_emp.probation_end_date.strftime(
-					"%Y-%m-%d") if one_emp.probation_end_date else ''  # 试用到期日期
-				one_row_dict["contract_end_date"] = one_emp.contract_end_date.strftime(
-					"%Y-%m-%d") if one_emp.contract_end_date else ''  # 合同到期日期
+				one_row_dict["probation_end_date"] = get_strftime(one_emp.probation_end_date, "%Y-%m-%d") if one_emp.probation_end_date else ''  # 试用到期日期
+				one_row_dict["contract_end_date"] = get_strftime(one_emp.contract_end_date, "%Y-%m-%d") if one_emp.contract_end_date else ''  # 合同到期日期 if one_emp.contract_renew_times:
 				if one_emp.contract_renew_times:
-					one_row_dict["contract_renew_times"] = int(
-						one_emp.contract_renew_times)  # 合同续签次数
+					one_row_dict["contract_renew_times"] = int(one_emp.contract_renew_times)  # 合同续签次数
 				else:
 					one_row_dict["contract_renew_times"] = "--"
-				one_row_dict["departure_date"] = one_emp.departure_date.strftime(
-					"%Y-%m-%d") if one_emp.departure_date else ''  # 离职日期
+				one_row_dict["departure_date"] = get_strftime(one_emp.departure_date, "%Y-%m-%d") if one_emp.departure_date else ''  # 离职日期
 				one_row_dict[
 					"departure_procedure"] = one_emp.get_departure_procedure_display()  # 离职手续
 				one_row_dict["departure_cause"] = one_emp.departure_cause  # 离职原因
 				one_row_dict[
-					"social_insurance_reduce_date"] = one_emp.social_insurance_reduce_date.strftime(
-					"%Y-%m-%d") if one_emp.social_insurance_reduce_date else ''  # 社保减员日期
+					"social_insurance_reduce_date"] = get_strftime(one_emp.social_insurance_reduce_date, "%Y-%m-%d") if one_emp.social_insurance_reduce_date else ''  # 社保减员日期
 				one_row_dict[
-					"business_insurance_reduce_date"] = one_emp.business_insurance_reduce_date.strftime(
-					"%Y-%m-%d") if one_emp.business_insurance_reduce_date else ''  # 商保减员日期
+					"business_insurance_reduce_date"] = get_strftime(one_emp.business_insurance_reduce_date, "%Y-%m-%d") if one_emp.business_insurance_reduce_date else ''  # 商保减员日期
 				one_row_dict[
-					"provident_fund_reduce_date"] = one_emp.provident_fund_reduce_date.strftime(
-					"%Y-%m-%d") if one_emp.provident_fund_reduce_date else ''  # 公积金减员日期
+					"provident_fund_reduce_date"] = get_strftime(one_emp.provident_fund_reduce_date, "%Y-%m-%d") if one_emp.provident_fund_reduce_date else ''  # 公积金减员日期
 				one_row_dict["phone_number"] = one_emp.phone_number  # 联系电话
 				one_row_dict["contact_person"] = one_emp.contact_person  # 紧急联系人
 				one_row_dict[
@@ -204,8 +186,7 @@ def write_excel(employee_type, employee_obj_list):
 			for one_emp in employee_obj_list:
 				one_row_dict = defaultdict(str)
 				one_row_dict["name"] = one_emp.name  # 姓名
-				one_row_dict["create_time"] = one_emp.create_time.strftime(
-					"%Y-%m-%d %X") if one_emp.create_time else "--"
+				one_row_dict["create_time"] = get_strftime(one_emp.create_time, "%Y-%m-%d %X") if one_emp.create_time else "--"
 				one_row_dict["sex"] = one_emp.get_sex_display()  # 性别
 				one_row_dict[
 					"identity_card_number"] = one_emp.identity_card_number  # 身份证号
@@ -220,10 +201,8 @@ def write_excel(employee_type, employee_obj_list):
 				except:
 					one_row_dict["recruitment_attache"] = "--"  # 招聘人员
 				one_row_dict["phone_number"] = one_emp.phone_number  # 联系电话
-				one_row_dict["start_work_date"] = one_emp.start_work_date.strftime(
-					"%Y-%m-%d") if one_emp.start_work_date else ''  # 开始工作日
-				one_row_dict["end_work_date"] = one_emp.end_work_date.strftime(
-					"%Y-%m-%d") if one_emp.end_work_date else ''  # 结束工作日
+				one_row_dict["start_work_date"] = get_strftime(one_emp.start_work_date, "%Y-%m-%d") if one_emp.start_work_date else ''  # 开始工作日
+				one_row_dict["end_work_date"] = get_strftime(one_emp.end_work_date, "%Y-%m-%d") if one_emp.end_work_date else ''  # 结束工作日
 				one_row_dict["work_days"] = one_emp.work_days  # 工作天数
 				one_row_dict["hours"] = one_emp.hours  # 小时数
 				one_row_dict["amount_of_payment"] = one_emp.amount_of_payment  # 发放金额
@@ -231,8 +210,7 @@ def write_excel(employee_type, employee_obj_list):
 					one_row_dict["release_user"] = one_emp.release_user.first_name  # 发放人
 				except:
 					one_row_dict["release_user"] = "--"  # 发放人
-				one_row_dict["release_time"] = one_emp.release_time.strftime(
-					"%Y-%m-%d") if one_emp.release_time else ''  # 发放时间
+				one_row_dict["release_time"] = get_strftime(one_emp.release_time, "%Y-%m-%d") if one_emp.release_time else ''  # 发放时间
 				one_row_dict["remark1"] = one_emp.remark1  # 备注1
 
 				rows_list.append(one_row_dict.copy())
