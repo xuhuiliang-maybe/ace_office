@@ -72,13 +72,9 @@ class ArrivalAndBillingExportView(View):
 				rows_list.append(one_row_dict.copy())
 
 			if rows_list:
-				# 实例化导出类
-				export_excel = ExportExcel()
-				export_excel.sheetname = "arrival_and_billing"
-				export_excel.head_title_list = head_list
-				export_excel.field_name_list = field_list
-				export_excel.data_obj_list = rows_list
-				export_excel.filename = "arrival_and_billing"
+				param = dict(sheetname="arrival_and_billing", head_title_list=head_list, field_name_list=field_list,
+							 data_obj_list=rows_list, filename="arrival_and_billing")
+				export_excel = ExportExcel(**param)
 				filepath, filename = export_excel.export()
 				# 页面下载导出文件
 				response = download_file(filepath, filename, True)

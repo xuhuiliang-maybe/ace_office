@@ -216,12 +216,11 @@ def write_excel(employee_type, employee_obj_list):
 				rows_list.append(one_row_dict.copy())
 
 		if rows_list:
-			# 实例化导出类
-			export_excel = ExportExcel()
-			export_excel.path = "export_employee"
-			export_excel.head_title_list = head_list
-			export_excel.field_name_list = field_list
-			export_excel.data_obj_list = rows_list
+			name = "emp"
+			param = dict(sheetname=name, head_title_list=head_list, field_name_list=field_list,
+						 data_obj_list=rows_list, filename=name, path="export_employee")
+
+			export_excel = ExportExcel(**param)
 			if employee_type == "employee":
 				export_excel.sheetname = "Employee"
 				export_excel.filename = "Employee"

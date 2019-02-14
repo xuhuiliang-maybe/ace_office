@@ -12,7 +12,7 @@ sys.setdefaultencoding("utf-8")
 
 
 class ExportExcel(object):
-	def __int__(self, sheetname, head_title_list, field_name_list, data_obj_list, filename, path="tmp"):
+	def __init__(self, sheetname, head_title_list, field_name_list, data_obj_list, filename, path="tmp"):
 		"""在指定的位置上生成一个excel 文件， 并将这个文件的路径作为返回值，供前台html 页面去下载
 		:param sheetname:excel文件中sheet的名字
 		:param head_title_list:列表类型的参数,列表每项是一个字符串。excel 文件中第一行的内容。

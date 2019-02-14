@@ -272,13 +272,10 @@ class ApprovalExportView(View):
 				one_row_dict["status"] = one_apply.get_status_display()
 				rows_list.append(one_row_dict.copy())
 			if rows_list:
-				# 实例化导出类
-				export_excel = ExportExcel()
-				export_excel.head_title_list = self.head_list
-				export_excel.field_name_list = self.field_list
-				export_excel.data_obj_list = rows_list
-				export_excel.sheetname = "leave_apply"
-				export_excel.filename = "leave_apply"
+				name = "leave_apply"
+				param = dict(sheetname=name, head_title_list=self.head_list, field_name_list=self.field_list,
+							 data_obj_list=rows_list, filename=name)
+				export_excel = ExportExcel(**param)
 				filepath, filename = export_excel.export()
 
 				# 页面下载导出文件
@@ -324,13 +321,10 @@ class ApprovalExportView(View):
 				one_row_dict["status"] = one_apply.get_status_display()
 				rows_list.append(one_row_dict.copy())
 			if rows_list:
-				# 实例化导出类
-				export_excel = ExportExcel()
-				export_excel.head_title_list = self.head_list
-				export_excel.field_name_list = self.field_list
-				export_excel.data_obj_list = rows_list
-				export_excel.sheetname = "loan_apply"
-				export_excel.filename = "loan_apply"
+				name = "loan_apply"
+				param = dict(sheetname=name, head_title_list=self.head_list, field_name_list=self.field_list,
+							 data_obj_list=rows_list, filename=name)
+				export_excel = ExportExcel(**param)
 				filepath, filename = export_excel.export()
 
 				# 页面下载导出文件
@@ -403,8 +397,10 @@ class ApprovalExportView(View):
 				one_row_dict["status"] = one_apply.get_status_display()
 				rows_list.append(one_row_dict.copy())
 			if rows_list:
-				# 实例化导出类
-				export_excel = ExportExcel()
+				name = "temporary_write_offs_billing_apply"
+				param = dict(sheetname=name, head_title_list=self.head_list, field_name_list=self.field_list,
+							 data_obj_list=rows_list, filename=name)
+				export_excel = ExportExcel(**param)
 				export_excel.head_title_list = self.head_list
 				export_excel.field_name_list = self.field_list
 				export_excel.data_obj_list = rows_list
@@ -452,13 +448,10 @@ class ApprovalExportView(View):
 				one_row_dict["status"] = one_apply.get_status_display()
 				rows_list.append(one_row_dict.copy())
 			if rows_list:
-				# 实例化导出类
-				export_excel = ExportExcel()
-				export_excel.head_title_list = self.head_list
-				export_excel.field_name_list = self.field_list
-				export_excel.data_obj_list = rows_list
-				export_excel.sheetname = "wage_apply"
-				export_excel.filename = "wage_apply"
+				name = "wage_apply"
+				param = dict(sheetname=name, head_title_list=self.head_list, field_name_list=self.field_list,
+							 data_obj_list=rows_list, filename=name)
+				export_excel = ExportExcel(**param)
 				filepath, filename = export_excel.export()
 
 				# 页面下载导出文件
@@ -501,13 +494,10 @@ class ApprovalExportView(View):
 				one_row_dict["status"] = one_apply.get_status_display()
 				rows_list.append(one_row_dict.copy())
 			if rows_list:
-				# 实例化导出类
-				export_excel = ExportExcel()
-				export_excel.head_title_list = self.head_list
-				export_excel.field_name_list = self.field_list
-				export_excel.data_obj_list = rows_list
-				export_excel.sheetname = "wage_replacement_apply"
-				export_excel.filename = "wage_replacement_apply"
+				name = "wage_replacement_apply"
+				param = dict(sheetname=name, head_title_list=self.head_list, field_name_list=self.field_list,
+							 data_obj_list=rows_list, filename=name)
+				export_excel = ExportExcel(**param)
 				filepath, filename = export_excel.export()
 
 				# 页面下载导出文件
@@ -556,13 +546,10 @@ class ApprovalExportView(View):
 				one_row_dict["status"] = one_apply.get_status_display()
 				rows_list.append(one_row_dict.copy())
 			if rows_list:
-				# 实例化导出类
-				export_excel = ExportExcel()
-				export_excel.head_title_list = self.head_list
-				export_excel.field_name_list = self.field_list
-				export_excel.data_obj_list = rows_list
-				export_excel.sheetname = "write_offs_apply"
-				export_excel.filename = "write_offs_apply"
+				name = "write_offs_apply"
+				param = dict(sheetname=name, head_title_list=self.head_list, field_name_list=self.field_list,
+							 data_obj_list=rows_list, filename=name)
+				export_excel = ExportExcel(**param)
 				filepath, filename = export_excel.export()
 
 				# 页面下载导出文件
@@ -603,13 +590,10 @@ class ApprovalExportView(View):
 				one_row_dict["status"] = one_apply.get_status_display()
 				rows_list.append(one_row_dict.copy())
 			if rows_list:
-				# 实例化导出类
-				export_excel = ExportExcel()
-				export_excel.head_title_list = self.head_list
-				export_excel.field_name_list = self.field_list
-				export_excel.data_obj_list = rows_list
-				export_excel.sheetname = "demand_turnover_apply"
-				export_excel.filename = "demand_turnover_apply"
+				name = "demand_turnover_apply"
+				param = dict(sheetname=name, head_title_list=self.head_list, field_name_list=self.field_list,
+							 data_obj_list=rows_list, filename=name)
+				export_excel = ExportExcel(**param)
 				filepath, filename = export_excel.export()
 
 				# 页面下载导出文件
@@ -682,13 +666,10 @@ class ApprovalExportView(View):
 				one_row_dict["status"] = one_apply.get_status_display()
 				rows_list.append(one_row_dict.copy())
 			if rows_list:
-				# 实例化导出类
-				export_excel = ExportExcel()
-				export_excel.head_title_list = self.head_list
-				export_excel.field_name_list = self.field_list
-				export_excel.data_obj_list = rows_list
-				export_excel.sheetname = "billing_pre_pay_apply"
-				export_excel.filename = "billing_pre_pay_apply"
+				name = "billing_pre_pay_apply"
+				param = dict(sheetname=name, head_title_list=self.head_list, field_name_list=self.field_list,
+							 data_obj_list=rows_list, filename=name)
+				export_excel = ExportExcel(**param)
 				filepath, filename = export_excel.export()
 
 				# 页面下载导出文件
@@ -736,13 +717,10 @@ class ApprovalExportView(View):
 				one_row_dict["status"] = one_apply.get_status_display()
 				rows_list.append(one_row_dict.copy())
 			if rows_list:
-				# 实例化导出类
-				export_excel = ExportExcel()
-				export_excel.head_title_list = self.head_list
-				export_excel.field_name_list = self.field_list
-				export_excel.data_obj_list = rows_list
-				export_excel.sheetname = "recruited_billing_apply"
-				export_excel.filename = "recruited_billing_apply"
+				name = "recruited_billing_apply"
+				param = dict(sheetname=name, head_title_list=self.head_list, field_name_list=self.field_list,
+							 data_obj_list=rows_list, filename=name)
+				export_excel = ExportExcel(**param)
 				filepath, filename = export_excel.export()
 
 				# 页面下载导出文件

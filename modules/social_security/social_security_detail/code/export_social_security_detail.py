@@ -170,13 +170,11 @@ class SocialSecurityDetailExportView(View):
 				one_row_dict["lump_sum"] = self.format_none(detail.lump_sum)
 				rows_list.append(one_row_dict.copy())
 			if rows_list:
-				# 实例化导出类
-				export_excel = ExportExcel()
-				export_excel.head_title_list = head_list
-				export_excel.field_name_list = field_list
-				export_excel.data_obj_list = rows_list
-				export_excel.sheetname = "social_security_detail"
-				export_excel.filename = "social_security_detail"
+				name = "social_security_detail"
+				param = dict(sheetname=name, head_title_list=head_list, field_name_list=field_list,
+							 data_obj_list=rows_list, filename=name)
+
+				export_excel = ExportExcel(**param)
 				filepath, filename = export_excel.export()
 
 				# 页面下载导出文件
