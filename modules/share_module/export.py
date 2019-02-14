@@ -98,7 +98,7 @@ class ExportExcel(object):
 
 
 class ExportWord(object):
-	def __int__(self, titles, content_list, filename, filepath):
+	def __init__(self, titles, content_list, filename, filepath):
 		"""生成指定名称word文件，
 		:param titles: 标题
 		:param content_list:内容列表
@@ -123,7 +123,7 @@ class ExportWord(object):
 
 
 class ExportTxt(object):
-	def __int__(self, titles, content_list, filename, filepath):
+	def __init__(self, titles, content_list, filename, filepath):
 		"""生成指定名称word文件，
 		:param titles: 标题
 		:param content_list:内容列表
@@ -148,16 +148,10 @@ class ExportTxt(object):
 
 
 if __name__ == "__main__":
-	word_obj = ExportWord()
-	word_obj.titles = u"文章标题\n"
-	word_obj.content_list = [u"时间：15455445", u"日期：45545"]
-	word_obj.filename = "ds.doc"
-	word_obj.filepath = "D:\\"
+	param = dict(titles="文章标题", content_list=["时间：15455445", "日期：45545"], filename="ds.doc", filepath="D:\\")
+	word_obj = ExportWord(**param)
 	word_obj.generate()
 
-	txt_obj = ExportTxt()
-	txt_obj.titles = u"文章标题"
-	txt_obj.content_list = [u"时间：15455445", u"日期：45545"]
-	txt_obj.filename = "ds.txt"
-	txt_obj.filepath = "D:\\"
+	param = dict(titles="文章标题", content_list=["时间：15455445", "日期：45545"], filename="ds.txt", filepath="D:\\")
+	txt_obj = ExportTxt(**param)
 	txt_obj.generate()
