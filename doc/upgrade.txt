@@ -1,0 +1,4 @@
+crontab：
+* 0 */3 * * /usr/local/nginx/logs/aa_nginx_access_log.sh
+0 */6 * * * /var/www/html/backmysql.sh
+0 2 * * * /var/www/html/ace_office/export.sh >> /tmp/export_emp.log

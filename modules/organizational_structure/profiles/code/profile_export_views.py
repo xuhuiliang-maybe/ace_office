@@ -86,6 +86,7 @@ class ProfileExportView(View):
 			export_excel.field_name_list = field_list
 			export_excel.data_obj_list = rows_list
 			export_excel.filename = "Profile"
+			export_excel.path = "tmp"
 			filepath, filename = export_excel.export()
 			# 页面下载导出文件
 			response = download_file(filepath, filename, True)
