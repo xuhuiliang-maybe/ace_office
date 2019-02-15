@@ -12,7 +12,7 @@ class Project(models.Model):
         ('1', u'是'),
         ('2', u'否'),
     )
-    number = models.CharField(u"项目编号", max_length=4, unique=True)  # 唯一
+    number = models.CharField(u"项目编号", max_length=10, unique=True)  # 唯一
     short_name = models.CharField(u"项目简称", max_length=50, blank=True)
     full_name = models.CharField(u"项目名称", max_length=200, blank=True)
     principal = models.ForeignKey(User, verbose_name=u"项目负责人", related_name="principal", on_delete=models.SET_NULL,
