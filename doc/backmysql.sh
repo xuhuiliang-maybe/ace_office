@@ -35,6 +35,7 @@ echo -e "结束执行备份：$end mysql$file.sql\n" >> $filedir/auto_backup.log
 
 # bpcs_uploader 备份到百度云盘
 /var/www/html/bpcs_uploader/bpcs_uploader.php upload $filedir/mysql$file.sql bangtai_db_backup/$file_path/mysql$file.sql
+/var/www/html/bpcs_uploader/bpcs_uploader.php delete bangtai_db_backup/$file_path/auto_backup.log
 /var/www/html/bpcs_uploader/bpcs_uploader.php upload $filedir/auto_backup.log bangtai_db_backup/$file_path/auto_backup.log
 
 fi
