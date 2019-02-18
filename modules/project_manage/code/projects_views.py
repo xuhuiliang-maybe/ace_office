@@ -24,6 +24,10 @@ class ProjectsList(ListView):
 		self.search_name = self.request.GET.get("search_name", "")
 		self.dept_ids = self.request.GET.get("dept_ids", "")
 		self.dept_name = self.request.GET.get("dept_name", "")
+		try:
+			self.progress_state = int(self.request.GET.get("progress_state", 1))  # 目前状态
+		except:
+			self.progress_state = 0
 
 		# 判断是否是客服部,是，只显示当前用户所属部门下信息
 		self.customer_service = 0
@@ -37,7 +41,8 @@ class ProjectsList(ListView):
 			self.customer_service = 1
 
 		search_condition = {
-			"full_name__icontains": self.search_name
+			"full_name__icontains": self.search_name,
+			"progress_state":self.progress_state
 		}
 		if self.dept_name:
 			search_condition.update({"department__name__in": self.dept_name.split(",")})
@@ -57,4 +62,6 @@ class ProjectsList(ListView):
 		context["search_name"] = self.search_name
 		context["customer_service"] = self.customer_service
 		context["project_info_type"] = project_info_type
+		context["progress_state_list"] = ProgressState.objects.all()
+		context["progress_state"] = self.progress_state
 		return context

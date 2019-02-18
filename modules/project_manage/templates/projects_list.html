@@ -71,11 +71,15 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <p>
-                                            <input type="text" id="dept_name" name="dept_name" placeholder="归属部门搜索"
-                                                   onclick="query_dept_param()" value="{{ dept_name }}" readonly/>
+                                            <input type="text" id="dept_name" name="dept_name" placeholder="归属部门搜索" onclick="query_dept_param()" value="{{ dept_name }}" readonly/>
                                             <input type="hidden" id="dept_ids" name="dept_ids" value="{{ dept_ids }}"/>
-                                            <input type="text" id="search_name" name="search_name" placeholder="项目名称"
-                                                   value="{{ search_name }}"/>
+                                            <input type="text" id="search_name" name="search_name" placeholder="项目名称" value="{{ search_name }}"/>
+                                            <select name="progress_state" id="progress_state">
+                                                <option value=0>目前状态</option>
+                                                {% for one_progress_state in progress_state_list %}
+                                                    <option value={{ one_progress_state.id }} {% if progress_state ==  one_progress_state.id %}selected{% endif %}>{{ one_progress_state.name }}</option>
+                                                {% endfor %}
+                                            </select>
                                         </p>
                                     </div>
                                 </div>

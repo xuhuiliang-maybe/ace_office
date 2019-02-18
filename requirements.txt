@@ -20,5 +20,5 @@ python-docx
 uwsgi==2.0.15
 request
 bypy
-
+MySQL-python
 

@@ -36,8 +36,7 @@ urlpatterns = [
 	url(r'^mysite/', include('modules.mysite.urls', namespace='mysite')),
 
 	# 组织架构
-	url(r'^organizational/',
-	    include('modules.organizational_structure.urls', namespace='organizational_structure')),
+	url(r'^organizational/', include('modules.organizational_structure.urls', namespace='organizational_structure')),
 
 	# 项目管理
 	url(r'^projectmanage/', include('modules.project_manage.urls', namespace='project_manage')),
