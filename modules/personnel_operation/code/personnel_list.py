@@ -41,5 +41,4 @@ class PersonnelList(ListView):
 		context["improve_status"] = self.improve_status
 		context["st_error_date"] = self.st_error_date
 		context["et_error_date"] = self.et_error_date
-		print context
 		return context

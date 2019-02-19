@@ -129,11 +129,9 @@ class DepartmentsListView(View):
 						result_dict[parent_id]["additionalParameters"]['children'].update(
 							new_sub_dict)
 						return True
-					elif result_dict[index]["additionalParameters"]['children']:
+					elif result_dict[index].get("additionalParameters", {}).get('children'):
 						# 递归调用，查询树形节点域当前节点的关系
-						if self.update_result_dict(
-							result_dict[index]["additionalParameters"]['children'],
-							dept_obj):
+						if self.update_result_dict(result_dict[index]["additionalParameters"]['children'], dept_obj):
 							return True
 					elif parent_id != 0:
 						self.not_find_parent.append(dept_obj)

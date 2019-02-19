@@ -82,8 +82,6 @@ class ProfileLoadView(View):
 					else:
 						import_num += 1  # 新增导入
 
-					print str(get_excel_int(row[10]))
-					print len(str(get_excel_int(row[10])))
 					User.objects.filter(username=row[4]).update(
 						password=make_password("111111"),
 						company=row[1],  # 公司名称
