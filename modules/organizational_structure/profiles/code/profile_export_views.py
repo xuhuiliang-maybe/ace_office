@@ -33,6 +33,12 @@ class ProfileExportView(View):
                       "is_superuser",
                       "is_staff"]
 
+        head_list = [u'公司名称', u'用户名', u'姓名', u'性别', u'岗位', u'手机号', u'座机号', u'办公通讯地址', u'入职时间',
+                     u'在职(有效)', u'部门负责人状态', u'超级用户状态', u'职员状态']
+        field_list = ["company", "username", "first_name",
+                      "gender", "position", "mobile_phone", "telephone", "address", "date_joined",
+                      "is_active", "dept_head", "is_superuser", "is_staff"]
+
         try:
             self.dept_ids = self.request.GET.get("dept_ids", "")
             self.dept_name = self.request.GET.get("dept_name", "")

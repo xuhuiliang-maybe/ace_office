@@ -84,29 +84,29 @@
                                 <span class="lbl"></span>
                             </label>
                         </th>
-                        <th class="center">编号</th>
+                        <th class="center">序号</th>
                         <th class="center">公司名称</th>
-                        <th class="center">一级部门</th>
-                        <th class="center">二级部门</th>
+{#                        <th class="center">一级部门</th>#}
+{#                        <th class="center">二级部门</th>#}
                         <th class="center">用户名</th>
                         <th class="center">姓名</th>
                         <th class="center">性别</th>
                         <th class="center">岗位</th>
-                        <th class="center">直线上级</th>
-                        <th class="center">邮箱</th>
+{#                        <th class="center">直线上级</th>#}
+{#                        <th class="center">邮箱</th>#}
                         <th class="center">手机号</th>
                         <th class="center">座机号</th>
                         <th class="center">办公通讯地址</th>
-                        <th class="center">审批假条</th>
-                        <th class="center">审批借款</th>
-                        <th class="center">审批涨薪</th>
+{#                        <th class="center">审批假条</th>#}
+{#                        <th class="center">审批借款</th>#}
+{#                        <th class="center">审批涨薪</th>#}
                         <th class="center">入职时间(加入时间)</th>
                         <th class="center">在职(有效)</th>
                         <th class="center">部门负责人状态</th>
                         <th class="center">超级用户状态</th>
                         <th class="center">职员状态</th>
-                        <th class="center">备注1</th>
-                        <th class="center">备注2</th>
+{#                        <th class="center">备注1</th>#}
+{#                        <th class="center">备注2</th>#}
                         <th class="center">操作</th>
                     </tr>
                     </thead>
@@ -123,8 +123,8 @@
 
                             <td>{{ forloop.counter }}</td>
                             <td>{{ profile.company }}</td>
-                            <td>{{ profile.one_level_dept }}</td>
-                            <td>{{ profile.attribution_dept }}</td>
+{#                            <td>{{ profile.one_level_dept }}</td>#}
+{#                            <td>{{ profile.attribution_dept }}</td>#}
                             <td>
                                 <a href="{% url "organizational_structure:profile:profile_edit" pk=profile.id %}">
                                     {{ profile.username }}
@@ -133,21 +133,21 @@
                             <td>{{ profile.first_name }}</td>
                             <td>{{ profile.gender | selectgender }}</td>
                             <td>{{ profile.position.name }}</td>
-                            <td>{{ profile.higher_up }}</td>
-                            <td>{{ profile.email }}</td>
+{#                            <td>{{ profile.higher_up }}</td>#}
+{#                            <td>{{ profile.email }}</td>#}
                             <td>{{ profile.mobile_phone }}</td>
                             <td>{{ profile.telephone }}</td>
                             <td>{{ profile.address }}</td>
-                            <td>{{ profile.authorize_leave }} 天</td>
-                            <td>{{ profile.authorize_loan }} ￥</td>
-                            <td>{{ profile.authorize_wage }} ￥</td>
+{#                            <td>{{ profile.authorize_leave }} 天</td>#}
+{#                            <td>{{ profile.authorize_loan }} ￥</td>#}
+{#                            <td>{{ profile.authorize_wage }} ￥</td>#}
                             <td>{{ profile.date_joined | date }}</td>
                             <td>{{ profile.is_active | true_false_formater | safe }}</td>
                             <td>{{ profile.dept_head | true_false_formater | safe }}</td>
                             <td>{{ profile.is_superuser | true_false_formater | safe }}</td>
                             <td>{{ profile.is_staff | true_false_formater | safe }}</td>
-                            <td>{{ profile.remark1 }}</td>
-                            <td>{{ profile.remark2 }}</td>
+{#                            <td>{{ profile.remark1 }}</td>#}
+{#                            <td>{{ profile.remark2 }}</td>#}
 
                             <td>
 
