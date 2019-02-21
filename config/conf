@@ -25,6 +25,7 @@ host=47.93.229.122
 [sys]
 memcached=memcached://127.0.0.1:11211/?timeout=86400
 paginate=10
+superusername=taoyuzhu
 
 [service]
 debug=1

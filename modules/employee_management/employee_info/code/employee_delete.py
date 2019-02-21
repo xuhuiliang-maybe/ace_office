@@ -11,6 +11,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 from django.views.generic.edit import DeleteView
 
+from config.conf_core import SUPERUSERNAME
 from modules.employee_management.employee_info.models import Employee
 from modules.share_module.check_decorator import check_principal, check_user_is_songxiaodan
 from modules.share_module.permissionMixin import class_view_decorator
@@ -51,7 +52,7 @@ class EmployeesBatchDelete(SuccessMessageMixin, View):
 			if ids[0] == "all":
 				if request.user.is_superuser:
 					employee_obj.filter(status="1").delete()
-					if request.user.username == "songxiaodan":
+					if request.user.username == SUPERUSERNAME:
 						employee_obj.all.delete()
 					messages.success(self.request, u"成功删除")
 					result = {"code": -1, "msg": u"成功删除"}
@@ -68,7 +69,7 @@ class EmployeesBatchDelete(SuccessMessageMixin, View):
 					except:
 						project_principal = None
 					if project_principal == request.user or request.user.is_superuser:  # 是项目负责人或超级管理员
-						if one_obj.status == "1" or request.user.username == "songxiaodan":  # 员工在职或用户时宋晓丹
+						if one_obj.status == "1" or request.user.username == SUPERUSERNAME:  # 员工在职或用户时宋晓丹
 							one_obj.delete()
 				except:
 					traceback.print_exc()
