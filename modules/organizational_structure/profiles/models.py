@@ -51,7 +51,7 @@ class Profile(ProfileUser):
 	authorize_wage = models.PositiveIntegerField(u"可审批涨薪金额", default=0, blank=True)
 	photo = models.ImageField(u"头像", upload_to='user_photo', default='/static/avatars/avatar2.png', blank=True)
 	address = models.CharField(u"办公通讯地址", max_length=256, blank=True)
-	remark1 = models.CharField(u"备注1", max_length=256, blank=True)
+	remark1 = models.CharField(u"户籍地址", max_length=256, blank=True)
 	remark2 = models.CharField(u"备注2", max_length=256, blank=True)
 	remark3 = models.CharField(u"备注3", max_length=256, blank=True)
 	remark4 = models.CharField(u"备注4", max_length=256, blank=True)

@@ -19,27 +19,26 @@ class ProfileUpdate(SuccessMessageMixin, UpdateView):
 	# 保持与列表页相同顺序
 	fields = (
 		"company",
-		"one_level_dept",
-		"attribution_dept",
+		# "one_level_dept",
+		# "attribution_dept",
 		"username",
 		"first_name",
 		"gender",
 		"position",
-		"higher_up",
-		"email",
+		# "higher_up",
+		# "email",
 		"mobile_phone",
 		"telephone",
 		"address",
-		"authorize_leave",
-		"authorize_loan",
-		"authorize_wage",
+		"remark1",
+		# "authorize_leave",
+		# "authorize_loan",
+		# "authorize_wage",
 		"date_joined",
 		"is_active",
 		"dept_head",
 		"is_superuser",
 		"is_staff",
-		"remark1",
-		"remark2"
 	)
 
 	def get_success_url(self):

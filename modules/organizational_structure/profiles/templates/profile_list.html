@@ -97,6 +97,7 @@
                         <th class="center">手机号</th>
                         <th class="center">座机号</th>
                         <th class="center">办公通讯地址</th>
+                        <th class="center">户籍地址</th>
 {#                        <th class="center">审批假条</th>#}
 {#                        <th class="center">审批借款</th>#}
 {#                        <th class="center">审批涨薪</th>#}
@@ -105,8 +106,6 @@
                         <th class="center">部门负责人状态</th>
                         <th class="center">超级用户状态</th>
                         <th class="center">职员状态</th>
-{#                        <th class="center">备注1</th>#}
-{#                        <th class="center">备注2</th>#}
                         <th class="center">操作</th>
                     </tr>
                     </thead>
@@ -138,6 +137,7 @@
                             <td>{{ profile.mobile_phone }}</td>
                             <td>{{ profile.telephone }}</td>
                             <td>{{ profile.address }}</td>
+                            <td>{{ profile.remark1 }}</td>
 {#                            <td>{{ profile.authorize_leave }} 天</td>#}
 {#                            <td>{{ profile.authorize_loan }} ￥</td>#}
 {#                            <td>{{ profile.authorize_wage }} ￥</td>#}
@@ -146,8 +146,6 @@
                             <td>{{ profile.dept_head | true_false_formater | safe }}</td>
                             <td>{{ profile.is_superuser | true_false_formater | safe }}</td>
                             <td>{{ profile.is_staff | true_false_formater | safe }}</td>
-{#                            <td>{{ profile.remark1 }}</td>#}
-{#                            <td>{{ profile.remark2 }}</td>#}
 
                             <td>
 
