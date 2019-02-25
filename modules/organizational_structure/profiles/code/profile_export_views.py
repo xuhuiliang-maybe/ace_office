@@ -33,10 +33,10 @@ class ProfileExportView(View):
                       "is_superuser",
                       "is_staff"]
 
-        head_list = [u'公司名称', u'用户名', u'姓名', u'性别', u'岗位', u'手机号', u'座机号', u'办公通讯地址', u'入职时间',
+        head_list = [u'公司名称', u'用户名', u'姓名', u'性别', u'岗位', u'手机号', u'座机号', u'办公通讯地址', u'户籍地址', u'入职时间',
                      u'在职(有效)', u'部门负责人状态', u'超级用户状态', u'职员状态']
         field_list = ["company", "username", "first_name",
-                      "gender", "position", "mobile_phone", "telephone", "address", "date_joined",
+                      "gender", "position", "mobile_phone", "telephone", "address", "remark1", "date_joined",
                       "is_active", "dept_head", "is_superuser", "is_staff"]
 
         try:
@@ -71,6 +71,7 @@ class ProfileExportView(View):
                 one_row_dict["mobile_phone"] = one_user_obj.mobile_phone  # 手机号
                 one_row_dict["telephone"] = one_user_obj.telephone  # 座机号
                 one_row_dict["address"] = one_user_obj.address  # 办公通讯地址
+                one_row_dict["remark1"] = one_user_obj.remark1  # 户籍地址
                 one_row_dict["authorize_leave"] = int(one_user_obj.authorize_leave)  # 审批请假天数
                 one_row_dict["authorize_loan"] = int(one_user_obj.authorize_loan)  # 审批借款金额
                 one_row_dict["authorize_wage"] = int(one_user_obj.authorize_wage)  # 审批工资金额
