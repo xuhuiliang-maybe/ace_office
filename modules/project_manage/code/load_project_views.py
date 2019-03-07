@@ -100,15 +100,7 @@ class LoadProjectView(View):
                             no_project_num += 1
                             continue
 
-                        project_obj = Project.objects.filter(number=project_number)
-
-                        # 信息已存在，没有创建新的，对已有数据做更新
-                        if project_obj.exists():
-                            repeat_num += 1  # 重复导入数
-                            project_obj.update(principal=self.get_principal(row))
-                            continue
-
-                        Project.objects.create(
+                        info_dict = dict(
                             number=project_number,
                             short_name=row[1],  # 项目简称
                             full_name=row[2],  # 项目名称
@@ -224,6 +216,15 @@ class LoadProjectView(View):
                             nov=row[86],  # 11月
                             dec=row[87],  # 12月
                         )
+                        # 信息已存在，没有创建新的，对已有数据做更新
+                        project_obj = Project.objects.filter(number=project_number)
+                        if project_obj.exists():
+                            repeat_num += 1  # 重复导入数
+                            project_obj.update(**info_dict)
+                            continue
+
+                        Project.objects.create(**info_dict)
+                        import_num += 1
                     except:
                         messages_warning += str(rowindex) + ","
                         traceback.print_exc()
@@ -232,10 +233,10 @@ class LoadProjectView(View):
             if messages_warning:
                 messages.warning(self.request, messages_warning + u"行数据格式错误！")
 
-            msg = u"导入成功，记录总数：%s，" % total
-            if import_num: msg += u"成功导入：%s，" % import_num
-            if repeat_num: msg += u"重复记录(忽略)：%s，" % repeat_num
-            if no_project_num: msg += u"无项目编号记录(忽略)：%s，" % no_project_num
+            msg = u"导入成功，记录总数：%s条，" % total
+            if import_num: msg += u"新增：%s条，" % import_num
+            if repeat_num: msg += u"更新：%s条，" % repeat_num
+            if no_project_num: msg += u"无项目编号(忽略)：%s条，" % no_project_num
             messages.success(self.request, msg)
 
             return redirect(reverse('project_manage:project_list', args=("basic_info",)))
