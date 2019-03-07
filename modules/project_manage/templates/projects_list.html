@@ -201,11 +201,19 @@
                         {% endif %}
 
                         {% if project_info_type == "billing_info" %}
-                            <th class="center">发票类型</th>
                             <th class="center">发票抬头</th>
-                            <th class="center">发票科目</th>
+                            <th class="center">开票方式</th>
+                            <th class="center">专票科目</th>
+                            <th class="center">专票费用内容</th>
+                            <th class="center">专票说明</th>
+                            <th class="center">普票科目</th>
+                            <th class="center">普票费用内容</th>
+                            <th class="center">普票说明</th>
+                            <th class="center">发票接收人</th>
+                            <th class="center">电话</th>
+                            <th class="center">地址</th>
+                            <th class="center">快递说明</th>
                             <th class="center">发票开具时间</th>
-                            <th class="center">发票邮寄地址及联系人</th>
                             <th class="center">是否一般纳税人</th>
                             <th class="center">纳税人识别号</th>
                             <th class="center">地址</th>
@@ -333,11 +341,20 @@
                                 <td>{{ project.dec | default_if_none:"" }}</td>
                             {% endif %}
                             {% if project_info_type == "billing_info" %}
-                                <td>{{ project.invoice_type.name }}</td>
                                 <td>{{ project.invoice_title }}</td>
-                                <td>{{ project.invoice_subject }}</td>
-                                <td>{{ project.invoice_open_date | default_if_none:"" }}</td>
+                                <td>{{ project.invoice_mode }}</td>
+                                <td>{{ project.special_subject }}</td>
+                                <td>{{ project.special_cost }}</td>
+                                <td>{{ project.special_desc }}</td>
+                                <td>{{ project.general_subject }}</td>
+                                <td>{{ project.general_cost }}</td>
+                                <td>{{ project.general_desc }}</td>
+                                <td>{{ project.invoice_receiver }}</td>
+                                <td>{{ project.invoice_receiver }}</td>
+                                <td>{{ project.invoice_phone }}</td>
                                 <td>{{ project.invoice_mail }}</td>
+                                <td>{{ project.fast_mail_desc }}</td>
+                                <td>{{ project.invoice_open_date | default_if_none:"" }}</td>
                                 <td>{{ project.get_is_general_taxpayer_display }}</td>
                                 <td>{{ project.taxpayer_identifier }}</td>
                                 <td>{{ project.address }}</td>

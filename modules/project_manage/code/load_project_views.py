@@ -174,47 +174,55 @@ class LoadProjectView(View):
                             other_project=row[43],  # 其他需要我司代收代付项目
 
                             # 开票信息
-                            invoice_type=InvoiceType.get_dict_item_by_name(row[44]),  # 发票类型
-                            invoice_title=row[45],  # 发票抬头
-                            invoice_subject=row[46],  # 发票科目
-                            invoice_open_date=row[47],  # 发票开据时间
-                            invoice_mail=row[48],  # 发票邮寄地址及联系人
-                            is_general_taxpayer=true_false_unformat_new(row[49]),  # 是否一般纳税人
-                            taxpayer_identifier=row[50],  # 纳税人识别号
-                            address=row[51],  # 地址
-                            phone=row[52],  # 电话
-                            bank=row[53],  # 开户行
-                            account_number=row[54],  # 账号
+                            invoice_title=row[44],  # 发票抬头
+                            invoice_mode=row[45],  # 开票方式
+                            special_subject=row[46],  # 专票科目
+                            special_cost=row[47],  # 专票费用内容
+                            special_desc=row[48],  # 专票说明
+                            general_subject=row[49],  # 普票科目
+                            general_cost=row[50],  # 普票费用内容
+                            general_desc=row[51],  # 普票说明
+                            invoice_receiver=row[52],  # 发票接收人
+                            invoice_phone=row[53],  # 电话
+                            invoice_mail=row[54],  # 地址
+                            fast_mail_desc=row[55],  # 快递说明
+                            invoice_open_date=row[56],  # 发票开据时间
+                            is_general_taxpayer=true_false_unformat_new(row[57]),  # 是否一般纳税人
+                            taxpayer_identifier=row[58],  # 纳税人识别号
+                            address=row[59],  # 地址
+                            phone=row[60],  # 电话
+                            bank=row[61],  # 开户行
+                            account_number=row[62],  # 账号
 
                             # 销售信息
-                            salesman=Profile.get_user_by_username_or_first_name(row[55]),
+                            salesman=Profile.get_user_by_username_or_first_name(row[63]),
                             # 销售人员
-                            sales_type=SalesType.get_dict_item_by_name(row[56]),  # 销售类型
-                            dispatch_commission=get_excel_float(row[57]),  # 派遣提成标准
-                            remark1=row[58],
-                            outsourc_commission=get_excel_float(row[59]),  # 外包提成标准
-                            remark2=row[60],
-                            proxy_personnel_commission=get_excel_float(row[61]),  # 代理人事提成标准
-                            remark3=row[62],
-                            proxy_recruitment_commission=get_excel_float(row[63]),  # 代理招聘提成标准
-                            remark4=row[64],
-                            hourly_commission=get_excel_float(row[65]),  # 小时工提成标准
-                            remark5=row[66],
+                            sales_type=SalesType.get_dict_item_by_name(row[64]),  # 销售类型
+                            dispatch_commission=get_excel_float(row[65]),  # 派遣提成标准
+                            remark1=row[66],
+                            outsourc_commission=get_excel_float(row[67]),  # 外包提成标准
+                            remark2=row[68],
+                            proxy_personnel_commission=get_excel_float(row[69]),  # 代理人事提成标准
+                            remark3=row[70],
+                            proxy_recruitment_commission=get_excel_float(row[71]),  # 代理招聘提成标准
+                            remark4=row[72],
+                            hourly_commission=get_excel_float(row[73]),  # 小时工提成标准
+                            remark5=row[74],
 
                             # 招聘单价
-                            recruit_difficulty=row[67],  # 招聘难度系数
-                            jan=row[68],  # 1月
-                            feb=row[69],  # 2月
-                            mar=row[70],  # 3月
-                            apr=row[71],  # 4月
-                            may=row[72],  # 5月
-                            jun=row[73],  # 6月
-                            jul=row[74],  # 7月
-                            aug=row[75],  # 8月
-                            sep=row[76],  # 9 月
-                            oct=row[77],  # 10月
-                            nov=row[78],  # 11月
-                            dec=row[79],  # 12月
+                            recruit_difficulty=row[75],  # 招聘难度系数
+                            jan=row[76],  # 1月
+                            feb=row[77],  # 2月
+                            mar=row[78],  # 3月
+                            apr=row[79],  # 4月
+                            may=row[80],  # 5月
+                            jun=row[81],  # 6月
+                            jul=row[82],  # 7月
+                            aug=row[83],  # 8月
+                            sep=row[84],  # 9 月
+                            oct=row[85],  # 10月
+                            nov=row[86],  # 11月
+                            dec=row[87],  # 12月
                         )
                     except:
                         messages_warning += str(rowindex) + ","

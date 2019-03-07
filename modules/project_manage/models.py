@@ -88,11 +88,20 @@ class Project(models.Model):
 
     # 开票信息
     invoice_type = models.ForeignKey(InvoiceType, verbose_name=u"发票类型", blank=True, null=True,
-                                     on_delete=models.SET_NULL)
+                                     on_delete=models.SET_NULL, editable=False)
     invoice_title = models.CharField(u"发票抬头", max_length=200, blank=True)
-    invoice_subject = models.CharField(u"发票科目", max_length=200, blank=True)
+    invoice_mode = models.CharField(u"开票方式", max_length=200, blank=True)
+    special_subject = models.CharField(u"专票科目", max_length=200, blank=True)
+    special_cost = models.TextField(u"专票费用内容 ", max_length=300, blank=True)
+    special_desc = models.TextField(u"专票说明 ", max_length=300, blank=True)
+    general_subject = models.CharField(u"普票科目 ", max_length=200, blank=True)
+    general_cost = models.TextField(u"普票费用内容 ", max_length=300, blank=True)
+    general_desc = models.TextField(u"普票说明 ", max_length=300, blank=True)
+    invoice_receiver = models.CharField(u"发票接收人 ", max_length=200, blank=True)
+    invoice_phone = models.CharField(u"电话 ", max_length=200, blank=True)
+    invoice_mail = models.TextField(u"地址", max_length=300, blank=True)
+    fast_mail_desc = models.TextField(u"快递说明 ", max_length=300, blank=True)
     invoice_open_date = models.CharField(u"发票开具时间", max_length=200, blank=True)
-    invoice_mail = models.TextField(u"发票邮寄地址及联系人", max_length=300, blank=True)
     is_general_taxpayer = models.CharField(u"是否一般纳税人", max_length=2, blank=True, choices=IS_GENERAL_TAXPAYER,
                                            default="2")
     taxpayer_identifier = models.CharField(u"纳税人识别号", max_length=200, blank=True)
