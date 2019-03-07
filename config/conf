@@ -1,4 +1,4 @@
-[database-]
+[database]
 engine=sqlite3
 dbname=db.sqlite3
 username=
@@ -6,7 +6,7 @@ password=
 host=
 port=
 
-[database]
+[database-]
 engine=mysql
 dbname=aces
 username=root
