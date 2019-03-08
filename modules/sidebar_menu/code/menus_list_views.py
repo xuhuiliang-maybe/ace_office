@@ -38,8 +38,8 @@ class SidebarMenusList(View):
 				 "icon": "menu-icon fa fa-sitemap",
 				 "url": "",
 				 "menus": [
-					 {'permissions': 'admin_account.browse_structure', "show": True,
-					  "text": u"组织架构图", "icon": "", "url": "/organizational/structure"},
+					 # {'permissions': 'admin_account.browse_structure', "show": True,
+					 #  "text": u"组织架构图", "icon": "", "url": "/organizational/structure"},
 					 {'permissions': 'departments.browse_department', "show": True, "text": u"部门信息",
 					  "icon": "", "url": "/organizational/departments/list"},
 					 {'permissions': 'admin_account.browse_user', "show": True, "text": u"管理人员",

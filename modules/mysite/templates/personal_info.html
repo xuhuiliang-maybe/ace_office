@@ -1,4 +1,5 @@
 {% extends "base/base.html" %}
+{% load share_module_tags %}
 
 {% block css %}
     <link rel="stylesheet" href="/static/css/jquery-ui.custom.css"/>
@@ -17,19 +18,19 @@
             <div>
                 <div id="user-profile-1" class="user-profile row">
                     <div class="col-xs-12 col-sm-3 center">
-                        <div>
-                            <!-- #section:pages/profile.picture -->
-                            <span class="profile-picture">
-                                <img id="avatar" class="editable img-responsive" alt="{{ request.user.first_name }}"
-                                     src="{{ request.user.photo.url }}"/>
-                            </span>
+{#                        <div>#}
+{#                            <!-- #section:pages/profile.picture -->#}
+{#                            <span class="profile-picture">#}
+{#                                <img id="avatar" class="editable img-responsive" alt="{{ request.user.first_name }}"#}
+{#                                     src="{{ request.user.photo.url }}"/>#}
+{#                            </span>#}
+{##}
+{#                            <!-- /section:pages/profile.picture -->#}
+{#                            <div class="space-4"></div>#}
+{##}
+{#                        </div>#}
 
-                            <!-- /section:pages/profile.picture -->
-                            <div class="space-4"></div>
-
-                        </div>
-
-                        <div class="space-6"></div>
+{#                        <div class="space-6"></div>#}
 
 
                         <!-- /section:pages/profile.contact -->
@@ -56,7 +57,7 @@
                         <!--<div class="hr hr16 dotted"></div>-->
                     </div>
 
-                    <div class="col-xs-12 col-sm-9">
+                    <div class="col-xs-12 col-sm-12">
                         <!--<div class="center">
                             <span class="btn btn-app btn-sm btn-light no-hover">
                                 <span class="line-height-1 bigger-170 blue"> 0 </span>
@@ -106,10 +107,18 @@
                         <!-- #section:pages/profile.info -->
                         <div class="profile-user-info profile-user-info-striped">
                             <div class="profile-info-row">
-                                <div class="profile-info-name"> 姓名</div>
+                                <div class="profile-info-name">公司名称</div>
 
                                 <div class="profile-info-value">
-                                    <span class="editable" id="first_name">{{ request.user.first_name }}</span>
+                                    <span class="editable" id="company">{{ request.user.company | default_if_none:""}}</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">姓名</div>
+
+                                <div class="profile-info-value">
+                                    <span class="editable" id="first_name">{{ request.user.first_name | default_if_none:""}}</span>
                                 </div>
                             </div>
 
@@ -117,7 +126,15 @@
                                 <div class="profile-info-name">用户名</div>
 
                                 <div class="profile-info-value">
-                                    <span class="editable" id="username">{{ request.user.username }}</span>
+                                    <span class="editable" id="username">{{ request.user.username | default_if_none:""}}</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">岗位</div>
+
+                                <div class="profile-info-value">
+                                    <span class="editable" id="position">{{ request.user.position | default_if_none:"" }}</span>
                                 </div>
                             </div>
 
@@ -125,7 +142,7 @@
                                 <div class="profile-info-name">办公通讯地址</div>
 
                                 <div class="profile-info-value">
-                                    <span class="editable" id="address">{{ request.user.address }}</span>
+                                    <span class="editable" id="address">{{ request.user.address | default_if_none:""}}</span>
                                 </div>
                             </div>
 
@@ -133,7 +150,7 @@
                                 <div class="profile-info-name">邮箱</div>
 
                                 <div class="profile-info-value">
-                                    <span class="editable" id="email">{{ request.user.email }}</span>
+                                    <span class="editable" id="email">{{ request.user.email | default_if_none:""}}</span>
                                 </div>
                             </div>
 
@@ -141,21 +158,48 @@
                                 <div class="profile-info-name">座机号</div>
 
                                 <div class="profile-info-value">
-                                    <span class="editable" id="telephone">{{ request.user.telephone }}</span>
+                                    <span class="editable" id="telephone">{{ request.user.telephone | default_if_none:""}}</span>
                                 </div>
                             </div>
+
                             <div class="profile-info-row">
                                 <div class="profile-info-name">手机号</div>
 
                                 <div class="profile-info-value">
-                                    <span class="editable" id="mobile_phone">{{ request.user.mobile_phone }}</span>
+                                    <span class="editable" id="mobile_phone">{{ request.user.mobile_phone | default_if_none:""}}</span>
                                 </div>
                             </div>
+
                             <div class="profile-info-row">
-                                <div class="profile-info-name"> 注册时间</div>
+                                <div class="profile-info-name">户籍地址</div>
 
                                 <div class="profile-info-value">
-                                    <span class="editable" id="signup">{{ request.user.date_joined }}</span>
+                                    <span class="editable" id="remark1">{{ request.user.remark1 | default_if_none:""}}</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">部门负责人</div>
+
+                                <div class="profile-info-value">
+                                    <span class="editable" id="dept_head">{{ request.user.dept_head | true_false_formater | safe}}</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">超级管理员</div>
+
+                                <div class="profile-info-value">
+                                    <span class="editable"
+                                          id="is_superuser">{{ request.user.is_superuser | true_false_formater | safe }}</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">入职时间(加入时间)</div>
+
+                                <div class="profile-info-value">
+                                    <span class="editable" id="signup">{{ request.user.date_joined | default_if_none:""}}</span>
                                 </div>
                             </div>
 
@@ -163,7 +207,7 @@
                                 <div class="profile-info-name"> 最近登录</div>
 
                                 <div class="profile-info-value">
-                                    <span class="editable" id="login">{{ request.user.last_login }}</span>
+                                    <span class="editable" id="login">{{ request.user.last_login | default_if_none:""}}</span>
                                 </div>
                             </div>
 
@@ -266,7 +310,8 @@
             //editables
 
             //text editable
-            $('#address').editable({
+            /**
+             $('#address').editable({
                 type: 'text',
                 name: 'address',
                 url: '{% url "mysite:personal_edit" %}',
@@ -275,7 +320,7 @@
                     layer.open({title: '提示', content: response});
                 }
             });
-            $('#email').editable({
+             $('#email').editable({
                 type: 'email',
                 name: 'email',
                 url: '{% url "mysite:personal_edit" %}',
@@ -284,7 +329,7 @@
                     alert(response)
                 }
             });
-            $('#telephone').editable({
+             $('#telephone').editable({
                 type: 'text',
                 name: 'telephone',
                 url: '{% url "mysite:personal_edit" %}',
@@ -293,7 +338,7 @@
                     layer.open({title: '提示', content: response});
                 }
             });
-            $('#mobile_phone').editable({
+             $('#mobile_phone').editable({
                 type: 'text',
                 name: 'mobile_phone',
                 url: '{% url "mysite:personal_edit" %}',
@@ -302,7 +347,7 @@
                     alert(response)
                 }
             });
-
+             **/
             // *** editable avatar *** //
             try {//ie8 throws some harmless exceptions, so let's catch'em
 
