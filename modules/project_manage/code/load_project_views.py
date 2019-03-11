@@ -217,7 +217,7 @@ class LoadProjectView(View):
                             dec=row[87],  # 12月
                         )
                         # 信息已存在，没有创建新的，对已有数据做更新
-                        project_obj = Project.objects.filter(number=project_number)
+                        project_obj = Project.objects.filter(full_name=row[2])
                         if project_obj.exists():
                             repeat_num += 1  # 重复导入数
                             project_obj.update(**info_dict)
