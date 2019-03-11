@@ -152,7 +152,6 @@ class Project(models.Model):
         verbose_name = u"项目信息"
         verbose_name_plural = u"项目信息s"
         ordering = ['-id']  # id倒叙
-        index_together = ["number", "full_name"]  # 索引字段组合
         permissions = (
             ("browse_basic_info", u"浏览 项目基础信息"),
 
