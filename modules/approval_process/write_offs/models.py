@@ -103,8 +103,8 @@ class WriteOffsDetails(models.Model):
 	department = models.ForeignKey(Department, verbose_name=u"费用部门")
 	project_name = models.CharField(u"费用项目", max_length=255, blank=True, null=True)
 	cost_sharing = models.CharField(u"费用分摊方式", max_length=1, choices=COST_SHARING_CHOICE)
-	cost_detail = models.TextField(u"费用明细说明", max_length=300)
-	invoice_situation = models.TextField(u"发票情况", max_length=300)
+	cost_detail = models.TextField(u"费用明细说明")
+	invoice_situation = models.TextField(u"发票情况")
 	payee = models.ForeignKey(User, verbose_name=u"领款人", related_name="writeoffsdetail_payee")
 	remark = models.CharField(u"备注", max_length=256, null=True, blank=True)
 

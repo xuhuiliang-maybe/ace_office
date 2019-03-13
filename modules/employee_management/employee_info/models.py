@@ -146,7 +146,7 @@ class Employee(models.Model):
     education = models.CharField(u"学历", max_length=10, choices=EDUCATION_CHOICES, blank=True)
     birthday = models.DateField(u"出生年月", blank=True, null=True)
     age = models.PositiveIntegerField(u"员工年龄", blank=True, default=0, help_text=u"选填，可由身份证号计算")
-    register_address = models.CharField(u"户口所在地", max_length=100, blank=True)
+    register_address = models.TextField(u"户口所在地", blank=True)
     register_postcode = models.CharField(u"户口邮编", max_length=20, blank=True)
     register_type = models.CharField(u"户口性质", max_length=20, choices=REGISTERTYPE_CHOICES, blank=True)
     work_address = models.CharField(u"工作地", max_length=256, blank=True)

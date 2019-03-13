@@ -34,7 +34,7 @@ class Public(models.Model):
 	"""申请模型公用基类 """
 
 	title = models.CharField(u"申请标题", max_length=100)
-	note = models.TextField(u"申请说明", max_length=256)
+	note = models.TextField(u"申请说明")
 	created = models.DateTimeField(u"申请时间", auto_now_add=True)
 	handle_date = models.DateTimeField(u"审批时间", blank=True, null=True)
 	reason = models.CharField(u"审批回复", max_length=100, blank=True)
