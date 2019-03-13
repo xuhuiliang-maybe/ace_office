@@ -48,9 +48,10 @@ class ProjectsList(ListView):
         if self.dept_name:
             search_condition.update({"department__name__in": self.dept_name.split(",")})
         else:
-            if not self.request.user.is_superuser:
+            if not self.request.user.is_superuser and not self.request.user.dept_head:
                 managements = map(int, self.request.user.remark2.split(",")) if self.request.user.remark2 else []
                 search_condition.update({"department__id__in": managements})
+
         kwargs = get_kwargs(search_condition)
         return Project.objects.filter(**kwargs)
 
