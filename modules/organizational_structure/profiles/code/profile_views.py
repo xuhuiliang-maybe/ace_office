@@ -29,11 +29,11 @@ class ProfileList(ListView):
         if self.dept_name:
             search_condition.update({"attribution_dept__in": self.dept_name.split(",")})
         else:
-            if not self.request.user.is_superuser and not self.request.user.dept_head:
+            if not self.request.user.is_superuser:
                 managements = map(int, self.request.user.remark2.split(",")) if self.request.user.remark2 else []
                 department_name_list = Department.objects.filter(id__in=managements).values_list("name", flat=True)
                 search_condition.update({"attribution_dept__in": department_name_list})
-                
+
         kwargs = get_kwargs(search_condition)
         return User.objects.filter(**kwargs)
 
