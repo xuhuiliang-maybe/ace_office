@@ -5,6 +5,7 @@ from collections import defaultdict
 from django.contrib.auth.models import User
 from django.views.generic import View
 
+from modules.organizational_structure.departments.models import Department
 from modules.share_module.download import download_file
 from modules.share_module.export import ExportExcel
 from modules.share_module.formater import true_false_formater
@@ -49,6 +50,12 @@ class ProfileExportView(View):
             }
             if self.dept_name:
                 search_condition.update({"attribution_dept__in": self.dept_name.split(",")})
+            else:
+                if not self.request.user.is_superuser:
+                    managements = map(int, self.request.user.remark2.split(",")) if self.request.user.remark2 else []
+                    department_name_list = Department.objects.filter(id__in=managements).values_list("name", flat=True)
+                    search_condition.update({"attribution_dept__in": department_name_list})
+
             kwargs = get_kwargs(search_condition)
             user_obj_list = User.objects.filter(**kwargs)
 
