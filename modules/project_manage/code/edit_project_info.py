@@ -144,9 +144,8 @@ class ProjectSettleAccountsInfoUpdate(SuccessMessageMixin, UpdateView):
 class ProjectBillingInfoUpdate(SuccessMessageMixin, UpdateView):
 	model = Project
 	template_name = "projects_edit.html"
-	success_message = u"%(invoice_type)s 成功修改"
-	fields = [
-		"invoice_type", "invoice_title", "invoice_subject", "invoice_open_date", "invoice_mail",
+	success_message = u"%(invoice_title)s 成功修改"
+	fields = ["invoice_title", "invoice_open_date", "invoice_mail",
 		"is_general_taxpayer", "taxpayer_identifier", "address", "phone", "bank", "account_number",
 	]
 
