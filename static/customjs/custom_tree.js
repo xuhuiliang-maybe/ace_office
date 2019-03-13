@@ -13,14 +13,14 @@ function self_init_tree(IdNameString, MultiSelectBool, TreeDataDict) {
         'open-icon': 'ace-icon fa fa-folder-open',
         'close-icon': 'ace-icon fa fa-folder',
         'itemSelect': true,
-        'folderSelect': true,
+        'folderSelect': true,//根节点能否选中
         'multiSelect': MultiSelectBool,//单,多选开关，true/false
         'selected-icon': 'ace-icon fa fa-check',
         'unselected-icon': 'ace-icon fa fa-times',
         'folder-open-icon': 'ace-icon tree-plus',
         'folder-close-icon': 'ace-icon tree-minus'
     });
-     $(IdNameString).tree('discloseAll');
+    $(IdNameString).tree('discloseAll');
 
     /**
      //Use something like this to reload data
@@ -54,8 +54,7 @@ function self_init_tree(IdNameString, MultiSelectBool, TreeDataDict) {
                 $data = tree_data;//the root tree
                 callback({data: $data});
                 return;
-            }
-            else if ("type" in options && options.type == "folder") {
+            } else if ("type" in options && options.type == "folder") {
                 if ("additionalParameters" in options && "children" in options.additionalParameters)
                     $data = options.additionalParameters.children || {};
                 else $data = {};//no data
@@ -76,18 +75,18 @@ function self_init_tree(IdNameString, MultiSelectBool, TreeDataDict) {
 }
 
 //获取部门信息并初始化树
-function get_all_dept(idStr, isMany) {
+function get_all_dept(idStr, isMany, edit_user_id) {
     $.ajax({
-               url: "/organizational/departments/list",
-               type: 'POST',
-               dataType: 'JSON',
-               data: {},
-               success: function (result) {
-                   $(idStr).removeData("fu.tree");
-                   $(idStr).unbind('click.fu.tree');
-                   self_init_tree(idStr, isMany, result);
-               }
-           });
+        url: "/organizational/departments/list",
+        type: 'POST',
+        dataType: 'JSON',
+        data: {"edit_user_id": edit_user_id},
+        success: function (result) {
+            $(idStr).removeData("fu.tree");
+            $(idStr).unbind('click.fu.tree');
+            self_init_tree(idStr, isMany, result);
+        }
+    });
 }
 
 function reload_dept_tree(bindId, isMany) {

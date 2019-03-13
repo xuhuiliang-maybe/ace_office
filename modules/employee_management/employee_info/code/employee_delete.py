@@ -35,10 +35,8 @@ class EmployeeDelete(SuccessMessageMixin, DeleteView):
 		return self.url
 
 	def get_context_data(self, **kwargs):
-		context = super(EmployeeDelete, self).get_context_data(**kwargs)
-		referrer = self.request.META.get('HTTP_REFERER', "")
-		context["referrer"] = referrer
-		return context
+		kwargs["referrer"] = self.request.META.get('HTTP_REFERER', "")
+		return super(EmployeeDelete, self).get_context_data(**kwargs)
 
 
 # 员工信息-批量删除
@@ -101,10 +99,8 @@ class TemporaryDelete(SuccessMessageMixin, DeleteView):
 		return self.url
 
 	def get_context_data(self, **kwargs):
-		context = super(TemporaryDelete, self).get_context_data(**kwargs)
-		referrer = self.request.META.get('HTTP_REFERER', "")
-		context["referrer"] = referrer
-		return context
+		kwargs["referrer"] = self.request.META.get('HTTP_REFERER', "")
+		return super(TemporaryDelete, self).get_context_data(**kwargs)
 
 
 # 临时工-批量删除

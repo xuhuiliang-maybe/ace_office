@@ -47,8 +47,7 @@
                             <td>{{ one_dict.name }}</td>
                             <td>
                                 <div>
-                                    <button class="btn btn-minier btn-info" type="button"
-                                            onclick="request_edit_url({{ one_dict.id }})">
+                                    <button class="btn btn-minier btn-info" type="button" onclick="request_edit_url({{ one_dict.id }})">
                                         <i class="ace-icon fa fa-pencil bigger-120"></i>
                                     </button>
                                     <button class="btn btn-minier btn-danger" type="button"
@@ -81,15 +80,15 @@
         var dict_url = "{{ prefix_url }}";
 
         function request_add_url() {
-            window.location.href = dict_url + "add";
+            window.location.href = dict_url + "/add";
         }
 
         function request_edit_url(obj_id) {
-            window.location.href = dict_url + obj_id + "/edit";
+            window.location.href = dict_url + '/' + obj_id + "/edit";
         }
 
         function request_del_url(obj_id) {
-            window.location.href = dict_url + obj_id + "/delete";
+            window.location.href = dict_url + '/' + obj_id + "/delete";
         }
     </script>
 {% endblock %}

@@ -9,7 +9,7 @@
         });
 
         $('#id_one_level_dept').on('click', function (ev) {
-            select_dept("#tree2", "#myDeptModal-1")
+            select_dept("#tree2", "#myDeptModal-2")
         });
 
 
@@ -26,5 +26,34 @@
         $('#id_address').on('click', function (ev) {
             address_modal("id_address", true)
         });
+
+        //用户授权管理部门
+        $('#id_remark2').on('click', function (ev) {
+            get_all_dept("#tree3", true, {{ edit_user_id }});
+            $('#myDeptModal-3').modal({backdrop: 'static', keyboard: true})
+        });
+
+        Tree3DeptId = {{ managements}};
+
+        $('#tree3').on('selected.fu.tree', function (e, result) {
+            var select_list = result.selected;
+            for (var i = 0; i < select_list.length; i++) {
+                var value = select_list[i].value;
+                if (Tree3DeptId.indexOf(value) < 0) {
+                    Tree3DeptId.push(select_list[i].value)
+                }
+            }
+        }).on('deselected.fu.tree', function (e, result) {
+            var value = result.target.value;
+            if (Tree3DeptId.indexOf(value) > -1) {
+                Tree3DeptId.splice(contains(Tree3DeptId, value), 1);
+            }
+        });
+
+        //授权部门
+        function manage_dept() {
+            $('#id_remark2').val(Tree3DeptId);
+
+        }
     </script>
 {% endblock %}

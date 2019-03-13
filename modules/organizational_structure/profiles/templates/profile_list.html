@@ -85,9 +85,10 @@
                             </label>
                         </th>
                         <th class="center">序号</th>
+                        <th class="center">管理权</th>
                         <th class="center">公司名称</th>
 {#                        <th class="center">一级部门</th>#}
-{#                        <th class="center">二级部门</th>#}
+                        <th class="center">部门</th>
                         <th class="center">用户名</th>
                         <th class="center">姓名</th>
                         <th class="center">性别</th>
@@ -121,9 +122,10 @@
                             </td>
 
                             <td>{{ forloop.counter }}</td>
+                            <td>{{ profile.attribution_dept | get_management_rights | safe}}</td>
                             <td>{{ profile.company }}</td>
-{#                            <td>{{ profile.one_level_dept }}</td>#}
-{#                            <td>{{ profile.attribution_dept }}</td>#}
+                            {# <td>{{ profile.one_level_dept }}</td>#}
+                            <td>{{ profile.attribution_dept }}</td>
                             <td>
                                 <a href="{% url "organizational_structure:profile:profile_edit" pk=profile.id %}">
                                     {{ profile.username }}
@@ -136,7 +138,7 @@
 {#                            <td>{{ profile.email }}</td>#}
                             <td>{{ profile.mobile_phone }}</td>
                             <td>{{ profile.telephone }}</td>
-                            <td>{{ profile.address }}</td>
+                            <td>{{ profile.address | default_if_none:""}}</td>
                             <td>{{ profile.remark1 }}</td>
 {#                            <td>{{ profile.authorize_leave }} 天</td>#}
 {#                            <td>{{ profile.authorize_loan }} ￥</td>#}

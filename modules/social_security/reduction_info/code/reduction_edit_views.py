@@ -107,7 +107,7 @@ class ReductionCustomUpdate(View):
 								customer_service_dept = Department.objects.filter(name=u"客服部")
 								all_customer_service_dept = list()
 								if customer_service_dept.exists():
-									all_customer_service_dept = customer_service_dept[0].AllChildren()
+									all_customer_service_dept = customer_service_dept[0].all_children()
 								if reduction_obj[0].emplyid.project_name.department not in all_customer_service_dept:
 									#  当前信息部门，不属于客服部
 									personnel_dept_principal = User.objects.filter(attribution_dept=u"人事部", dept_head=True)  # 人事部负责人
@@ -168,7 +168,7 @@ class ReductionCustomUpdate(View):
 							all_customer_service_dept = list()
 							if customer_service_dept.exists():
 								all_customer_service_dept = customer_service_dept[
-									0].AllChildren()
+									0].all_children()
 							if reduction_obj[
 								0].emplyid.project_name.department not in all_customer_service_dept:
 								#  当前信息部门，不属于客服部

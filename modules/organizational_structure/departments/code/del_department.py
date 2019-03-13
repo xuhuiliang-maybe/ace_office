@@ -32,7 +32,7 @@ class DepartmentsDelView(View):
 				if dept.parent_dept == 0:
 					return HttpResponse(message_dict["3"])
 				else:
-					if dept.getChildren():
+					if dept.get_children():
 						return HttpResponse(message_dict["4"])
 					else:
 						dept.delete()

@@ -98,7 +98,7 @@ function custom_ajax_post(url, param) {
     return result
 }
 
-function batch_delete(url) {
+function batch_delete(url, help_text) {
     var ids = "";
     $("input[name='db_id']").each(function () {
         if ($(this).is(":checked")) {
@@ -107,7 +107,7 @@ function batch_delete(url) {
     });
     if (!ids) {
 
-        layer.confirm("确认删除全部数据?", {btn: ['确定', '取消']}, function (index) {
+        layer.confirm("确认删除全部数据?" + help_text, {btn: ['确定', '取消']}, function (index) {
             var load_index = layer.load(0, {shade: [0.1, '#fff']});
             var result = custom_ajax_post(url, {"ids": "all"});
             if (result == 1) {
@@ -129,7 +129,8 @@ function batch_delete(url) {
 }
 
 function delHtmlTag(str) {
-    return str.replace(/<[^>]+>/g, "");//去掉所有的html标记
+    // return str.replace(/<[^>]+>/g, "");//去掉所有的html标记
+    return str.replace(/<[^>]+>(.*)<[^>]+>/g, "");//去掉所有的html标记
 }
 
 function batch_oper(url, oper_type) {
@@ -180,4 +181,14 @@ function stringToDate(dateStr, separator) {
     var day = parseInt(dateArr[2]);
     var date = new Date(year, month - 1, day);
     return date;
+}
+
+function contains(a, obj) {
+    var i = a.length;
+    while (i--) {
+        if (a[i] === obj) {
+            return i;
+        }
+    }
+    return false;
 }

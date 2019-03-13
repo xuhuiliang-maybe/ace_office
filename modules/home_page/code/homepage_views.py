@@ -68,7 +68,7 @@ class IndexView(View):
 			self.kefu_obj_list = list()  # 客服部子部门对象
 			customer_service_dept = Department.objects.filter(name=u"客服部")
 			if customer_service_dept.exists():
-				self.kefu_obj_list = customer_service_dept[0].AllChildren()
+				self.kefu_obj_list = customer_service_dept[0].all_children()
 				for one_kefu in self.kefu_obj_list:
 					self.kefu_list.append(one_kefu.name)
 

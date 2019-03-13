@@ -267,13 +267,13 @@ class EmployeeExportView(View):
 				self.start_time = date_formater(self.start_time, "%Y/%m/%d %X")
 				self.end_time = date_formater(self.end_time, "%Y/%m/%d %X")
 
-			try:
-				user_position = self.request.user.position.name  # 用户岗位
-			except:
-				user_position = "--"
-			position_list = [u"客服专员", u"客服主管", u"外包主管", u"客服经理"]
-			if user_position in position_list:  # 登录用户在客服部，只能查看所在部门员工信息
-				dept_name = self.request.user.attribution_dept
+			# try:
+			# 	user_position = self.request.user.position.name  # 用户岗位
+			# except:
+			# 	user_position = "--"
+			# position_list = [u"客服专员", u"客服主管", u"外包主管", u"客服经理"]
+			# if user_position in position_list:  # 登录用户在客服部，只能查看所在部门员工信息
+			# 	dept_name = self.request.user.attribution_dept
 
 			search_condition = {
 				"status": status,
@@ -291,8 +291,15 @@ class EmployeeExportView(View):
 				"create_time__lte": self.end_time
 			}
 			if dept_name:
-				search_condition.update(
-					{"project_name__department__name__in": dept_name.split(",")})
+				search_condition.update({"project_name__department__name__in": dept_name.split(",")})
+			else:
+				if not self.request.user.is_superuser:
+					managements = map(int, self.request.user.remark2.split(",")) if self.request.user.remark2 else []
+					search_condition.update({"department__id__in": managements})
+
+			# 普通管理员只查询自己负责项目的员工信息
+			if not self.request.user.is_superuser:
+				search_condition.update({"project_name__principal": self.request.user})
 
 			kwargs = get_kwargs(search_condition)
 			if employee_type == "employee":  # 查看员工信息

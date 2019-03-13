@@ -25,7 +25,7 @@ Billing_STATE = (
 
 # 到账与开票
 class ArrivalAndBilling(models.Model):
-	project_name = models.ForeignKey(Project, verbose_name=u"项目名称", related_name="arrivalandbilling")
+	project_name = models.ForeignKey(Project, verbose_name=u"项目名称", related_name="arrivalandbilling", null=True)
 	settlement_date = models.DateField(u"结算月份")
 	settlement_amount_long = models.PositiveIntegerField(u"结算金额（长期业务）", blank=True, null=True)
 	settlement_amount_snap = models.PositiveIntegerField(u"结算金额（临时工）", blank=True, null=True)

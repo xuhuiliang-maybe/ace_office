@@ -46,7 +46,7 @@
                                     新增
                                 </button>
                                 <button class="btn btn-xs btn-info" data-rel="tooltip" title="批量删除"
-                                        onclick="batch_delete('{% url "project_manage:project_batch_delete" %}')">
+                                        onclick="batch_delete('{% url "project_manage:project_batch_delete" %}', '项目关联员工信息会一并删除！')">
                                     <i class="ace-icon fa fa-trash-o bigger-130"></i>
                                     批量删除
                                 </button>
@@ -118,6 +118,7 @@
                             </label>
                         </th>
                         <th class="center">项目编号</th>
+                        <th class="center">管理权</th>
                         <th class="center">项目简称</th>
                         <th class="center">项目名称</th>
                         <th class="center">项目负责人</th>
@@ -257,6 +258,7 @@
                                 {{ project.number }}
                                 </a>
                             </td>
+                            <td>{{ project.department.management_rights.name | default_if_none:""}}</td>
                             <td>{{ project.short_name }}</td>
                             <td>{{ project.full_name }}</td>
                             <td>{{ project.principal | default_if_none:"" }}</td>
@@ -426,7 +428,7 @@
                     <h4 class="modal-title">
                         导入项目信息
                         <small>
-                            <b style="color: #d14a7d">以模板格式为准，项目编号一致会全量更新项目信息。</b>
+                            <b style="color: #d14a7d">以模板格式为准，项目项目名称一致会全量更新项目信息。</b>
                         </small>
                     </h4>
                 </div>
@@ -483,18 +485,29 @@
         });
 
         //监听查询条件选择部门
-        select_dept_name = "";
-        select_dept_id = "";
+        select_dept_name = [];
+        select_dept_id = [];
         $('#tree1').on('selected.fu.tree', function (e, result) {
             var select_list = result.selected;
-            select_dept_name = "";
-            select_dept_id = "";
             for (var i = 0; i < select_list.length; i++) {
-                select_dept_name += delHtmlTag(select_list[i].text.replace(/\s/gi,'')) + ",";
-                select_dept_id += select_list[i].value + ",";
+                var value = select_list[i].value;
+                var dept_name = delHtmlTag(select_list[i].text.replace(/\s/gi, ''));
+                if (select_dept_id.indexOf(value) < 0) {
+                    select_dept_id.push(value)
+                }
+                if (select_dept_name.indexOf(dept_name) < 0) {
+                    select_dept_name.push(dept_name)
+                }
             }
-            select_dept_name = select_dept_name.substring(0,select_dept_name.length-1);
-            select_dept_id = select_dept_id.substring(0,select_dept_id.length-1);
+        }).on('deselected.fu.tree', function (e, result) {
+            var value = result.target.value;
+            var dept_name = delHtmlTag(result.target.text.replace(/\s/gi, ''));
+            if (select_dept_name.indexOf(dept_name) > -1) {
+                select_dept_name.splice(contains(select_dept_name, dept_name), 1);
+            }
+            if (select_dept_id.indexOf(value) > -1) {
+                select_dept_id.splice(contains(select_dept_id, value), 1);
+            }
         });
 
         function select_dept() {
@@ -505,7 +518,10 @@
         //选择部门,查询条件
         function query_dept_param() {
             get_all_dept("#tree1", true);
-            $('#myDeptModal').modal({backdrop: 'static', keyboard: false})
+            $('#myDeptModal').modal({backdrop: 'static', keyboard: true});
+            select_dept_name = [];
+            select_dept_id = [];
+            select_dept()
         }
 
         //监听新增项目选择部门

@@ -34,10 +34,9 @@ class ProjectsDelete(SuccessMessageMixin, DeleteView):
 		return self.url
 
 	def get_context_data(self, **kwargs):
-		context = super(ProjectsDelete, self).get_context_data(**kwargs)
-		referrer = self.request.META.get('HTTP_REFERER', "")
-		context["referrer"] = referrer
-		return context
+		kwargs["referrer"] = self.request.META.get('HTTP_REFERER', "")
+		kwargs["help_text"] = u"项目关联员工信息会一并删除！"
+		return super(ProjectsDelete, self).get_context_data(**kwargs)
 
 
 @class_view_decorator(login_required)

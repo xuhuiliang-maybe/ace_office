@@ -175,16 +175,20 @@ class Project(models.Model):
         return "/projectmanage/project/basic_info"
 
     def get_unit_price(self, month_str):
+        price = 0
         try:
             unit_price = {
                 "1": self.jan, "2": self.feb, "3": self.mar, "4": self.apr,
                 "5": self.may, "6": self.jun, "7": self.jul, "8": self.aug,
                 "9": self.sep, "10": self.oct, "11": self.nov, "12": self.dec,
             }
-            return unit_price.get(month_str, 0)
+            price = unit_price.get(month_str) or 0
+            if not str(price).isdigit():
+                price = 0
         except:
             traceback.print_exc()
-            return 0
+        finally:
+            return price
 
     @staticmethod
     def get_project_by_full_name_or_short_name(name_str):

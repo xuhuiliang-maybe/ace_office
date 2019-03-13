@@ -363,10 +363,9 @@
                     <!-- #section:basics/navbar.user_menu -->
                     <li class="light-blue">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                            <img class="nav-user-photo" src="{{ request.user.photo.url }}"
-                                 alt="{{ request.user.username }}"/>
+{#                            <img class="nav-user-photo" src="{{ request.user.photo.url }}" alt="{{ request.user.username }}"/>#}
                         <span class="user-info">
-                            <small>欢迎回来,</small>
+                            <small>欢迎回来</small>
                             <strong>{% firstof request.user.get_short_name request.user.get_username %}</strong>
                         </span>
 
@@ -638,7 +637,7 @@
                 <!-- #section:basics/footer -->
                 <div class="footer-content">
                 <span class="bigger-120">
-                    <span class="blue bolder">{{ company_name }} &copy; 2018</span>
+                    <span class="blue bolder">{{ company_name }} &copy; 2019</span>
                 </span>
 
                     <!--<span class="action-buttons">

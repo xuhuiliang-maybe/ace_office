@@ -97,6 +97,7 @@
                     <thead>
                     <tr>
                         <th class="center">序号</th>
+                        <th class="center">管理权</th>
                         <th class="center">员工姓名</th>
                         <th class="center">项目名称</th>
                         <th class="center">服务部门</th>
@@ -131,6 +132,7 @@
                     {% for archive in archive_list %}
                         <tr class="center">
                             <td>{{ forloop.counter }}</td>
+                            <td>{{ archive.employee_id.project_name.department.management_rights.name | default_if_none:"" }}</td>
                             <td>
                                 <a href="{% url "archive_info:archive_edit" pk=archive.id %}">
                                     {{ archive.employee_id.name }}

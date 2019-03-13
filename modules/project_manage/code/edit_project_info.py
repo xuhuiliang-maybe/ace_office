@@ -41,11 +41,9 @@ class ProjectUpdate(SuccessMessageMixin, UpdateView):
 		return self.url
 
 	def get_context_data(self, **kwargs):
-		context = super(ProjectUpdate, self).get_context_data(**kwargs)
-		context["form_content"] = u"编辑项目基础信息"
-		referrer = self.request.META.get('HTTP_REFERER', "")
-		context["referrer"] = referrer
-		return context
+		kwargs["form_content"] = u"编辑项目基础信息"
+		kwargs["referrer"] = self.request.META.get('HTTP_REFERER', "")
+		return super(ProjectUpdate, self).get_context_data(**kwargs)
 
 	def form_valid(self, form):
 		try:

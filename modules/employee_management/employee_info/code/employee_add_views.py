@@ -34,10 +34,8 @@ class EmployeeCreate(SuccessMessageMixin, CreateView):
 		return self.url
 
 	def get_context_data(self, **kwargs):
-		context = super(EmployeeCreate, self).get_context_data(**kwargs)
-		referrer = self.request.META.get('HTTP_REFERER', "")
-		context["referrer"] = referrer
-		return context
+		kwargs["referrer"] = self.request.META.get('HTTP_REFERER', "")
+		return super(EmployeeCreate, self).get_context_data(**kwargs)
 
 	def form_valid(self, form):
 		try:
@@ -116,10 +114,8 @@ class TemporaryCreate(SuccessMessageMixin, CreateView):
 		return self.url
 
 	def get_context_data(self, **kwargs):
-		context = super(TemporaryCreate, self).get_context_data(**kwargs)
-		referrer = self.request.META.get('HTTP_REFERER', "")
-		context["referrer"] = referrer
-		return context
+		kwargs["referrer"] = self.request.META.get('HTTP_REFERER', "")
+		return super(TemporaryCreate, self).get_context_data(**kwargs)
 
 	def form_valid(self, form):
 		try:

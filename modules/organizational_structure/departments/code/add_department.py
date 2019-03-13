@@ -13,7 +13,7 @@ from modules.share_module.permissionMixin import class_view_decorator
 class DepartmentsAdd(CreateView):
 	model = Department
 	template_name = "base/document_edit.html"
-	fields = ["name", "parent_dept", "apportion_type"]
+	fields = "__all__"
 
 	def get_success_url(self):
 		self.url = reverse('organizational_structure:departments:departments_list', args=())

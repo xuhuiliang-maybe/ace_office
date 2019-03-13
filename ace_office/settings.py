@@ -15,14 +15,14 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 from config.conf_core import *
 
 DATABASES = {
-	'default': {
-		'ENGINE': "django.db.backends.%s" % DB_ENGINE,
-		'NAME': DB_NAME,
-		'USER': DB_USERNAME,
-		'PASSWORD': DB_PASSWORD,
-		'HOST': DB_HOST,
-		'PORT': DB_PORT,
-	}
+    'default': {
+        'ENGINE': "django.db.backends.%s" % DB_ENGINE,
+        'NAME': DB_NAME,
+        'USER': DB_USERNAME,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
+    }
 }
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,101 +36,101 @@ SECRET_KEY = '74c=_w-u(pid!8c-mj)v1izwuwufx8qr60f1z%z)auk-0)@fef'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if eval(SET_DEBUG):
-	DEBUG = True
+    DEBUG = True
 else:
-	DEBUG = False
+    DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
 # Application definition
 
 INSTALLED_APPS = (
-	'django.contrib.admin',
-	'django.contrib.auth',
-	'django.contrib.contenttypes',
-	'django.contrib.sessions',
-	'django.contrib.messages',
-	'django.contrib.staticfiles',
-	'django_forms_bootstrap',
-	'modules.admin_account',  # 用户权限
-	'modules.home_page',  # 我的主页
-	'modules.mysite',  # 我的地盘
-	'modules.organizational_structure',  # 组织架构
-	'modules.organizational_structure.departments',  # 部门信息
-	'modules.organizational_structure.profiles',  # 管理员信息
-	'modules.organizational_structure.structures',  # 组织结构图
-	'modules.project_manage',  # 项目管理
-	'modules.employee_management.employee_info',  # 员工信息
-	'modules.employee_management.archives_info',  # 员工档案信息
-	'modules.social_security',  # 社保福利
-	'modules.social_security.increase_info',  # 社保福利增员
-	'modules.social_security.reduction_info',  # 社保福利减员
-	'modules.social_security.social_security_detail',  # 社保明细
-	'modules.settlement_pay',  # 结算发薪
-	'modules.recruitment_manage',  # 招聘管理
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django_forms_bootstrap',
+    'modules.admin_account',  # 用户权限
+    'modules.home_page',  # 我的主页
+    'modules.mysite',  # 我的地盘
+    'modules.organizational_structure',  # 组织架构
+    'modules.organizational_structure.departments',  # 部门信息
+    'modules.organizational_structure.profiles',  # 管理员信息
+    'modules.organizational_structure.structures',  # 组织结构图
+    'modules.project_manage',  # 项目管理
+    'modules.employee_management.employee_info',  # 员工信息
+    'modules.employee_management.archives_info',  # 员工档案信息
+    'modules.social_security',  # 社保福利
+    'modules.social_security.increase_info',  # 社保福利增员
+    'modules.social_security.reduction_info',  # 社保福利减员
+    'modules.social_security.social_security_detail',  # 社保明细
+    'modules.settlement_pay',  # 结算发薪
+    'modules.recruitment_manage',  # 招聘管理
 
-	'modules.approval_process',  # 审批流程
-	'modules.approval_process.leave',  # 审批流程，请假
-	'modules.approval_process.loan',  # 审批流程，备用金
-	'modules.approval_process.write_offs',  # 审批流程，报销与销账
-	'modules.approval_process.wage',  # 审批流程，工资与职位调整
-	'modules.approval_process.wage_replacement',  # 审批流程，工资补发申请
-	'modules.approval_process.billing_pre_pay',  # 审批流程，结算与发薪
-	'modules.approval_process.demand_turnover',  # 审批流程，管理人员需求与离职
-	'modules.approval_process.temporary_write_offs_billing',  # 审批流程，临时工销账与开票
-	'modules.approval_process.recruited_billing',  # 审批流程，待招结算与开票
+    'modules.approval_process',  # 审批流程
+    'modules.approval_process.leave',  # 审批流程，请假
+    'modules.approval_process.loan',  # 审批流程，备用金
+    'modules.approval_process.write_offs',  # 审批流程，报销与销账
+    'modules.approval_process.wage',  # 审批流程，工资与职位调整
+    'modules.approval_process.wage_replacement',  # 审批流程，工资补发申请
+    'modules.approval_process.billing_pre_pay',  # 审批流程，结算与发薪
+    'modules.approval_process.demand_turnover',  # 审批流程，管理人员需求与离职
+    'modules.approval_process.temporary_write_offs_billing',  # 审批流程，临时工销账与开票
+    'modules.approval_process.recruited_billing',  # 审批流程，待招结算与开票
 
-	'modules.expense_manage',  # 费用管理
-	'modules.personnel_operation',  # 人事操作质量
-	'modules.system',  # 系统管理
-	'modules.share_module',  # 公用模块
-	'modules.dict_table',  # 字典表模块
-	'modules.sidebar_menu',  # 页面菜单模块
-	'modules.payroll_manage.payroll_detail',  # 薪资明细
-	'modules.payroll_manage.payroll_gather',  # 薪资汇总
+    'modules.expense_manage',  # 费用管理
+    'modules.personnel_operation',  # 人事操作质量
+    'modules.system',  # 系统管理
+    'modules.share_module',  # 公用模块
+    'modules.dict_table',  # 字典表模块
+    'modules.sidebar_menu',  # 页面菜单模块
+    'modules.payroll_manage.payroll_detail',  # 薪资明细
+    'modules.payroll_manage.payroll_gather',  # 薪资汇总
 
-	'modules.finance.social_security_audit',  # 财务-社保审核
-	'modules.finance.arrival_and_billing',  # 财务-到账与开票
-	'modules.finance.loans_and_write_offs',  # 财务-借款与销账
+    'modules.finance.social_security_audit',  # 财务-社保审核
+    'modules.finance.arrival_and_billing',  # 财务-到账与开票
+    'modules.finance.loans_and_write_offs',  # 财务-借款与销账
 
-	'modules.contract_manage',  # 合同
+    'modules.contract_manage',  # 合同
 
-	# 'modules.attendance',  # 考勤
+    # 'modules.attendance',  # 考勤
 )
 
 MIDDLEWARE_CLASSES = (
-	'django.middleware.common.BrokenLinkEmailsMiddleware',
-	'django.contrib.sessions.middleware.SessionMiddleware',
-	'django.middleware.common.CommonMiddleware',
-	'django.middleware.csrf.CsrfViewMiddleware',
-	'django.contrib.auth.middleware.AuthenticationMiddleware',
-	'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-	'django.contrib.messages.middleware.MessageMiddleware',
-	# 'corsheaders.middleware.CorsMiddleware',
-	'django.middleware.locale.LocaleMiddleware',
-	'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'django.middleware.security.SecurityMiddleware',
-	"modules.middleware.threadlocals.ThreadLocals",
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    "modules.middleware.threadlocals.ThreadLocals",
 )
 
 ROOT_URLCONF = 'ace_office.urls'
 
 TEMPLATES = [
-	{
-		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		'DIRS': [os.path.join(BASE_DIR, 'templates')],
-		'APP_DIRS': True,
-		'OPTIONS': {
-			'context_processors': [
-				'django.template.context_processors.debug',
-				'django.template.context_processors.request',
-				'django.contrib.auth.context_processors.auth',
-				'django.contrib.messages.context_processors.messages',
-				'django.core.context_processors.static',
-				'django.core.context_processors.request',
-			],
-		},
-	},
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.static',
+                'django.core.context_processors.request',
+            ],
+        },
+    },
 ]
 
 WSGI_APPLICATION = 'ace_office.wsgi.application'
@@ -156,18 +156,18 @@ STATIC_ROOT = ''
 STATIC_PATH = os.path.join(BASE_DIR, 'static').replace('\\', '/')
 # Additional locations of static files
 STATICFILES_DIRS = (
-	# Put strings here, like "/home/html/static" or "C:/www/django/static".
-	# Always use forward slashes, even on Windows.
-	# Don't forget to use absolute paths, not relative paths.
-	'%s/%s' % (BASE_DIR, '/static'),
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    '%s/%s' % (BASE_DIR, '/static'),
 )
 
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
-	'django.contrib.staticfiles.finders.FileSystemFinder',
-	'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-	#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 LOGIN_REDIRECT_URL = "/accounts/login"
@@ -191,7 +191,7 @@ DATE_FORMAT = "Y-m-d"
 
 # 系统报错发送admin邮件
 ADMINS = (
-	('XHL', '593548215@qq.com'),
+    ('XHL', '593548215@qq.com'),
 )
 MANAGERS = ADMINS
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -201,3 +201,16 @@ SERVER_EMAIL = "593548215@qq.com"
 EMAIL_HOST_USER = '593548215@qq.com'
 EMAIL_HOST_PASSWORD = 'xhl,.,.1991'
 EMAIL_PORT = 25
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',  # 缓存到内存
+        'LOCATION': 'ace_office_cache',  # 在内存中存储的变量（保证唯一）
+        'TIMEOUT': None,  # 缓存超时时间（默认300，None表示永不过期，0表示立即过期）
+        'OPTIONS': {
+            'MAX_ENTRIES': 300,  # 最大缓存个数（默认300）
+            'CULL_FREQUENCY': 5,
+            # 缓存到达最大个数之后，Django会自动清空3/1 ,设置为10 就剔除10/1
+        }
+    }
+}

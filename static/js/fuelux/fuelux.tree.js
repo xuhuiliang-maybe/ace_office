@@ -355,7 +355,7 @@
 			});
 		},
 
-		//disclose visible will only disclose visible tree folders
+			//disclose visible will only disclose visible tree folders
 		discloseVisible: function discloseVisible() {
 			var self = this;
 
