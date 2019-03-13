@@ -73,8 +73,11 @@ def check_user_is_songxiaodan(function):
 
 	return _wrapped_view
 
-# 是否是项目负责人
 def check_principal(function):
+	"""是否负责该项目
+	:param function:
+	:return:
+	"""
 	def _wrapped_view(request, *args, **kwargs):
 		login_user = request.user
 		db_id = kwargs.get("pk", "")  # 员工信息id

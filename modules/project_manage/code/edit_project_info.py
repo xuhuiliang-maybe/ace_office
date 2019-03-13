@@ -14,11 +14,11 @@ from modules.share_module.permissionMixin import class_view_decorator
 from modules.share_module.utils import get_kwargs
 
 
-# 基础信息-编辑
 @class_view_decorator(login_required)
 @class_view_decorator(permission_required('project_manage.change_project', raise_exception=True))
-@class_view_decorator(check_principal)  # 校验是否负责该项目
+@class_view_decorator(check_principal)
 class ProjectUpdate(SuccessMessageMixin, UpdateView):
+    """基础信息"""
     model = Project
     template_name = "projects_edit.html"
     success_message = u"%(full_name)s 成功修改"
@@ -75,11 +75,11 @@ class ProjectUpdate(SuccessMessageMixin, UpdateView):
             traceback.print_exc()
 
 
-# 福利信息-编辑
 @class_view_decorator(login_required)
 @class_view_decorator(permission_required('project_manage.change_social_security_info', raise_exception=True))
-@class_view_decorator(check_principal)  # 校验是否负责该项目
+@class_view_decorator(check_principal)
 class ProjectSocialSecurityInfoUpdate(SuccessMessageMixin, UpdateView):
+    """福利信息"""
     model = Project
     template_name = "projects_edit.html"
     success_message = u"%(insured_place)s 成功修改"
@@ -105,11 +105,11 @@ class ProjectSocialSecurityInfoUpdate(SuccessMessageMixin, UpdateView):
         return super(ProjectSocialSecurityInfoUpdate, self).get_context_data(**kwargs)
 
 
-# 结算信息-编辑
 @class_view_decorator(login_required)
 @class_view_decorator(permission_required('project_manage.change_settle_accounts_info', raise_exception=True))
-@class_view_decorator(check_principal)  # 校验是否负责该项目
+@class_view_decorator(check_principal)
 class ProjectSettleAccountsInfoUpdate(SuccessMessageMixin, UpdateView):
+    """结算信息"""
     model = Project
     template_name = "projects_edit.html"
     success_message = u"%(service_standard)s 成功修改"
@@ -133,11 +133,11 @@ class ProjectSettleAccountsInfoUpdate(SuccessMessageMixin, UpdateView):
         return super(ProjectSettleAccountsInfoUpdate, self).get_context_data(**kwargs)
 
 
-# 开票信息-编辑
 @class_view_decorator(login_required)
 @class_view_decorator(permission_required('project_manage.change_billing_info', raise_exception=True))
-@class_view_decorator(check_principal)  # 校验是否负责该项目
+@class_view_decorator(check_principal)
 class ProjectBillingInfoUpdate(SuccessMessageMixin, UpdateView):
+    """开票信息"""
     model = Project
     template_name = "projects_edit.html"
     success_message = u"%(invoice_title)s 成功修改"
@@ -176,11 +176,11 @@ class ProjectBillingInfoUpdate(SuccessMessageMixin, UpdateView):
         return super(ProjectBillingInfoUpdate, self).get_context_data(**kwargs)
 
 
-# 销售信息-编辑
 @class_view_decorator(login_required)
 @class_view_decorator(permission_required('project_manage.change_sales_info', raise_exception=True))
-@class_view_decorator(check_principal)  # 校验是否负责该项目
+@class_view_decorator(check_principal)
 class ProjectSalesInfoUpdate(SuccessMessageMixin, UpdateView):
+    """销售信息"""
     model = Project
     template_name = "projects_edit.html"
     success_message = u"%(salesman)s 成功修改"
@@ -206,11 +206,11 @@ class ProjectSalesInfoUpdate(SuccessMessageMixin, UpdateView):
         return super(ProjectSalesInfoUpdate, self).get_context_data(**kwargs)
 
 
-# 招聘单价-编辑
 @class_view_decorator(login_required)
 @class_view_decorator(permission_required('project_manage.change_recruitment_unit', raise_exception=True))
-@class_view_decorator(check_principal)  # 校验是否负责该项目
+@class_view_decorator(check_principal)
 class ProjectRecruitmentUnitUpdate(SuccessMessageMixin, UpdateView):
+    """招聘单价"""
     model = Project
     template_name = "projects_edit.html"
     success_url = "/projectmanage/project/recruitment_unit"
