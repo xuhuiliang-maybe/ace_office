@@ -82,7 +82,7 @@ class EmployeeList(ListView):
             else:
                 if not self.request.user.is_superuser:
                     managements = map(int, self.request.user.remark2.split(",")) if self.request.user.remark2 else []
-                    search_condition.update({"department__id__in": managements})
+                    search_condition.update({"project_name__department__id__in": managements})
 
             # 普通管理员只查询自己负责项目的员工信息
             if not self.request.user.is_superuser:
