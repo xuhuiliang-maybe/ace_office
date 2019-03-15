@@ -6,7 +6,7 @@ password=
 host=
 port=
 
-[database]
+[database-]
 engine=mysql
 dbname=aces
 username=root
@@ -14,7 +14,7 @@ password=RootPass123!!!
 port=3306
 host=127.0.0.1
 
-[database-]
+[database]
 engine=mysql
 dbname=aces
 username=root
