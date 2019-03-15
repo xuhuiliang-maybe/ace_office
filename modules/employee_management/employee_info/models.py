@@ -125,11 +125,11 @@ class Employee(models.Model):
     """员工信息 """
 
     # 员工信息与临时工信息，公用字段
-    name = models.CharField(u"姓名", max_length=100)
+    name = models.CharField(u"姓名", max_length=100, db_index=True)
     sex = models.CharField(u"性别", max_length=2, choices=GENDER_CHOICES, blank=True, help_text=u"选填，可由身份证号计算")
-    identity_card_number = models.CharField(u"身份证号", max_length=18)
+    identity_card_number = models.CharField(u"身份证号", max_length=18, db_index=True)
     project_name = models.ForeignKey(Project, verbose_name=u"项目名称", blank=True, null=True, on_delete=models.SET_NULL,
-                                     related_name="employees")
+                                     related_name="employees", db_index=True)
     recruitment_attache = models.ForeignKey(User, blank=True, null=True, verbose_name=u"招聘人员",
                                             on_delete=models.SET_NULL,
                                             related_name="user_recruitment_attache")
@@ -137,7 +137,7 @@ class Employee(models.Model):
     phone_number = models.CharField(u"联系电话", max_length=100, blank=True)
 
     # 员工信息字段
-    status = models.CharField(u"目前状态", max_length=100, choices=IS_WORK, default="1")
+    status = models.CharField(u"目前状态", max_length=100, choices=IS_WORK, default="1", db_index=True)
     salary_card_number = models.CharField(u"银行卡号", max_length=100, blank=True)
     job_dept = models.CharField(u"部门", max_length=100, blank=True)
     bank_account = models.CharField(u"开户银行", max_length=100, blank=True)
@@ -152,8 +152,8 @@ class Employee(models.Model):
     work_address = models.CharField(u"工作地", max_length=256, blank=True)
     insured_place = models.CharField(u"社保地", max_length=256, blank=True)
     person_type = models.ForeignKey(ContractType, blank=True, null=True, on_delete=models.SET_NULL,
-                                    verbose_name=u"人员属性")
-    contract_type = models.CharField(u"合同属性", max_length=10, choices=CONTRACT_CHOICES, blank=True)
+                                    verbose_name=u"人员属性", db_index=True)
+    contract_type = models.CharField(u"合同属性", max_length=10, choices=CONTRACT_CHOICES, blank=True, db_index=True)
     contract_subject = models.ForeignKey(CompanySubject, blank=True, null=True, on_delete=models.SET_NULL,
                                          verbose_name=u"合同主体")
     entry_date = models.DateField(u"入职日期", default=timezone.now, null=True, blank=True)
@@ -197,7 +197,7 @@ class Employee(models.Model):
     remark3 = models.CharField(u"备注3", max_length=256, blank=True)
     remark4 = models.CharField(u"备注4", max_length=256, blank=True)
     remark5 = models.CharField(u"备注5", max_length=256, blank=True)
-    create_time = models.DateTimeField(verbose_name=u'创建时间', auto_now=True, blank=True, null=True)
+    create_time = models.DateTimeField(verbose_name=u'创建时间', auto_now=True, blank=True, null=True, db_index=True)
 
     def __str__(self):
         return self.name
@@ -206,9 +206,8 @@ class Employee(models.Model):
         verbose_name = u"员工信息"
         # unique_together = (("name", "identity_card_number"),)  # 不重复的字段组合
         ordering = ['-id']  # id倒叙
-        index_together = ["name", "project_name", "status", "identity_card_number",
-                          "person_type",
-                          "contract_type"]
+        index_together = ["project_name", "name", "identity_card_number", "person_type", "contract_type", "status",
+                          "create_time"]
         permissions = (
             ("browse_employee", u"浏览 员工信息"),
             ("export_employee", u"导出 员工信息"),
@@ -261,11 +260,11 @@ ISSUE_STATUS = (
 class Archive(models.Model):
     """ 员工管理-档案信息 """
 
-    employee_id = models.ForeignKey(Employee, verbose_name=u"员工信息", related_name="archives")
+    employee_id = models.ForeignKey(Employee, verbose_name=u"员工信息", related_name="archives", db_index=True)
     number = models.CharField(u"档案编号", max_length=100, blank=True, null=True)
     type = models.ForeignKey(ArchiveType, verbose_name=u"档案类型", blank=True, null=True)
-    issue = models.CharField(u"是否发出", max_length=2, blank=True, choices=ISSUE_STATUS, default="2")
-    receive = models.CharField(u"是否收到", max_length=2, blank=True, choices=ISSUE_STATUS, default="2")
+    issue = models.CharField(u"是否发出", max_length=2, blank=True, choices=ISSUE_STATUS, default="2", db_index=True)
+    receive = models.CharField(u"是否收到", max_length=2, blank=True, choices=ISSUE_STATUS, default="2", db_index=True)
     bank_copy = models.PositiveIntegerField(u"银行卡复印件", blank=True, null=True)
     id_copy = models.PositiveIntegerField(u"身份证复印件", blank=True, null=True)
     booklet_copy = models.PositiveIntegerField(u"户口本复印件", blank=True, null=True)
@@ -293,7 +292,7 @@ class Archive(models.Model):
     class Meta:
         verbose_name = u"员工档案信息"
         ordering = ['-id']  # id倒叙
-        index_together = ["issue", "receive"]
+        index_together = ["employee_id", "issue", "receive"]
         permissions = (
             ("browse_archive", u"浏览 员工档案信息"),
         )
