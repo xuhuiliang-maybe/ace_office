@@ -27,7 +27,7 @@ class Department(models.Model):
     """部门信息 """
 
     name = models.CharField(u"部门名称", max_length=50, unique=True)
-    parent_dept = models.PositiveIntegerField(u"上级部门", blank=False, default=1)
+    parent_dept = models.PositiveIntegerField(u"上级部门", blank=False, default=1, db_index=True)
     apportion_type = models.CharField(u"分摊类型", max_length=1, choices=APPORTION_TYPE, default='1')
     management_rights = models.ForeignKey(ManagementRights, verbose_name="管理权", null=True)
 
