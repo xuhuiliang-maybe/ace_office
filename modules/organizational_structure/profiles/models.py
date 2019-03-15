@@ -3,6 +3,7 @@ import traceback
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
 
@@ -66,6 +67,10 @@ class Profile(ProfileUser):
 
     def get_username(self):
         return getattr(self, self.FIRST_NAME_FIELD)
+
+    @staticmethod
+    def get_absolute_url():
+        return reverse('organizational_structure:profile:profile_list', args=())
 
     @staticmethod
     def get_user_by_username_or_first_name(user_str):

@@ -7,6 +7,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse
 from django.views.generic.edit import CreateView
 
+from modules.organizational_structure.profiles.models import Profile
 from modules.share_module.permissionMixin import class_view_decorator
 
 
@@ -19,7 +20,7 @@ class ProfileCreate(SuccessMessageMixin, CreateView):
     success_message = u"%(username)s 成功创建"
 
     def get_success_url(self):
-        self.url = reverse('organizational_structure:profile:profile_list', args=())
+        self.url = Profile.get_absolute_url()
         referrer = self.request.POST.get("referrer", "")
         # if referrer:
         # 	self.url = referrer

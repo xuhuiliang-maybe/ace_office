@@ -2,6 +2,7 @@
 import traceback
 
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 from django.db import models
 
 from modules.dict_table.models import ManagementRights
@@ -40,6 +41,10 @@ class Department(models.Model):
         permissions = (
             ("browse_department", u"浏览 部门信息"),
         )
+
+    @staticmethod
+    def get_absolute_url():
+        return reverse('organizational_structure:departments:departments_list', args=())
 
     def update_dept_cache(self):
         """更新部门信息缓存

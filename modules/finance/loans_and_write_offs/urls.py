@@ -8,9 +8,9 @@ from modules.finance.loans_and_write_offs.code.list_loans_and_write_offs import 
 
 # 财务-借款与销账
 urlpatterns = [
-	# url(r'^add$', LoansAndWriteOffsCreate.as_view(), name="add_loansandwriteoffs"),  # 增
-	url(r'^(?P<pk>[0-9]+)/delete$', LoansAndWriteOffsDelete.as_view(), name="del_loansandwriteoffs"),  # 删
-	url(r'^list$', LoansAndWriteOffsListView.as_view(), name="list_loansandwriteoffs"),  # 查
-	url(r'^(?P<pk>[0-9]+)/edit$', LoansAndWriteOffsUpdate.as_view(), name="edit_loansandwriteoffs"),  # 改
-	url(r'^export$', LoansAndWriteOffsExportView.as_view(), name="export_loansandwriteoffs"),  # 导出
+    # url(r'^add$', LoansAndWriteOffsCreate.as_view(), name="add_loansandwriteoffs"),
+    url(r'^(?P<pk>[0-9]+)/delete$', LoansAndWriteOffsDelete.as_view(), name="del_loansandwriteoffs"),
+    url(r'^list$', LoansAndWriteOffsListView.as_view(), name="list_loansandwriteoffs"),
+    url(r'^(?P<pk>[0-9]+)/edit$', LoansAndWriteOffsUpdate.as_view(), name="edit_loansandwriteoffs"),
+    url(r'^export$', LoansAndWriteOffsExportView.as_view(), name="export_loansandwriteoffs"),
 ]
