@@ -36,6 +36,7 @@ class Department(models.Model):
 
     class Meta:
         verbose_name = u"部门信息"
+        index_together = ["name"]  # 索引字段组合
         permissions = (
             ("browse_department", u"浏览 部门信息"),
         )
