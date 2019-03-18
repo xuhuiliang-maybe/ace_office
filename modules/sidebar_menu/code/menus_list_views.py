@@ -1,22 +1,15 @@
 # encoding=utf-8
 import json
+import traceback
 
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.generic import View
 
-from modules.contract_manage.models import ContractPreviewCode
 from modules.dict_table.models import ManagementRights, Subject, LeaveType, ImproveStatus, ExpenseType, ArchiveType, \
     InvoiceType, Position, WageGrantType, Cycle, BusinessInsuranceCompany, SalesType, SocialSecurityType, \
     SocialSecurityAccountType, ProgressState, ProjectType, ContractType, CompanySubject
-from modules.finance.arrival_and_billing.models import ArrivalAndBilling
-from modules.finance.loans_and_write_offs.models import LoansAndWriteOffs
-from modules.finance.social_security_audit.models import SocialSecurityAudit
-from modules.organizational_structure.departments.models import Department
-from modules.organizational_structure.profiles.models import Profile
 from modules.share_module.permissionMixin import class_view_decorator
-from modules.system.models import DataBackup, SystemConfig
 
 menu_list = [
     {
@@ -24,7 +17,7 @@ menu_list = [
         "show": True,
         "text": "我的主页",
         "icon": "menu-icon fa fa-tachometer",
-        "url": reverse('home_page:index', args=())
+        "url": "/homepage/index"
     },
 
     {
@@ -39,14 +32,14 @@ menu_list = [
                 "show": True,
                 "text": "我的个人信息",
                 "icon": "",
-                "url": reverse('mysite:personal', args=())
+                "url": "/mysite/personal"
             },
             {
                 "permissions": '',
                 "show": False,
                 "text": "我的邮箱",
                 "icon": "",
-                "url": reverse('mysite:emails', args=())
+                "url": "/mysite/emails"
             },
         ]
     },
@@ -63,21 +56,21 @@ menu_list = [
                 "show": False,
                 "text": "组织架构图",
                 "icon": "",
-                "url": reverse('organizational_structure:structure', args=())
+                "url": "/organizational/structure"
             },
             {
                 "permissions": "departments.browse_department",
                 "show": True,
                 "text": "部门信息",
                 "icon": "",
-                "url": Department.get_absolute_url()
+                "url": "/organizational/departments/list"
             },
             {
                 "permissions": "admin_account.browse_user",
                 "show": True,
                 "text": "管理人员",
                 "icon": "",
-                "url": Profile.get_absolute_url()
+                "url": "/organizational/profile/list"
             }
         ]
     },
@@ -330,21 +323,21 @@ menu_list = [
                 "show": True,
                 "text": "社保审核",
                 "icon": "",
-                "url": SocialSecurityAudit.get_absolute_url()
+                "url": "/finance/social_security_audit/list"
             },
             {
                 "permissions": "arrival_and_billing.browse_arrivalandbilling",
                 "show": True,
                 "text": "到账与开票",
                 "icon": "",
-                "url": ArrivalAndBilling.get_absolute_url()
+                "url": "/finance/arrival_and_billing/list"
             },
             {
                 "permissions": "loans_and_write_offs.browse_loansandwriteoffs",
                 "show": True,
                 "text": "借款与销账",
                 "icon": "",
-                "url": LoansAndWriteOffs.get_absolute_url()
+                "url": "/finance/loans_and_write_offs/list"
             }
         ]
     },
@@ -360,7 +353,7 @@ menu_list = [
                 "show": True,
                 "text": "派遣",
                 "icon": "",
-                "url": ContractPreviewCode.get_absolute_url()
+                "url": "/contract/send"
             },
 
             {
@@ -368,7 +361,7 @@ menu_list = [
                 "show": True,
                 "text": "外包",
                 "icon": "",
-                "url": ContractPreviewCode.get_absolute_url()
+                "url": "/contract/outsourc"
             },
 
             {
@@ -376,7 +369,7 @@ menu_list = [
                 "show": True,
                 "text": "实习生",
                 "icon": "",
-                "url": ContractPreviewCode.get_absolute_url()
+                "url": "/contract/intern"
             },
 
             {
@@ -384,7 +377,7 @@ menu_list = [
                 "show": True,
                 "text": "劳务",
                 "icon": "",
-                "url": ContractPreviewCode.get_absolute_url()
+                "url": "/contract/service"
             },
 
             {
@@ -392,7 +385,7 @@ menu_list = [
                 "show": True,
                 "text": "小时工",
                 "icon": "",
-                "url": ContractPreviewCode.get_absolute_url()
+                "url": "/contract/hourly"
             },
 
             {
@@ -400,7 +393,7 @@ menu_list = [
                 "show": True,
                 "text": "合同预览",
                 "icon": "",
-                "url": ContractPreviewCode.get_absolute_url()
+                "url": "/contract/preview"
             }
         ]
     },
@@ -424,14 +417,14 @@ menu_list = [
                 "show": True,
                 "text": "系统设置",
                 "icon": "",
-                "url": SystemConfig.get_absolute_url()
+                "url": "/system/config"
             },
             {
                 "permissions": "system.data_backup",
                 "show": True,
                 "text": "数据备份",
                 "icon": "",
-                "url": DataBackup.get_absolute_url()
+                "url": "/system/data_backup"
             }
         ]
     },
