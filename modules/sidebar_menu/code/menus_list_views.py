@@ -6,9 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.views.generic import View
 
-from modules.dict_table.models import ManagementRights, Subject, LeaveType, ImproveStatus, ExpenseType, ArchiveType, \
-    InvoiceType, Position, WageGrantType, Cycle, BusinessInsuranceCompany, SalesType, SocialSecurityType, \
-    SocialSecurityAccountType, ProgressState, ProjectType, ContractType, CompanySubject
 from modules.share_module.permissionMixin import class_view_decorator
 
 menu_list = [
@@ -441,126 +438,126 @@ menu_list = [
                 "show": True,
                 "text": "公司主体",
                 "icon": "",
-                "url": CompanySubject.get_absolute_url()
+                "url": "/dicttable/companysubject"
             },
             {
                 "permissions": "dict_table.browse_contracttype",
                 "show": True,
                 "text": "合同类型",
                 "icon": "",
-                "url": ContractType.get_absolute_url()
+                "url": "/dicttable/contracttype"
             },
             {
                 "permissions": "dict_table.browse_projecttype",
                 "show": True,
                 "text": "项目类型",
                 "icon": "",
-                "url": ProjectType.get_absolute_url()
+                "url": "/dicttable/projecttype"
             },
             {
                 "permissions": "dict_table.browse_progressstate",
                 "show": True,
                 "text": "项目目前状态",
                 "icon": "",
-                "url": ProgressState.get_absolute_url()
+                "url": "/dicttable/progressstate"
             },
             {
                 "permissions": "dict_table.browse_salestype",
                 "show": True,
                 "text": "销售类型",
                 "icon": "",
-                "url": SalesType.get_absolute_url()
+                "url": "/dicttable/salestype"
             },
             {
                 "permissions": "dict_table.browse_socialsecuritytype",
                 "show": True,
                 "text": "社保险种",
                 "icon": "",
-                "url": SocialSecurityType.get_absolute_url()
+                "url": "/dicttable/socialsecuritytype"
             },
             {
                 "permissions": "dict_table.browse_socialsecurityaccounttype",
                 "show": True,
                 "text": "社保账户类型",
                 "icon": "",
-                "url": SocialSecurityAccountType.get_absolute_url()
+                "url": "/dicttable/socialsecurityaccounttype"
             },
             {
                 "permissions": "dict_table.browse_businessinsurancecompany",
                 "show": True,
                 "text": "商保公司",
                 "icon": "",
-                "url": BusinessInsuranceCompany.get_absolute_url()
+                "url": "/dicttable/businessinsurancecompany"
             },
             {
                 "permissions": "dict_table.browse_cycle",
                 "show": True,
                 "text": "时间周期",
                 "icon": "",
-                "url": Cycle.get_absolute_url()
+                "url": "/dicttable/cycle"
             },
             {
                 "permissions": "dict_table.browse_wagegranttype",
                 "show": True,
                 "text": "工资发放方式",
                 "icon": "",
-                "url": WageGrantType.get_absolute_url()
+                "url": "/dicttable/wagegranttype"
             },
             {
                 "permissions": "dict_table.browse_invoicetype",
                 "show": True,
                 "text": "发票类型",
                 "icon": "",
-                "url": InvoiceType.get_absolute_url()
+                "url": "/dicttable/invoicetype"
             },
             {
                 "permissions": "dict_table.browse_position",
                 "show": True,
                 "text": "岗位类型",
                 "icon": "",
-                "url": Position.get_absolute_url()
+                "url": "/dicttable/position"
             },
             {
                 "permissions": "dict_table.browse_archivetype",
                 "show": True,
                 "text": "档案类型",
                 "icon": "",
-                "url": ArchiveType.get_absolute_url()
+                "url": "/dicttable/archivetype"
             },
             {
                 "permissions": "dict_table.browse_expensetype",
                 "show": True,
                 "text": "费用类型",
                 "icon": "",
-                "url": ExpenseType.get_absolute_url()
+                "url": "/dicttable/expensetype"
             },
             {
                 "permissions": "dict_table.browse_improvestatus",
                 "show": True,
                 "text": "改善状态",
                 "icon": "",
-                "url": ImproveStatus.get_absolute_url()
+                "url": "/dicttable/improvestatus"
             },
             {
                 "permissions": "dict_table.browse_leavetype",
                 "show": True,
                 "text": "请假类型",
                 "icon": "",
-                "url": LeaveType.get_absolute_url()
+                "url": "/dicttable/leavetype"
             },
             {
                 "permissions": "dict_table.browse_subject",
                 "show": True,
                 "text": "科目",
                 "icon": "",
-                "url": Subject.get_absolute_url()
+                "url": "/dicttable/subject"
             },
             {
                 "permissions": "dict_table.browse_management_rights",
                 "show": True,
                 "text": "管理权",
                 "icon": "",
-                "url": ManagementRights.get_absolute_url()
+                "url": "/dicttable/management_rights"
             }
         ]
     }
