@@ -23,7 +23,6 @@ class SidebarMenusList(View):
         :return:
         """
         data = self.get_menu_list()
-        print data
         result = json.dumps({"data": data})
         return HttpResponse(result, content_type="application/json")
 
@@ -33,7 +32,6 @@ class SidebarMenusList(View):
         """
         from modules.sidebar_menu.code.menus import menu_list
         try:
-            print self.request.user, "111111", self.request.user.is_superuser
             if not self.request.user.is_superuser:
                 for one_menu in menu_list:
                     if not self.request.user.has_perm(one_menu["permissions"]):
