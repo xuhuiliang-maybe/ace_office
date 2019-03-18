@@ -2,11 +2,14 @@
 import json
 
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.generic import View
 
 from modules.contract_manage.models import ContractPreviewCode
-from modules.dict_table.models import *
+from modules.dict_table.models import ManagementRights, Subject, LeaveType, ImproveStatus, ExpenseType, ArchiveType, \
+    InvoiceType, Position, WageGrantType, Cycle, BusinessInsuranceCompany, SalesType, SocialSecurityType, \
+    SocialSecurityAccountType, ProgressState, ProjectType, ContractType, CompanySubject
 from modules.finance.arrival_and_billing.models import ArrivalAndBilling
 from modules.finance.loans_and_write_offs.models import LoansAndWriteOffs
 from modules.finance.social_security_audit.models import SocialSecurityAudit
