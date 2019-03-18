@@ -33,6 +33,7 @@ class SidebarMenusList(View):
         menu_list = list()
         try:
             from modules.sidebar_menu.code.menus import menu_list
+            print self.request.user, "111111"
             if not self.request.user.is_superuser:
                 for one_menu in menu_list:
                     if not self.request.user.has_perm(one_menu["permissions"]):
