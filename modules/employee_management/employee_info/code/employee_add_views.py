@@ -9,7 +9,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse
 from django.views.generic.edit import CreateView
 
-from modules.employee_management.employee_info.models import Employee, EmployeeForm
+from modules.employee_management.employee_info.models import Employee, EmployeeForm, TemporaryForm
 from modules.project_manage.models import Project
 from modules.share_module.permissionMixin import class_view_decorator
 
@@ -32,6 +32,7 @@ class EmployeeCreate(SuccessMessageMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         kwargs["referrer"] = self.request.META.get('HTTP_REFERER', "")
+        kwargs["form_content"] = "新增员工信息"
         return super(EmployeeCreate, self).get_context_data(**kwargs)
 
     def form_valid(self, form):
@@ -93,11 +94,7 @@ class TemporaryCreate(SuccessMessageMixin, CreateView):
     model = Employee
     template_name = "employee_edit.html"
     success_message = u"%(name)s 成功创建"
-    fields = [
-        "name", "sex", "identity_card_number", "project_name",
-        "recruitment_attache", "phone_number", "start_work_date", "end_work_date", "work_days", "hours",
-        "amount_of_payment", "release_user", "release_time", "remark1",
-    ]
+    form_class = TemporaryForm
 
     def get_success_url(self):
         url = reverse('employee_info:list', args=("temporary",))

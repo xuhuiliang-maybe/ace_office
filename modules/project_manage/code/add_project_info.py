@@ -14,7 +14,7 @@ from modules.share_module.utils import get_kwargs
 class ProjectsCreate(SuccessMessageMixin, CreateView):
 	model = Project
 	template_name = "projects_edit.html"
-	fields = "__all__"
+	form_class = ProjectForm
 	success_message = u"%(full_name)s 成功创建"
 
 	def get_success_url(self):

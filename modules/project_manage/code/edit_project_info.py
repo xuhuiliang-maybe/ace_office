@@ -8,7 +8,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse
 from django.views.generic.edit import UpdateView
 
-from modules.project_manage.models import Project
+from modules.project_manage.models import Project, ProjectForm
 from modules.share_module.check_decorator import check_principal
 from modules.share_module.permissionMixin import class_view_decorator
 from modules.share_module.utils import get_kwargs
@@ -22,12 +22,7 @@ class ProjectUpdate(SuccessMessageMixin, UpdateView):
     model = Project
     template_name = "projects_edit.html"
     success_message = u"%(full_name)s 成功修改"
-    fields = [
-        "number", "short_name", "full_name", "principal", "department", "customer", "business_city",
-        "company_subject", "contract_type", "project_type", "start_date", "end_date",
-        "progress_state", "customer_service_staff", "customer_service_charge",
-        "outsource_director", "customer_service_director", "other_responsible_person"
-    ]
+    form_class = ProjectForm
 
     def get_success_url(self):
         url = reverse('project_manage:project_list', args=("basic_info",))

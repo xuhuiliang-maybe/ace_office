@@ -189,6 +189,7 @@
                             </label>
                         </th>
                         <!--公共信息-->
+                        <th class="center">操作</th>
                         <th class="center">序号</th>
                         <th class="center">管理权</th>
                         <th class="center">姓名</th>
@@ -263,7 +264,6 @@
                             <th class="center">备注</th>
                         {% endif %}
                         <th class="center">创建时间</th>
-                        <th class="center">操作</th>
                     </tr>
                     </thead>
 
@@ -276,6 +276,21 @@
                                     <span class="lbl"></span>
                                 </label>
                             </td>
+                            <td>
+                                <div>
+                                    {% if employee_type == "employee" %}
+                                        <button class="btn btn-minier btn-danger"
+                                                onclick="window.location.href='{% url "employee_info:employee_delete" pk=emplyee.id %}'">
+                                    {% endif %}
+                                    {% if employee_type == "temporary" %}
+                                        <button class="btn btn-minier btn-danger"
+                                                onclick="window.location.href='{% url "employee_info:temporary_delete" pk=emplyee.id %}'">
+                                    {% endif %}
+                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+                                </div>
+                            </td>
+
                             <!--公共信息-->
                             <td>{{ forloop.counter }} </td>
                             <td>{{ emplyee.project_name.department.management_rights.name | default_if_none:"" }} </td>
@@ -361,33 +376,6 @@
                                 <td>{{ emplyee.remark1 }}</td>
                             {% endif %}
                             <td>{{ emplyee.create_time | date:"Y-m-d H:m:s"}}</td>
-                            <td>
-
-                                <div>
-                                    {% if employee_type == "employee" %}
-                                        <button class="btn btn-minier btn-info"
-                                                onclick="window.location.href='{% url "employee_info:employee_edit" pk=emplyee.id %}'">
-                                    {% endif %}
-                                    {% if employee_type == "temporary" %}
-                                        <button class="btn btn-minier btn-info"
-                                                onclick="window.location.href='{% url "employee_info:temporary_edit" pk=emplyee.id %}'">
-                                    {% endif %}
-                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                    </button>
-
-                                    {% if employee_type == "employee" %}
-                                        <button class="btn btn-minier btn-danger"
-                                                onclick="window.location.href='{% url "employee_info:employee_delete" pk=emplyee.id %}'">
-                                    {% endif %}
-                                    {% if employee_type == "temporary" %}
-                                        <button class="btn btn-minier btn-danger"
-                                                onclick="window.location.href='{% url "employee_info:temporary_delete" pk=emplyee.id %}'">
-                                    {% endif %}
-                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                    </button>
-
-                                </div>
-                            </td>
                         </tr>
                     {% empty %}
                         <tr class="info">
@@ -485,7 +473,7 @@
 {% block self_js %}
     <script type="text/javascript">
         $(document).ready(function () {
-            FixTable("MyTable", 7);
+            FixTable("MyTable", 8);
         });
 
         $("#st_release_time, #et_release_time, #start_time, #end_time").datepicker(datepickerOptions);

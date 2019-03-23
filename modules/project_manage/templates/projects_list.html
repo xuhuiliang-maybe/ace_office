@@ -117,6 +117,7 @@
                                 <span class="lbl"></span>
                             </label>
                         </th>
+                        <th class="center">操作</th>
                         <th class="center">项目编号</th>
                         <th class="center">管理权</th>
                         <th class="center">项目简称</th>
@@ -222,7 +223,6 @@
                             <th class="center">开户行</th>
                             <th class="center">账号</th>
                         {% endif %}
-                        <th class="center">操作</th>
                     </tr>
                     </thead>
 
@@ -234,6 +234,18 @@
                                     <input type="checkbox" class="ace" name="db_id" value="{{ project.id }}"/>
                                     <span class="lbl"></span>
                                 </label>
+                            </td>
+
+                            <td>
+                                <div>
+                                    <!--just project basic info have delete button-->
+                                    {% if project_info_type == "basic_info" %}
+                                        <button class="btn btn-minier btn-danger"
+                                                onclick="window.location.href='{% url "project_manage:project_delete" pk=project.id %}'">
+                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                        </button>
+                                    {% endif %}
+                                </div>
                             </td>
 
                             <td>
@@ -258,6 +270,7 @@
                                 {{ project.number }}
                                 </a>
                             </td>
+
                             <td>{{ project.department.management_rights.name | default_if_none:""}}</td>
                             <td>{{ project.short_name }}</td>
                             <td>{{ project.full_name }}</td>
@@ -363,46 +376,7 @@
                                 <td>{{ project.bank }}</td>
                                 <td>{{ project.account_number }}</td>
                             {% endif %}
-                            <td>
-                                <div>
-                                    {% if project_info_type == "basic_info" %}
-                                        <button class="btn btn-minier btn-info"
-                                                onclick="window.location.href='{% url "project_manage:project_edit" pk=project.id %}'">
-                                    {% endif %}
-                                    {% if project_info_type == "social_security_info" %}
-                                        <button class="btn btn-minier btn-info"
-                                                onclick="window.location.href='{% url "project_manage:edit_project_social_security" pk=project.id %}'">
-                                    {% endif %}
-                                    {% if project_info_type == "settle_accounts_info" %}
-                                        <button class="btn btn-minier btn-info"
-                                                onclick="window.location.href='{% url "project_manage:edit_project_settle_accounts" pk=project.id %}'">
-                                    {% endif %}
-                                    {% if project_info_type == "billing_info" %}
-                                        <button class="btn btn-minier btn-info"
-                                                onclick="window.location.href='{% url "project_manage:edit_project_billing" pk=project.id %}'">
-                                    {% endif %}
-                                    {% if project_info_type == "sales_info" %}
-                                        <button class="btn btn-minier btn-info"
-                                                onclick="window.location.href='{% url "project_manage:edit_project_sales" pk=project.id %}'">
-                                    {% endif %}
-                                    {% if project_info_type == "recruitment_unit" %}
-                                        <button class="btn btn-minier btn-info"
-                                                onclick="window.location.href='{% url "project_manage:edit_project_recruitment_unit" pk=project.id %}'">
-                                    {% endif %}
-                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                    </button>
 
-
-                                    <!--just project basic info have delete button-->
-                                    {% if project_info_type == "basic_info" %}
-                                        <button class="btn btn-minier btn-danger"
-                                                onclick="window.location.href='{% url "project_manage:project_delete" pk=project.id %}'">
-                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                        </button>
-                                    {% endif %}
-
-                                </div>
-                            </td>
                         </tr>
                     {% empty %}
                         <tr class="info">
@@ -480,7 +454,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             {% if project_info_type != "recruitment_unit" %}
-                FixTable("MyTable", 5);
+                FixTable("MyTable", 6);
             {% endif %}
         });
 

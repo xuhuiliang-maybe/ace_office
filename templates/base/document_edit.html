@@ -2,6 +2,7 @@
 {% load i18n admin_static %}
 {% load bootstrap_tags %}
 {% block css %}
+    <link rel="stylesheet" href="/static/css/select2.css" />
 {% endblock %}
 {% block breadcrumb %}
     <li class="active">信息维护</li>
@@ -82,7 +83,7 @@
                                         <div class="form-group">
                                             <div class="col-xs-12 col-sm-6">
                                                 <input type="hidden" name="referrer" value="{{ referrer }}"/>
-                                                {{ form | as_bootstrap_horizontal:"col-md-4" }}
+                                                {{ form | as_bootstrap }}
                                             </div>
                                         </div>
                                     </div>
@@ -125,6 +126,7 @@
 {% endblock %}
 
 {% block js %}
+    <script src="/static/js/select2.js"></script>
     <script src="/static/js/jquery-ui.js"></script>
     <script src="/static/js/fuelux/fuelux.tree.js"></script>
     <script src="/static/customjs/custom_tree.js"></script>
@@ -133,6 +135,8 @@
     <script src="/static/customjs/jquery.cityselect.js"></script>
 
     <script type="text/javascript">
+        $('.select2').css('width', '400px').attr("class", "select2-container select2").select2({allowClear: true});
+
         function bind_propertychange() {
             var frm = document.getElementById("base_edit");
             var type_list = ["submit", "hidden"];

@@ -1,6 +1,8 @@
 # coding=utf-8
+from django import forms
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.forms import ModelChoiceField, TypedChoiceField
 
 from modules.dict_table.models import *
 from modules.organizational_structure.departments.models import Department
@@ -199,3 +201,34 @@ class Project(models.Model):
             return None
         except:
             traceback.print_exc()
+
+
+class ProjectForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProjectForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if field_name != "department":
+                if isinstance(field, ModelChoiceField) or isinstance(field, TypedChoiceField):
+                    field.widget.attrs.update({'class': 'select2'})
+
+    class Meta:
+        model = Project
+        fields = "__all__"
+
+
+class ProjectEditForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProjectForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if field_name != "department":
+                if isinstance(field, ModelChoiceField) or isinstance(field, TypedChoiceField):
+                    field.widget.attrs.update({'class': 'select2'})
+
+    class Meta:
+        model = Project
+        fields = [
+            "number", "short_name", "full_name", "principal", "department", "customer", "business_city",
+            "company_subject", "contract_type", "project_type", "start_date", "end_date",
+            "progress_state", "customer_service_staff", "customer_service_charge",
+            "outsource_director", "customer_service_director", "other_responsible_person"
+        ]

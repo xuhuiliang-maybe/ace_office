@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.forms import ModelChoiceField, TypedChoiceField
 from django.utils import timezone
 
 from modules.dict_table.models import *
@@ -233,6 +234,12 @@ class EmployeeForm(forms.ModelForm):
     # 		# 身份证相同并在职，不予录入
     # 		self.add_error('identity_card_number', u"相同身份证号并且在职的员工信息已经存在!")
 
+    def __init__(self, *args, **kwargs):
+        super(EmployeeForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field, ModelChoiceField) or isinstance(field, TypedChoiceField):
+                field.widget.attrs.update({'class': 'select2'})
+
     class Meta:
         model = Employee
         fields = [
@@ -248,6 +255,22 @@ class EmployeeForm(forms.ModelForm):
             "social_insurance_reduce_date", "business_insurance_reduce_date",
             "provident_fund_reduce_date", "phone_number", "contact_person",
             "contact_relationship", "contact_person_phone", "recruitment_channel"
+        ]
+
+
+class TemporaryForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(TemporaryForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field, ModelChoiceField) or isinstance(field, TypedChoiceField):
+                field.widget.attrs.update({'class': 'select2'})
+
+    class Meta:
+        model = Employee
+        fields = [
+            "name", "sex", "identity_card_number", "project_name",
+            "recruitment_attache", "phone_number", "start_work_date", "end_work_date", "work_days", "hours",
+            "amount_of_payment", "release_user", "release_time", "remark1",
         ]
 
 
