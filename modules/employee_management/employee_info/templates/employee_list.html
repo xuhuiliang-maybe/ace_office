@@ -554,7 +554,14 @@
                     + "&start_time=" + start_time
                     + "&end_time=" + end_time;
 
-            } else {
+
+            }
+                {% if request.user.dept_head %}
+                    else if (1 === 1){
+                    location.href = "/employeemanage/export?employee_type=employee"
+                }
+                {% endif %}
+            else {
                 layer.open({icon: 3, title: '提示', content: "至少使用一个过滤条件"});
             }
 
@@ -582,7 +589,13 @@
                     + "&start_time=" + start_time
                     + "&end_time=" + end_time
                     + "&recruitment_attache=" + recruitment_attache;
-            } else {
+            }
+                {% if request.user.dept_head %}
+                    else if (1 === 1){
+                    location.href = "/employeemanage/export?employee_type=employee"
+                }
+                {% endif %}
+            else {
                 layer.open({icon: 3, title: '提示', content: "至少使用一个过滤条件"});
             }
         });
