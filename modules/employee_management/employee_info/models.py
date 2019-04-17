@@ -199,6 +199,7 @@ class Employee(models.Model):
     remark4 = models.CharField(u"备注4", max_length=256, blank=True)
     remark5 = models.CharField(u"备注5", max_length=256, blank=True)
     create_time = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True, blank=True, null=True, db_index=True)
+    modified = models.DateTimeField(verbose_name=u'修改时间', auto_now=True, blank=True, null=True)
 
     def __str__(self):
         return self.name

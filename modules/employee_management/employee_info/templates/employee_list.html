@@ -264,6 +264,7 @@
                             <th class="center">备注</th>
                         {% endif %}
                         <th class="center">创建时间</th>
+                        <th class="center">修改时间</th>
                     </tr>
                     </thead>
 
@@ -376,6 +377,7 @@
                                 <td>{{ emplyee.remark1 }}</td>
                             {% endif %}
                             <td>{{ emplyee.create_time | date:"Y-m-d H:m:s"}}</td>
+                            <td>{{ emplyee.modified | date:"Y-m-d H:m:s"}}</td>
                         </tr>
                     {% empty %}
                         <tr class="info">

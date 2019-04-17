@@ -29,7 +29,7 @@ def write_excel(employee_type, employee_obj_list):
                          u'合同到期日期(2016-01-01)', u'合同续签次数', u'离职日期(2016-01-01)', u'离职手续', u'离职原因',
                          u'#DIV/0!01-', u'#DIV/0!02-', u'公积金减员日期(2016-01-01)', u'联系电话', u'紧急联系人',
                          u'与联系人关系', u'紧急联系人电话', u'招聘渠道', u'招聘人员', u'客服专员', u'客服主管',
-                         u'外包主管', u'客服经理', u'其他负责人', u"创建时间"]
+                         u'外包主管', u'客服经理', u'其他负责人', u"创建时间", u"修改时间"]
             field_list = ["name", "attribution_dept", "identity_card_number", "status", "project_name",
                           "salary_card_number", "bank_account", "job_dept", "position", "sex", "nation",
                           "education",
@@ -49,14 +49,14 @@ def write_excel(employee_type, employee_obj_list):
                           "contact_relationship",
                           "contact_person_phone", "recruitment_channel", "recruitment_attache",
                           "customer_service_staff", "customer_service_charge", "outsource_director",
-                          "customer_service_director", "other_responsible_person", "create_time"]
+                          "customer_service_director", "other_responsible_person", "create_time", "modified"]
         elif employee_type == "temporary":
             head_list = [u"姓名", u"性别", u"身份证号", u"项目名称", u"服务部门", u"招聘人员", u"联系电话", u"开始工作日",
-                         u"结束工作日", u"工作天数", u"小时数", u"发放金额", u"发放人", u"发放时间", u"备注1", u"创建时间"]
+                         u"结束工作日", u"工作天数", u"小时数", u"发放金额", u"发放人", u"发放时间", u"备注1", u"创建时间", u"修改时间"]
             field_list = ["name", "sex", "identity_card_number", "project_name", "attribution_dept",
                           "recruitment_attache", "phone_number", "start_work_date",
                           "end_work_date", "work_days", "hours", "amount_of_payment", "release_user",
-                          "release_time", "remark1", "create_time"]
+                          "release_time", "remark1", "create_time", "modified"]
 
         # 组装导出数据
         rows_list = list()
@@ -64,8 +64,8 @@ def write_excel(employee_type, employee_obj_list):
             for one_emp in employee_obj_list:
                 one_row_dict = defaultdict(str)
                 one_row_dict["name"] = one_emp.name  # 姓名
-                one_row_dict["create_time"] = get_strftime(one_emp.create_time,
-                                                           "%Y-%m-%d %X") if one_emp.create_time else "--"
+                one_row_dict["create_time"] = get_strftime(one_emp.create_time, "%Y-%m-%d %X") if one_emp.create_time else "--"
+                one_row_dict["modified"] = get_strftime(one_emp.modified, "%Y-%m-%d %X") if one_emp.modified else "--"
                 if one_emp.project_name:
                     one_row_dict[
                         "attribution_dept"] = one_emp.project_name.department.name if one_emp.project_name.department else "--"  # 服务部门
@@ -201,8 +201,8 @@ def write_excel(employee_type, employee_obj_list):
             for one_emp in employee_obj_list:
                 one_row_dict = defaultdict(str)
                 one_row_dict["name"] = one_emp.name  # 姓名
-                one_row_dict["create_time"] = get_strftime(one_emp.create_time,
-                                                           "%Y-%m-%d %X") if one_emp.create_time else "--"
+                one_row_dict["create_time"] = get_strftime(one_emp.create_time, "%Y-%m-%d %X") if one_emp.create_time else "--"
+                one_row_dict["modified"] = get_strftime(one_emp.modified, "%Y-%m-%d %X") if one_emp.modified else "--"
                 one_row_dict["sex"] = one_emp.get_sex_display()  # 性别
                 one_row_dict[
                     "identity_card_number"] = one_emp.identity_card_number  # 身份证号
@@ -358,10 +358,10 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
                          u'合同到期日期(2016-01-01)', u'合同续签次数', u'离职日期(2016-01-01)', u'离职手续', u'离职原因',
                          u'#DIV/0!01-', u'#DIV/0!02-', u'公积金减员日期(2016-01-01)', u'联系电话', u'紧急联系人',
                          u'与联系人关系', u'紧急联系人电话', u'招聘渠道', u'招聘人员', u'客服专员', u'客服主管',
-                         u'外包主管', u'客服经理', u'其他负责人', u"创建时间"]
+                         u'外包主管', u'客服经理', u'其他负责人', u"创建时间", u"修改时间"]
         elif employee_type == "temporary":
             head_list = [u"序号", u"姓名", u"性别", u"身份证号", u"项目名称", u"服务部门", u"招聘人员", u"联系电话", u"开始工作日", u"结束工作日", u"工作天数",
-                         u"小时数", u"发放金额", u"发放人", u"发放时间", u"备注1", u"创建时间"]
+                         u"小时数", u"发放金额", u"发放人", u"发放时间", u"备注1", u"创建时间", u"修改时间"]
         head_str = "\t".join(head_list)
         with open(filepath, "w") as f:  # 格式化字符串还能这么用！
             f.write(head_str)
@@ -465,8 +465,8 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
                             tmp_one.append(one_emp.project_name.other_responsible_person.first_name)  # 其他负责人
                         except:
                             tmp_one.append("--")
-                        tmp_one.append(
-                            one_emp.create_time.strftime("%Y-%m-%d %X") if one_emp.create_time else "--")  # 创建时间
+                        tmp_one.append(one_emp.create_time.strftime("%Y-%m-%d %X") if one_emp.create_time else "--")  # 创建时间
+                        tmp_one.append(one_emp.modified.strftime("%Y-%m-%d %X") if one_emp.create_time else "--")  # 修改时间
                         f.write("\t".join(tmp_one))
                         f.write("\n")
 
