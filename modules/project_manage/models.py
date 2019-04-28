@@ -3,12 +3,13 @@ from django import forms
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.forms import ModelChoiceField, TypedChoiceField
+from model_utils.models import TimeStampedModel
 
 from modules.dict_table.models import *
 from modules.organizational_structure.departments.models import Department
 
 
-class Project(models.Model):
+class Project(TimeStampedModel):
     """项目信息 """
     IS_GENERAL_TAXPAYER = (
         ('1', u'是'),
