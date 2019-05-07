@@ -85,7 +85,7 @@ def check_principal(function):
 		try:
 			model_obj = model_name.objects.filter(id=db_id)
 			if model_obj.exists():
-				if not login_user.is_superuser:
+				if not login_user.is_superuser and not login_user.dept_head:
 					if model_name == Archive:  # 档案信息
 						if model_obj[0].employee_id.project_name.principal != login_user:
 							messages.warning(request, u"不是项目负责人！")
@@ -121,7 +121,7 @@ def check_principal(function):
 	return _wrapped_view
 
 
-# 是否是项目负责人
+# 校验是否有此员工
 def check_employee(function):
 	def _wrapped_view(request, *args, **kwargs):
 		name = request.GET.get("name")
