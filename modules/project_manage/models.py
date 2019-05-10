@@ -196,7 +196,7 @@ class Project(TimeStampedModel):
     @staticmethod
     def get_project_by_full_name_or_short_name(name_str):
         try:
-            project_obj = Project.objects.filter(Q(short_name=name_str) | Q(full_name=name_str))
+            project_obj = Project.objects.filter(Q(short_name__contains=name_str) | Q(full_name__contains=name_str))
             if project_obj.exists():
                 return project_obj.first()
             return None
