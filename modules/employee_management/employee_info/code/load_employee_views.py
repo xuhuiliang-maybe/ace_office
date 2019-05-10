@@ -109,6 +109,7 @@ class LoadEmployeeView(View):
 								continue
 					except:
 						traceback.print_exc()
+						continue
 					try:
 						# 身份证号+姓名重复时，更新员工原有信息
 						filter_param = {
