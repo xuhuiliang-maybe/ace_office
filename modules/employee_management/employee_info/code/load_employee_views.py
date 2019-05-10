@@ -111,7 +111,13 @@ class LoadEmployeeView(View):
 						traceback.print_exc()
 					try:
 						# 身份证号+姓名重复时，更新员工原有信息
-						emp_obj = Employee.objects.filter(identity_card_number=row[3], name=row[1], status="1")
+						filter_param = {
+							"identity_card_number": row[3],
+							"name": row[1],
+							"status": "1",
+							"project_name__full_name__contains": row[5]
+						}
+						emp_obj = Employee.objects.filter(**filter_param)
 						if emp_obj.exists():
 							repeat_num += 1
 							emp_obj.update(
