@@ -29,66 +29,83 @@
                         </div>
 
                         <div class="widget-toolbar">
-                            <button class="btn btn-xs btn-info" onclick="$('#user_form').submit()" data-rel="tooltip"
-                                    title="搜索">
-                                <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
-                                搜索
-                            </button>
+                            {% if perms.employee_info.browse_employee %}
+                                <button class="btn btn-xs btn-info" onclick="$('#user_form').submit()"
+                                        data-rel="tooltip"
+                                        title="搜索">
+                                    <i class="ace-icon glyphicon glyphicon-search bigger-120"></i>
+                                    搜索
+                                </button>
+                            {% endif %}
 
-                            {% if employee_type == "employee" %}
-                                <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增员工"
-                                        onclick="window.location.href='{% url "employee_info:employee_add" %}'">
-                            {% endif %}
-                            {% if employee_type == "temporary" %}
-                                <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增临时工"
-                                        onclick="window.location.href='{% url "employee_info:temporary_add" %}'">
-                            {% endif %}
+                            {% if perms.employee_info.add_employee %}
+                                {% if employee_type == "employee" %}
+                                    <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增员工"
+                                            onclick="window.location.href='{% url "employee_info:employee_add" %}'">
+                                {% endif %}
+                                {% if employee_type == "temporary" %}
+                                    <button class="btn btn-xs btn-info" data-rel="tooltip" title="新增临时工"
+                                            onclick="window.location.href='{% url "employee_info:temporary_add" %}'">
+                                {% endif %}
                             <i class="ace-icon fa fa-plus-circle bigger-130"></i>
                             新增
                             </button>
+                            {% endif %}
 
-                            {% if employee_type == "employee" %}
-                                <button class="btn btn-xs btn-info" data-rel="tooltip" title="批量删除"
-                                        onclick="batch_delete('{% url "employee_info:employee_batch_delete" %}')">
-                            {% endif %}
-                            {% if employee_type == "temporary" %}
-                                <button class="btn btn-xs btn-info" data-rel="tooltip" title="批量删除"
-                                        onclick="batch_delete('{% url "employee_info:temporary_batchdelete_delete" %}')">
-                            {% endif %}
+                            {% if perms.employee_info.delete_employee %}
+                                {% if employee_type == "employee" %}
+                                    <button class="btn btn-xs btn-info" data-rel="tooltip" title="批量删除"
+                                            onclick="batch_delete('{% url "employee_info:employee_batch_delete" %}')">
+                                {% endif %}
+                                {% if employee_type == "temporary" %}
+                                    <button class="btn btn-xs btn-info" data-rel="tooltip" title="批量删除"
+                                            onclick="batch_delete('{% url "employee_info:temporary_batchdelete_delete" %}')">
+                                {% endif %}
                             <i class="ace-icon fa fa-trash-o bigger-130"></i>
                             批量删除
                             </button>
+                            {% endif %}
 
-                            {% if employee_type == "employee" %}
-                                <button class="btn btn-xs btn-info"
-                                        onclick="$('#myEmployeeModal').modal({backdrop: 'static', keyboard: false})"
-                                        data-rel="tooltip" title="导入Excel">
-                            {% endif %}
-                            {% if employee_type == "temporary" %}
-                                <button class="btn btn-xs btn-info"
-                                        onclick="$('#myEmployeeModal').modal({backdrop: 'static', keyboard: false})"
-                                        data-rel="tooltip" title="导入Excel">
-                            {% endif %}
+                            {% if perms.employee_info.add_employee %}
+                                {% if employee_type == "employee" %}
+                                    <button class="btn btn-xs btn-info"
+                                            onclick="$('#myEmployeeModal').modal({backdrop: 'static', keyboard: false})"
+                                            data-rel="tooltip" title="导入Excel">
+                                {% endif %}
+                                {% if employee_type == "temporary" %}
+                                    <button class="btn btn-xs btn-info"
+                                            onclick="$('#myEmployeeModal').modal({backdrop: 'static', keyboard: false})"
+                                            data-rel="tooltip" title="导入Excel">
+                                {% endif %}
                             <i class="ace-icon fa fa-cloud-upload bigger-130"></i>
                             导入
                             </button>
+                            {% endif %}
 
-                            {% if employee_type == "employee" %}
-                                <button class="btn btn-xs btn-info" id="exportemployee" data-rel="tooltip" title="导出Excel">
-                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>
-                                    导出
+                            {% if perms.employee_info.export_employee %}
+                                {% if employee_type == "employee" %}
+                                    <button class="btn btn-xs btn-info" id="exportemployee" data-rel="tooltip"
+                                            title="导出Excel">
+                                        <i class="ace-icon fa fa-cloud-download bigger-130"></i>
+                                        导出
+                                    </button>
+                                {% endif %}
+                                {% if employee_type == "temporary" %}
+                                    <button class="btn btn-xs btn-info" id="exporttemporary" data-rel="tooltip"
+                                            title="导出Excel">
+                                        <i class="ace-icon fa fa-cloud-download bigger-130"></i>
+                                        导出
+                                    </button>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if perms.employee_info.download_all_employee %}
+                                <button class="btn btn-xs btn-info" onClick="return downloadExcel()" data-rel="tooltip"
+                                        title="提取码：iysd">
+                                    <i class="ace-icon fa fa-download bigger-130"></i>
+                                    下载全部员工Excel
                                 </button>
                             {% endif %}
-                            {% if employee_type == "temporary" %}
-                                <button class="btn btn-xs btn-info" id="exporttemporary" data-rel="tooltip" title="导出Excel">
-                                <i class="ace-icon fa fa-cloud-download bigger-130"></i>
-                                    导出
-                                </button>
-                            {% endif %}
-                            <button class="btn btn-xs btn-info" onClick="return downloadExcel()" data-rel="tooltip" title="提取码：iysd">
-                                <i class="ace-icon fa fa-download bigger-130"></i>
-                                下载全部员工Excel
-                            </button>
                         </div>
                     </div>
                     <div class="widget-body">

@@ -219,6 +219,8 @@ class Employee(models.Model):
             ("browse_temporary", u"浏览 临时工信息"),
             ("change_temporary", u"修改 临时工信息"),
             ("export_temporary", u"导出 临时工信息"),
+            ("download_all_employee", u"下载 全部员工"),
+            ("leave_employee", u"查看-导出 离职员工"),
         )
 
 
