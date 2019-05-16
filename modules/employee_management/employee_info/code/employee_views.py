@@ -28,7 +28,7 @@ class EmployeeList(ListView):
 
             # 查询条件
             self.status = self.request.GET.get("status", "")  # 目前状态
-            if self.request.user.has_perm('employee_info.leave_employee'):
+            if not self.request.user.is_superuser and self.request.user.has_perm('employee_info.leave_employee'):
                 self.status = "2"
             self.project_name = self.request.GET.get("project_name", "")  # 项目名称
             self.dept_name = self.request.GET.get("dept_name", "")  # 服务部门
