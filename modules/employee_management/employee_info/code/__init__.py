@@ -8,7 +8,7 @@ employee_head_list = [u"序号", u'姓名（必填）', u'服务部门', u'身�
                       u'合同到期日期(2016-01-01)', u'合同续签次数', u'离职日期(2016-01-01)', u'离职手续', u'离职原因',
                       u'#DIV/0!01-', u'#DIV/0!02-', u'公积金减员日期(2016-01-01)', u'联系电话', u'紧急联系人',
                       u'与联系人关系', u'紧急联系人电话', u'招聘渠道', u'招聘人员', u'客服专员', u'客服主管',
-                      u'外包主管', u'客服经理', u'其他负责人', u"面试人员信息", u"创建时间", u"修改时间"]
+                      u'外包主管', u'客服经理', u'其他负责人', u"创建时间", u"修改时间"]
 employee_field_list = ["index", "name", "attribution_dept", "identity_card_number", "status", "project_name",
                        "salary_card_number", "bank_account", "job_dept", "position", "sex", "nation",
                        "education",
@@ -28,7 +28,7 @@ employee_field_list = ["index", "name", "attribution_dept", "identity_card_numbe
                        "contact_relationship",
                        "contact_person_phone", "recruitment_channel", "recruitment_attache",
                        "customer_service_staff", "customer_service_charge", "outsource_director",
-                       "customer_service_director", "other_responsible_person", "interviewer_information",
+                       "customer_service_director", "other_responsible_person",
                        "create_time", "modified"]
 
 temporary_head_list = [u"序号", u"姓名", u"性别", u"身份证号", u"项目名称", u"服务部门", u"招聘人员", u"联系电话", u"开始工作日",

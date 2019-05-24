@@ -166,11 +166,6 @@ def write_excel(employee_type, employee_obj_list):
                 except:
                     one_row_dict["other_responsible_person"] = "--"
 
-                try:
-                    one_row_dict["interviewer_information"] = one_emp.interviewer_information  # 面试人员信息
-                except:
-                    one_row_dict["interviewer_information"] = "--"
-
                 rows_list.append(one_row_dict.copy())
         elif employee_type == "temporary":
             for index, one_emp in enumerate(employee_obj_list):
@@ -430,10 +425,6 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
                             tmp_one.append("--")
                         try:
                             tmp_one.append(one_emp.project_name.other_responsible_person.first_name)  # 其他负责人
-                        except:
-                            tmp_one.append("--")
-                        try:
-                            tmp_one.append(one_emp.interviewer_information)  # 面试人员信息
                         except:
                             tmp_one.append("--")
                         tmp_one.append(

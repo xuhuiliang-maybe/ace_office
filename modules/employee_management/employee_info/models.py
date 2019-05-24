@@ -119,6 +119,7 @@ IS_WORK = (
     ('1', u'在职'),
     ('2', u'离职'),
     ('3', u'调出'),
+    ('4', u'面试'),
 )
 
 
@@ -192,7 +193,6 @@ class Employee(models.Model):
                                      related_name="release_user")
     release_time = models.DateField(u"发放时间", blank=True, null=True)
     remark1 = models.CharField(u"备注1", max_length=256, blank=True)
-    interviewer_information = models.TextField(u"面试人员信息", blank=True, null=True)
 
     # 预留字段
     remark2 = models.CharField(u"备注2", max_length=256, blank=True)

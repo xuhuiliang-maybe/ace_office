@@ -266,7 +266,6 @@
                             <th class="center">外包主管</th>
                             <th class="center">客服经理</th>
                             <th class="center">其他负责人</th>
-                            <th class="center">面试人员信息</th>
                         {% endif %}
 
                         <!--临时工信息-->
@@ -380,7 +379,6 @@
                                 <td>{{ emplyee.project_name.outsource_director | default_if_none:"" }}</td>
                                 <td>{{ emplyee.project_name.customer_service_director | default_if_none:"" }}</td>
                                 <td>{{ emplyee.project_name.other_responsible_person | default_if_none:"" }}</td>
-                                <td>{{ emplyee.interviewer_information | default_if_none:"" }}</td>
                             {% endif %}
 
                             <!--临时工信息-->
@@ -404,7 +402,7 @@
                                 <td colspan="20">
                             {% endif %}
                             {% if employee_type == "employee" %}
-                                <td colspan="58">
+                                <td colspan="57">
                             {% endif %}
                             抱歉，目前没有满足条件的信息。
                             </td>

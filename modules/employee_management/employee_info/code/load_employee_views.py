@@ -188,7 +188,6 @@ class LoadEmployeeView(View):
 							contact_person_phone=str(get_excel_int(row[46], True)),  # 紧急联系人电话
 							recruitment_channel=recruitment_channel_dict.get(row[47], ""),  # 招聘渠道
 							recruitment_attache=Profile.get_user_by_username_or_first_name(row[48]),  # 招聘人员
-							interviewer_information=row[54],  # 面试人员信息
 						)
 						import_num += 1
 					except:
