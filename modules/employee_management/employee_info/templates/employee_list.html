@@ -266,6 +266,7 @@
                             <th class="center">外包主管</th>
                             <th class="center">客服经理</th>
                             <th class="center">其他负责人</th>
+                            <th class="center">面试人员信息</th>
                         {% endif %}
 
                         <!--临时工信息-->
@@ -379,6 +380,7 @@
                                 <td>{{ emplyee.project_name.outsource_director | default_if_none:"" }}</td>
                                 <td>{{ emplyee.project_name.customer_service_director | default_if_none:"" }}</td>
                                 <td>{{ emplyee.project_name.other_responsible_person | default_if_none:"" }}</td>
+                                <td>{{ emplyee.interviewer_information | default_if_none:"" }}</td>
                             {% endif %}
 
                             <!--临时工信息-->
@@ -402,7 +404,7 @@
                                 <td colspan="20">
                             {% endif %}
                             {% if employee_type == "employee" %}
-                                <td colspan="57">
+                                <td colspan="58">
                             {% endif %}
                             抱歉，目前没有满足条件的信息。
                             </td>
@@ -428,6 +430,7 @@
                         导入员工信息
                         <small>
                             <b style="color: #d14a7d">请以模板格式为准，当员工身份证号+姓名重复并在在职时，更新员工原有信息</b>
+                            <b style="color: #d14a7d">最近一次更新:2019.5.24</b>
                         </small>
                     </h4>
                 </div>

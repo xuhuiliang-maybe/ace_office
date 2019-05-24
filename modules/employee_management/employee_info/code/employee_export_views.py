@@ -7,6 +7,8 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.views.generic import View
 
+from modules.employee_management.employee_info.code import employee_head_list, employee_field_list, temporary_head_list, \
+    temporary_field_list
 from modules.employee_management.employee_info.models import Employee
 from modules.share_module.download import download_file
 from modules.share_module.export import *
@@ -20,51 +22,21 @@ def write_excel(employee_type, employee_obj_list):
     head_list, field_list = [], []
     try:
         if employee_type == "employee":
-            head_list = [u'姓名（必填）', u'服务部门', u'身份证号（必填）', u'目前状态(在职/离职)', u'项目名称（必填）', u'银行卡号', u'开户银行',
-                         u'部门', u'职务', u'性别(男/女)', u'民族', u'学历', u'出生年月(2016-01-01)', u'员工年龄', u'户口所在地',
-                         u'户口邮编', u'户口性质', u'工作地', u'社保地', u'人员属性', u'合同属性', u'合同主体',
-                         u'入职日期(2016-01-01)', u'调出时间(2016-01-01)', u'转入时间(2016-01-01)', u'#DIV/0!01+', u"社保支付卡",
-                         u"开户银行", u'#DIV/0!02+',
-                         u'公积金增员日期(2016-01-01)', u'合同开始日期(2016-01-01)', u'试用期限', u'合同期限', u'试用到期日期(2016-01-01)',
-                         u'合同到期日期(2016-01-01)', u'合同续签次数', u'离职日期(2016-01-01)', u'离职手续', u'离职原因',
-                         u'#DIV/0!01-', u'#DIV/0!02-', u'公积金减员日期(2016-01-01)', u'联系电话', u'紧急联系人',
-                         u'与联系人关系', u'紧急联系人电话', u'招聘渠道', u'招聘人员', u'客服专员', u'客服主管',
-                         u'外包主管', u'客服经理', u'其他负责人', u"创建时间", u"修改时间"]
-            field_list = ["name", "attribution_dept", "identity_card_number", "status", "project_name",
-                          "salary_card_number", "bank_account", "job_dept", "position", "sex", "nation",
-                          "education",
-                          "birthday", "age", "register_address", "register_postcode", "register_type",
-                          "work_address", "insured_place", "person_type", "contract_type",
-                          "contract_subject",
-                          "entry_date", "call_out_time", "into_time", "social_insurance_increase_date",
-                          "social_security_payment_card",
-                          "use_bank",
-                          "business_insurance_increase_date", "provident_fund_increase_date",
-                          "contract_begin_date",
-                          "probation_period", "contract_period", "probation_end_date", "contract_end_date",
-                          "contract_renew_times", "departure_date", "departure_procedure",
-                          "departure_cause",
-                          "social_insurance_reduce_date", "business_insurance_reduce_date",
-                          "provident_fund_reduce_date", "phone_number", "contact_person",
-                          "contact_relationship",
-                          "contact_person_phone", "recruitment_channel", "recruitment_attache",
-                          "customer_service_staff", "customer_service_charge", "outsource_director",
-                          "customer_service_director", "other_responsible_person", "create_time", "modified"]
+            head_list = employee_head_list
+            field_list = employee_field_list
         elif employee_type == "temporary":
-            head_list = [u"姓名", u"性别", u"身份证号", u"项目名称", u"服务部门", u"招聘人员", u"联系电话", u"开始工作日",
-                         u"结束工作日", u"工作天数", u"小时数", u"发放金额", u"发放人", u"发放时间", u"备注1", u"创建时间", u"修改时间"]
-            field_list = ["name", "sex", "identity_card_number", "project_name", "attribution_dept",
-                          "recruitment_attache", "phone_number", "start_work_date",
-                          "end_work_date", "work_days", "hours", "amount_of_payment", "release_user",
-                          "release_time", "remark1", "create_time", "modified"]
+            head_list = temporary_head_list
+            field_list = temporary_field_list
 
         # 组装导出数据
         rows_list = list()
         if employee_type == "employee":
-            for one_emp in employee_obj_list:
+            for index, one_emp in enumerate(employee_obj_list):
                 one_row_dict = defaultdict(str)
+                one_row_dict["index"] = str(index + 1)  # 序号
                 one_row_dict["name"] = one_emp.name  # 姓名
-                one_row_dict["create_time"] = get_strftime(one_emp.create_time, "%Y-%m-%d %X") if one_emp.create_time else "--"
+                one_row_dict["create_time"] = get_strftime(one_emp.create_time,
+                                                           "%Y-%m-%d %X") if one_emp.create_time else "--"
                 one_row_dict["modified"] = get_strftime(one_emp.modified, "%Y-%m-%d %X") if one_emp.modified else "--"
                 if one_emp.project_name:
                     one_row_dict[
@@ -127,13 +99,11 @@ def write_excel(employee_type, employee_obj_list):
                 one_row_dict["contract_begin_date"] = get_strftime(one_emp.contract_begin_date,
                                                                    "%Y-%m-%d") if one_emp.contract_begin_date else ''  # 合同开始日期
                 if one_emp.probation_period:
-                    one_row_dict["probation_period"] = int(
-                        one_emp.probation_period)  # 使用期限
+                    one_row_dict["probation_period"] = int(one_emp.probation_period)  # 使用期限
                 else:
                     one_row_dict["probation_period"] = "--"
                 if one_emp.contract_period:
-                    one_row_dict["contract_period"] = int(
-                        one_emp.contract_period)  # 合同期限
+                    one_row_dict["contract_period"] = int(one_emp.contract_period)  # 合同期限
                 else:
                     one_row_dict["contract_period"] = "--"
                 one_row_dict["probation_end_date"] = get_strftime(one_emp.probation_end_date,
@@ -172,8 +142,7 @@ def write_excel(employee_type, employee_obj_list):
                 except:
                     one_row_dict["recruitment_attache"] = "--"  # 招聘人员
                 try:
-                    one_row_dict[
-                        "customer_service_staff"] = one_emp.project_name.customer_service_staff.first_name  # 客户专员
+                    one_row_dict["customer_service_staff"] = one_emp.project_name.customer_service_staff.first_name  # 客户专员
                 except:
                     one_row_dict["customer_service_staff"] = "--"
                 try:
@@ -196,12 +165,20 @@ def write_excel(employee_type, employee_obj_list):
                         "other_responsible_person"] = one_emp.project_name.other_responsible_person.first_name  # 其他负责人
                 except:
                     one_row_dict["other_responsible_person"] = "--"
+
+                try:
+                    one_row_dict["interviewer_information"] = one_emp.interviewer_information  # 面试人员信息
+                except:
+                    one_row_dict["interviewer_information"] = "--"
+
                 rows_list.append(one_row_dict.copy())
         elif employee_type == "temporary":
-            for one_emp in employee_obj_list:
+            for index, one_emp in enumerate(employee_obj_list):
                 one_row_dict = defaultdict(str)
+                one_row_dict["index"] = str(index + 1)  # 序号
                 one_row_dict["name"] = one_emp.name  # 姓名
-                one_row_dict["create_time"] = get_strftime(one_emp.create_time, "%Y-%m-%d %X") if one_emp.create_time else "--"
+                one_row_dict["create_time"] = get_strftime(one_emp.create_time,
+                                                           "%Y-%m-%d %X") if one_emp.create_time else "--"
                 one_row_dict["modified"] = get_strftime(one_emp.modified, "%Y-%m-%d %X") if one_emp.modified else "--"
                 one_row_dict["sex"] = one_emp.get_sex_display()  # 性别
                 one_row_dict[
@@ -349,19 +326,9 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
     try:
         head_list = list()
         if employee_type == "employee":
-            head_list = [u"序号", u'姓名（必填）', u'服务部门', u'身份证号（必填）', u'目前状态(在职/离职)', u'项目名称（必填）', u'银行卡号', u'开户银行',
-                         u'部门', u'职务', u'性别(男/女)', u'民族', u'学历', u'出生年月(2016-01-01)', u'员工年龄', u'户口所在地',
-                         u'户口邮编', u'户口性质', u'工作地', u'社保地', u'人员属性', u'合同属性', u'合同主体',
-                         u'入职日期(2016-01-01)', u'调出时间(2016-01-01)', u'转入时间(2016-01-01)', u'#DIV/0!01+', u"社保支付卡",
-                         u"开户银行", u'#DIV/0!02+',
-                         u'公积金增员日期(2016-01-01)', u'合同开始日期(2016-01-01)', u'试用期限', u'合同期限', u'试用到期日期(2016-01-01)',
-                         u'合同到期日期(2016-01-01)', u'合同续签次数', u'离职日期(2016-01-01)', u'离职手续', u'离职原因',
-                         u'#DIV/0!01-', u'#DIV/0!02-', u'公积金减员日期(2016-01-01)', u'联系电话', u'紧急联系人',
-                         u'与联系人关系', u'紧急联系人电话', u'招聘渠道', u'招聘人员', u'客服专员', u'客服主管',
-                         u'外包主管', u'客服经理', u'其他负责人', u"创建时间", u"修改时间"]
+            head_list = employee_head_list
         elif employee_type == "temporary":
-            head_list = [u"序号", u"姓名", u"性别", u"身份证号", u"项目名称", u"服务部门", u"招聘人员", u"联系电话", u"开始工作日", u"结束工作日", u"工作天数",
-                         u"小时数", u"发放金额", u"发放人", u"发放时间", u"备注1", u"创建时间", u"修改时间"]
+            head_list = temporary_head_list
         head_str = "\t".join(head_list)
         with open(filepath, "w") as f:  # 格式化字符串还能这么用！
             f.write(head_str)
@@ -465,8 +432,14 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
                             tmp_one.append(one_emp.project_name.other_responsible_person.first_name)  # 其他负责人
                         except:
                             tmp_one.append("--")
-                        tmp_one.append(one_emp.create_time.strftime("%Y-%m-%d %X") if one_emp.create_time else "--")  # 创建时间
-                        tmp_one.append(one_emp.modified.strftime("%Y-%m-%d %X") if one_emp.create_time else "--")  # 修改时间
+                        try:
+                            tmp_one.append(one_emp.interviewer_information)  # 面试人员信息
+                        except:
+                            tmp_one.append("--")
+                        tmp_one.append(
+                            one_emp.create_time.strftime("%Y-%m-%d %X") if one_emp.create_time else "--")  # 创建时间
+                        tmp_one.append(
+                            one_emp.modified.strftime("%Y-%m-%d %X") if one_emp.create_time else "--")  # 修改时间
                         f.write("\t".join(tmp_one))
                         f.write("\n")
 
@@ -507,108 +480,3 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
             os.system("bypy upload %s ExportEmployee -v" % filepath)
     except:
         traceback.print_exc()
-
-# @class_view_decorator(login_required)
-# @class_view_decorator(permission_required('employee_info.export_employee', raise_exception=True))
-# class NewEmployeeExportView(View):
-# 	def post(self, request, *args, **kwargs):
-# 		result_dict = {"code": 1, "msg": u"导出成功"}
-#
-# 		employee_type = self.request.POST.get("employee_type", "")
-# 		filename = ""
-# 		if employee_type == "employee":
-# 			filename = "Employee"
-# 		elif employee_type == "temporary":
-# 			filename = "Temporary"
-#
-# 		file_name = filename + "_" + time.strftime("%Y-%m-%d_%H_%M_%S") + ".txt"
-# 		tmp_path = get_media_sub_path("export_employee")  # 临时文件夹路径
-# 		filepath = os.path.join(tmp_path, file_name)  # 导出文件路径
-# 		if not os.path.exists(tmp_path):
-# 			os.makedirs(tmp_path)
-#
-# 		try:
-# 			# 员工查询
-# 			status = self.request.POST.get("status", "")  # 目前状态
-# 			project_name = self.request.POST.get("project_name", "")  # 项目名称
-# 			dept_name = self.request.POST.get("dept_name", "")  # 服务部门
-# 			principal = self.request.POST.get("principal", "")  # 项目负责人
-# 			name = self.request.POST.get("name", "")  # 姓名
-# 			identity_card_number = self.request.POST.get("identity_card_number", "")  # 身份证号
-# 			person_type = int(self.request.POST.get("person_type", 0))  # 人员属性
-# 			contract_type = self.request.POST.get("contract_type", "")  # 合同属性
-#
-# 			# 临时员工查询
-# 			phone_number = self.request.POST.get("phone_number", "")  # 联系方式
-# 			recruitment_attache = self.request.POST.get("recruitment_attache", "")  # 招聘人员
-# 			st_release_time = self.request.POST.get("st_release_time", "")  # 发放起始时间
-# 			et_release_time = self.request.POST.get("et_release_time", "")  # 发放终止日期
-# 			self.start_time = self.request.POST.get("start_time", "")  # 创建起始时间
-# 			self.end_time = self.request.POST.get("end_time", "")  # 创建终止时间
-#
-# 			if self.start_time and self.end_time:
-# 				self.start_time += " 00:00:01"
-# 				self.end_time += " 23:59:59"
-# 				self.start_time = date_formater(self.start_time, "%Y/%m/%d %X")
-# 				self.end_time = date_formater(self.end_time, "%Y/%m/%d %X")
-#
-# 			try:
-# 				user_position = self.request.user.position.name  # 用户岗位
-# 			except:
-# 				user_position = "--"
-# 			position_list = [u"客服专员", u"客服主管", u"外包主管", u"客服经理"]
-# 			if user_position in position_list:  # 登录用户在客服部，只能查看所在部门员工信息
-# 				dept_name = self.request.user.attribution_dept
-#
-# 			search_condition = {
-# 				"status": status,
-# 				"project_name__full_name__icontains": project_name,
-# 				"project_name__principal__first_name__icontains": principal,
-# 				"name__icontains": name,
-# 				"identity_card_number__icontains": identity_card_number,
-# 				"person_type": person_type,
-# 				"contract_type": contract_type,
-# 				"phone_number": phone_number,
-# 				"recruitment_attache__first_name__icontains": recruitment_attache,
-# 				"release_time__gte": st_release_time,
-# 				"release_time__lte": et_release_time,
-# 				"create_time__gte": self.start_time,
-# 				"create_time__lte": self.end_time
-# 			}
-# 			if dept_name:
-# 				search_condition.update(
-# 					{"project_name__department__name__in": dept_name.split(",")})
-#
-# 			kwargs = get_kwargs(search_condition)
-# 			if employee_type == "employee":  # 查看员工信息
-# 				kwargs.update({"is_temporary": False})
-# 			elif employee_type == "temporary":  # 查看临时工信息
-# 				kwargs.update({"is_temporary": True})
-# 			employee_obj_list = Employee.objects.filter(**kwargs)
-#
-# 			if employee_obj_list.exists():
-# 				# 组装导出数据
-# 				write_employee_file(employee_type, employee_obj_list, filepath)
-# 				download_path = "下载链接：https://pan.baidu.com/s/1Y7PWQ2gzfte5f7ELtK3tgg 密码：169c"
-# 				messages.success(self.request, u"成功导出员工信息（%s）, %s" % (file_name, download_path))
-# 			else:
-# 				messages.warning(self.request, u"没有查询到数据，请合理填写查询条件")
-# 		# if employee_obj_list.exists():
-# 		# 	# 页面下载导出文件
-# 		# 	response = download_file(filepath, file_name, False)
-# 		# 	return response
-# 		# else:
-# 		# 	# 导出只有表头信息的空文件
-# 		# 	if employee_type == "employee":
-# 		# 		return redirect(reverse('download', args=("employee_info",)))
-# 		# 	elif employee_type == "temporary":
-# 		# 		return redirect(reverse('download', args=("temporary_info",)))
-# 		except:
-# 			traceback.print_exc()
-# 			result_dict["msg"] = u"导出异常"
-# 			result_dict["code"] = 0
-# 		finally:
-# 			return HttpResponse(
-# 				json.dumps(result_dict),
-# 				content_type='application/json'
-# 			)
