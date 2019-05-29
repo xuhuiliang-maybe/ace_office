@@ -234,8 +234,8 @@ class LoadProjectView(View):
                 messages.warning(self.request, messages_warning + u"行数据格式错误！")
 
             msg = u"导入成功，记录总数：%s条，" % total
-            if import_num: msg += u"新增：%s条，" % import_num
-            if repeat_num: msg += u"更新：%s条，" % repeat_num
+            msg += u"新增：%s条，" % import_num
+            msg += u"更新：%s条，" % repeat_num
             if no_project_num: msg += u"无项目编号(忽略)：%s条，" % no_project_num
             messages.success(self.request, msg)
 
