@@ -4,7 +4,7 @@
 django==1.8.7
 pyExcelerator
 Pillow
-pip install --upgrade pillow --global-option="build_ext" --global-option="--disable-jpeg" --global-option="--disable-zlib"
+#pip install --upgrade pillow --global-option="build_ext" --global-option="--disable-jpeg" --global-option="--disable-zlib"
 xlrd
 python-Memcached
 django_forms_bootstrap
