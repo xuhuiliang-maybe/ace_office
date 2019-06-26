@@ -61,7 +61,7 @@ def check_user_is_songxiaodan(function):
 		try:
 			model_obj = model_name.objects.filter(id=db_id)
 			if model_obj.exists():
-				if login_user.username not in SUPERUSERNAMES and model_obj[0].status in ["2", "3"]:
+				if login_user.username not in SUPERUSERNAMES and model_obj.first().status in ["2", "3"]:
 					messages.warning(request, u"员工'目前状态'为'离职、调出'时，只能由'%s'维护信息！" % ",".join(SUPERUSERNAMES))
 					raise PermissionDenied
 		except:

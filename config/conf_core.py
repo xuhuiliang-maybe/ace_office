@@ -23,4 +23,3 @@ SUPERUSERNAMES = conf_object.get("sys", "superusername").split(",")  # 超管用
 
 # 服务相关
 SET_DEBUG = conf_object.get("service", "debug")
-print SUPERUSERNAMES
