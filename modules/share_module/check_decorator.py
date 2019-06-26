@@ -7,7 +7,7 @@ from django.shortcuts import resolve_url
 from django.template.response import TemplateResponse
 
 from ace_office import settings
-from config.conf_core import SUPERUSERNAME
+from config.conf_core import SUPERUSERNAMES
 from modules.approval_process.loan.models import LoanBudgetDetails
 from modules.approval_process.recruited_billing.models import RecruitedBillingDetails
 from modules.approval_process.temporary_write_offs_billing.models import TemporaryWriteOffsBillingDetails
@@ -61,8 +61,8 @@ def check_user_is_songxiaodan(function):
 		try:
 			model_obj = model_name.objects.filter(id=db_id)
 			if model_obj.exists():
-				if login_user.username != SUPERUSERNAME and model_obj[0].status in ["2", "3"]:
-					messages.warning(request, u"员工'目前状态'为'离职、调出'时，只能由'%s'维护信息！" % SUPERUSERNAME)
+				if login_user.username not in SUPERUSERNAMES and model_obj[0].status in ["2", "3"]:
+					messages.warning(request, u"员工'目前状态'为'离职、调出'时，只能由'%s'维护信息！" % ",".join(SUPERUSERNAMES))
 					raise PermissionDenied
 		except:
 			# 没有项目负责人信息
