@@ -25,7 +25,7 @@ host=localhost
 [sys]
 memcached=memcached://127.0.0.1:11211/?timeout=86400
 paginate=10
-superusername=taoyuzhu
+superusername=taoyuzhu,wangke
 
 [service]
 debug=1
