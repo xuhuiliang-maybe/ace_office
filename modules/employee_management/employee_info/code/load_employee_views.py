@@ -137,6 +137,9 @@ class LoadEmployeeView(View):
 								social_insurance_reduce_date=get_excel_date(row[40]),  # 社保减员日期
 								business_insurance_reduce_date=get_excel_date(row[41]),  # 商保减员日期
 								provident_fund_reduce_date=get_excel_date(row[42]),  # 公积金减员日期
+								age=get_excel_int(row[14]),  # 员工年龄
+								register_address=row[15],  # 户口所在地
+								register_postcode=str(get_excel_int(row[16], True)),  # 户口邮编
 							)
 							continue
 
