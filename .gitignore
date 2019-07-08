@@ -277,6 +277,5 @@ fabric.properties
 
 000*.py
 00*.py
-generate_preview
 mysql_backup
 tmp
