@@ -8,6 +8,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse
 from django.views.generic.edit import UpdateView
 
+from config.conf_core import SUPERUSERNAMES
 from modules.employee_management.employee_info.models import Employee, EmployeeForm, TemporaryForm
 from modules.project_manage.models import Project
 from modules.share_module.check_decorator import check_principal, check_user_is_songxiaodan
@@ -55,13 +56,16 @@ class EmployeeUpdate(SuccessMessageMixin, UpdateView):
                 messages.warning(self.request, u"请选择您所负责的“项目名称”")
                 return super(EmployeeUpdate, self).form_invalid(form)
 
-            project_name = Project.objects.filter(id=project_name)
+            project_obj = Project.objects.filter(id=project_name).first()
             principal = ""
-            if project_name.exists():
-                principal = project_name[0].principal
-            if login_user != principal:
-                messages.warning(self.request, u"请选择您所负责的“项目名称”")
-                return super(EmployeeUpdate, self).form_invalid(form)
+            if project_obj:
+                principal = project_obj.principal
+
+            if login_user.username not in SUPERUSERNAMES:
+                if not login_user.dept_head:
+                    if login_user != principal:
+                        messages.warning(self.request, u"请选择您所负责的“项目名称”")
+                        return super(EmployeeUpdate, self).form_invalid(form)
 
         # 校验身份证号，有在职员工有相同身份证号，不能同时存在，阻止录入，有相同身份证已离职可录入
         identity_card_number = self.request.POST.get('identity_card_number')
