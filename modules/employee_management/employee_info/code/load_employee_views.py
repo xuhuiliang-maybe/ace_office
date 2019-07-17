@@ -116,7 +116,7 @@ class LoadEmployeeView(View):
 							"identity_card_number": row[3],
 							"name": row[1],
 							"status": "1",
-							"project_name__full_name__contains": row[5]
+							# "project_name__full_name__contains": row[5]
 						}
 						emp_obj = Employee.objects.filter(**filter_param)
 						if emp_obj.exists():
