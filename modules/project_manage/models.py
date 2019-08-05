@@ -1,7 +1,6 @@
 # coding=utf-8
 from django import forms
 from django.contrib.auth.models import User
-from django.db.models import Q
 from django.forms import ModelChoiceField, TypedChoiceField
 from model_utils.models import TimeStampedModel
 
@@ -157,6 +156,7 @@ class Project(TimeStampedModel):
         ordering = ['-id']  # id倒叙
         permissions = (
             ("browse_basic_info", u"浏览 项目基础信息"),
+            ("export_project", u"导出 项目基础信息"),
 
             ("browse_social_security_info", u"浏览 项目社保信息"),
             ("change_social_security_info", u"修改 项目社保信息"),

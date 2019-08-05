@@ -56,12 +56,10 @@
                                     <i class="ace-icon fa fa-cloud-upload bigger-130"></i>
                                     导入
                                 </button>
-                                <!--
                                 <button class="btn btn-xs btn-info" id="exportproject" data-rel="tooltip" title="导出Excel">
                                     <i class="ace-icon fa fa-cloud-download"></i>
                                     导出
                                 </button>
-                                -->
                             {% endif %}
                         </div>
                     </div>
@@ -506,10 +504,21 @@
 
         /* 导出*/
         $("#exportproject").click(function () {
-            var select_dept_id = $("#dept_ids").val();
-            var first_name = $("#first_name").val();
-            var export_url = "/organizational/project/export?dept_ids=" + select_dept_id + "&first_name=" + first_name;
-            location.href = export_url;
+            var dept_name = $("#dept_name").val();
+            var dept_ids = $("#dept_ids").val();
+            var search_name = $("#search_name").val();
+            var progress_state = $("#progress_state").val();
+            if (dept_name || dept_ids || search_name || progress_state) {
+                location.href = "/projectmanage/export?dept_ids=" + dept_ids + "&search_name=" + search_name + "&progress_state=" + progress_state;
+            }
+                {% if request.user.dept_head %}
+                    else if (1 === 1){
+                    location.href = "/projectmanage/export"
+                }
+                {% endif %}
+            else {
+                layer.open({icon: 3, title: '提示', content: "至少使用一个过滤条件。"});
+            }
         });
 
     </script>

@@ -166,55 +166,56 @@ class LoadProjectView(View):
                             other_project=row[43],  # 其他需要我司代收代付项目
 
                             # 开票信息
-                            invoice_title=row[44],  # 发票抬头
-                            invoice_mode=row[45],  # 开票方式
-                            special_subject=row[46],  # 专票科目
-                            special_cost=row[47],  # 专票费用内容
-                            special_desc=row[48],  # 专票说明
-                            general_subject=row[49],  # 普票科目
-                            general_cost=row[50],  # 普票费用内容
-                            general_desc=row[51],  # 普票说明
-                            invoice_receiver=row[52],  # 发票接收人
-                            invoice_phone=row[53],  # 电话
-                            invoice_mail=row[54],  # 地址
-                            fast_mail_desc=row[55],  # 快递说明
-                            invoice_open_date=row[56],  # 发票开据时间
-                            is_general_taxpayer=true_false_unformat_new(row[57]),  # 是否一般纳税人
-                            taxpayer_identifier=row[58],  # 纳税人识别号
-                            address=row[59],  # 地址
-                            phone=row[60],  # 电话
-                            bank=row[61],  # 开户行
-                            account_number=row[62],  # 账号
+                            invoice_type=InvoiceType.get_dict_item_by_name(row[44]),  # 发票类型
+                            invoice_title=row[45],  # 发票抬头
+                            invoice_mode=row[46],  # 开票方式
+                            special_subject=row[47],  # 专票科目
+                            special_cost=row[48],  # 专票费用内容
+                            special_desc=row[49],  # 专票说明
+                            general_subject=row[50],  # 普票科目
+                            general_cost=row[51],  # 普票费用内容
+                            general_desc=row[52],  # 普票说明
+                            invoice_receiver=row[53],  # 发票接收人
+                            invoice_phone=row[54],  # 电话
+                            invoice_mail=row[55],  # 地址
+                            fast_mail_desc=row[56],  # 快递说明
+                            invoice_open_date=row[57],  # 发票开据时间
+                            is_general_taxpayer=true_false_unformat_new(row[58]),  # 是否一般纳税人
+                            taxpayer_identifier=row[59],  # 纳税人识别号
+                            address=row[60],  # 地址
+                            phone=row[61],  # 电话
+                            bank=row[62],  # 开户行
+                            account_number=row[63],  # 账号
 
                             # 销售信息
-                            salesman=Profile.get_user_by_username_or_first_name(row[63]),
+                            salesman=Profile.get_user_by_username_or_first_name(row[64]),
                             # 销售人员
-                            sales_type=SalesType.get_dict_item_by_name(row[64]),  # 销售类型
-                            dispatch_commission=get_excel_float(row[65]),  # 派遣提成标准
-                            remark1=row[66],
-                            outsourc_commission=get_excel_float(row[67]),  # 外包提成标准
-                            remark2=row[68],
-                            proxy_personnel_commission=get_excel_float(row[69]),  # 代理人事提成标准
-                            remark3=row[70],
-                            proxy_recruitment_commission=get_excel_float(row[71]),  # 代理招聘提成标准
-                            remark4=row[72],
-                            hourly_commission=get_excel_float(row[73]),  # 小时工提成标准
-                            remark5=row[74],
+                            sales_type=SalesType.get_dict_item_by_name(row[65]),  # 销售类型
+                            dispatch_commission=get_excel_float(row[66]),  # 派遣提成标准
+                            remark1=row[67],
+                            outsourc_commission=get_excel_float(row[68]),  # 外包提成标准
+                            remark2=row[69],
+                            proxy_personnel_commission=get_excel_float(row[70]),  # 代理人事提成标准
+                            remark3=row[71],
+                            proxy_recruitment_commission=get_excel_float(row[72]),  # 代理招聘提成标准
+                            remark4=row[73],
+                            hourly_commission=get_excel_float(row[74]),  # 小时工提成标准
+                            remark5=row[75],
 
                             # 招聘单价
-                            recruit_difficulty=row[75],  # 招聘难度系数
-                            jan=row[76],  # 1月
-                            feb=row[77],  # 2月
-                            mar=row[78],  # 3月
-                            apr=row[79],  # 4月
-                            may=row[80],  # 5月
-                            jun=row[81],  # 6月
-                            jul=row[82],  # 7月
-                            aug=row[83],  # 8月
-                            sep=row[84],  # 9 月
-                            oct=row[85],  # 10月
-                            nov=row[86],  # 11月
-                            dec=row[87],  # 12月
+                            recruit_difficulty=row[76],  # 招聘难度系数
+                            jan=row[77],  # 1月
+                            feb=row[78],  # 2月
+                            mar=row[79],  # 3月
+                            apr=row[80],  # 4月
+                            may=row[81],  # 5月
+                            jun=row[82],  # 6月
+                            jul=row[83],  # 7月
+                            aug=row[84],  # 8月
+                            sep=row[85],  # 9 月
+                            oct=row[86],  # 10月
+                            nov=row[87],  # 11月
+                            dec=row[88],  # 12月
                         )
                         # 信息已存在，没有创建新的，对已有数据做更新
                         project_obj = Project.objects.filter(full_name=row[2])
