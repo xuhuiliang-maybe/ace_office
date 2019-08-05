@@ -210,7 +210,7 @@ def write_excel(project_obj_list):
             one_row_dict["phone"] = one_project.phone
             one_row_dict["bank"] = one_project.bank
             one_row_dict["account_number"] = one_project.account_number
-            one_row_dict["salesman"] = one_project.salesman.name if one_project.salesman else ""
+            one_row_dict["salesman"] = one_project.salesman.first_name if one_project.salesman else ""
             one_row_dict["sales_type"] = one_project.sales_type.name if one_project.sales_type else ""
             one_row_dict["dispatch_commission"] = one_project.dispatch_commission
             one_row_dict["remark1"] = one_project.remark1
