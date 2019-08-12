@@ -31,7 +31,7 @@ def write_excel(project_obj_list):
                      "提供结算表时间(2016-01-01)",
                      "费用到账时间(2016-01-01)",
                      "工资发放时间(2016-01-01)",
-                     "工资发放方式", "结算对接人和联系方式", "异常结算情况", "工资服务结算周期", "其他需要我司代收代付项目", "发票类型", "发票抬头", "开票方式", "专票科目", "专票费用内容",
+                     "工资发放方式", "结算对接人和联系方式", "异常结算情况", "工资服务结算周期", "其他需要我司代收代付项目", "发票抬头", "开票方式", "专票科目", "专票费用内容",
                      "专票说明", "普票科目", "普票费用内容", "普票说明", "发票接收人", "电话", "地址", "快递说明", "发票开具日期(2016-01-01)",
                      "是否一般纳税人(是 / 否)", "纳税人识别号", "地址", "电话", "开户行", "账号", "销售人员", "销售类型", "派遣提成标准", "备注", "外包提成标准",
                      "备注",
@@ -83,7 +83,6 @@ def write_excel(project_obj_list):
             "abnormal_settlement",
             "wage_service_cost_settlement_cycle",
             "other_project",
-            "invoice_type",
             "invoice_title",
             "invoice_mode",
             "special_subject",
@@ -190,7 +189,6 @@ def write_excel(project_obj_list):
             one_row_dict["abnormal_settlement"] = one_project.abnormal_settlement
             one_row_dict["wage_service_cost_settlement_cycle"] = one_project.wage_service_cost_settlement_cycle
             one_row_dict["other_project"] = one_project.other_project
-            one_row_dict["invoice_type"] = one_project.invoice_type.name if one_project.invoice_type else ""
             one_row_dict["invoice_title"] = one_project.invoice_title
             one_row_dict["invoice_mode"] = one_project.invoice_mode
             one_row_dict["special_subject"] = one_project.special_subject
