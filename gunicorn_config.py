@@ -8,5 +8,5 @@ workers = multiprocessing.cpu_count() * 2 + 1
 max_requests = 5000
 user = 'root'
 group = 'root'
-# accesslog = '/var/log/gunicorn/xuetangx_video_log_access.log'
-# errorlog = '/var/log/gunicorn/xuetangx_video_log_error.log'
+accesslog = '/var/log/gunicorn/xuetangx_video_log_access.log'
+errorlog = '/var/log/gunicorn/xuetangx_video_log_error.log'
