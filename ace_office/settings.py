@@ -245,10 +245,10 @@ LOGGING = {
     'handlers': {
         # 在终端打印
         'console': {
-            'level': 'DEBUG',
-            'filters': ['require_debug_true'],  # 只有在Django debug为True时才在屏幕打印日志
+            'level': 'INFO',
+            # 'filters': ['require_debug_true'],  # 只有在Django debug为True时才在屏幕打印日志
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'standard'
         },
         # 默认的
         'default': {
