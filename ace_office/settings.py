@@ -270,6 +270,15 @@ LOGGING = {
             'formatter': 'standard',
             'encoding': 'utf-8',
         },
+        'request_handler': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_LOG_DIR, "script.log"),
+            'maxBytes': 1024 * 1024 * 5,
+            'backupCount': 5,
+            'formatter': 'standard',
+            'encoding': 'utf-8',
+        },
         # 专门定义一个收集特定信息的日志
         'collect': {
             'level': 'INFO',
@@ -286,7 +295,17 @@ LOGGING = {
         '': {
             'handlers': ['default', 'console', 'error'],  # 上线之后可以把'console'移除
             'level': 'DEBUG',
-            'propagate': True,  # 向不向更高级别的logger传递
+            'propagate': False,  # 向不向更高级别的logger传递
+        },
+        'django': {
+            'handlers': ['default', 'console'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+        'django.request': {
+            'handlers': ['request_handler'],
+            'level': 'DEBUG',
+            'propagate': False,
         },
         # 名为 'collect'的logger还单独处理
         'collect': {
