@@ -34,12 +34,12 @@ class Command(BaseCommand):
 			print file_path, os.path.exists(file_path)
 
 			gc.collect()
-			if os.path.exists(file_path):
-				# os.system("bypy mkdir ExportEmployee")
-				# os.system("/usr/local/bin/bypy upload %s ExportEmployee -v" % file_path)
-				command_str = "/var/www/html/bpcs_uploader/bpcs_uploader.php upload %s ExportEmployee/%s" % (
-					file_path, file_name)
-				os.system(command_str)
+			# if os.path.exists(file_path):
+			# 	# os.system("bypy mkdir ExportEmployee")
+			# 	# os.system("/usr/local/bin/bypy upload %s ExportEmployee -v" % file_path)
+			# 	command_str = "/var/www/html/bpcs_uploader/bpcs_uploader.php upload %s ExportEmployee/%s" % (
+			# 		file_path, file_name)
+			# 	os.system(command_str)
 			print "Total %s" % str(total)
 			print "End %s \n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
