@@ -66,7 +66,7 @@ class EmployeesBatchDelete(SuccessMessageMixin, View):
 						project_principal = one_obj.project_name.principal
 					except:
 						project_principal = None
-					if project_principal == request.user or request.user.is_superuser:  # 是项目负责人或超级管理员
+					if project_principal == request.user or request.user.is_superuser or request.user.username in SUPERUSERNAMES:  # 是项目负责人或超级管理员
 						if one_obj.status == "1" or request.user.username in SUPERUSERNAMES:  # 员工在职或用户时宋晓丹
 							one_obj.delete()
 				except:
