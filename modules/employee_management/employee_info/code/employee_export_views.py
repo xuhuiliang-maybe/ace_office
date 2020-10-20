@@ -52,6 +52,7 @@ def write_excel(employee_type, employee_obj_list):
                     one_row_dict["project_name"] = "--"  # 项目名称
                 one_row_dict["salary_card_number"] = one_emp.salary_card_number  # 银行卡号
                 one_row_dict["bank_account"] = one_emp.bank_account  # 开户银行
+                one_row_dict["bank_address"] = one_emp.bank_address  # 开户地
                 one_row_dict["job_dept"] = one_emp.job_dept  # 部门
                 one_row_dict["position"] = one_emp.position  # 职务
                 one_row_dict["sex"] = one_emp.get_sex_display()  # 性别
@@ -344,6 +345,7 @@ def write_employee_file(employee_type, employee_obj_list, filepath):
                         tmp_one.append(one_emp.project_name.full_name if one_emp.project_name else "--")  # 项目名称
                         tmp_one.append(one_emp.salary_card_number if one_emp.salary_card_number else "--")  # 银行卡号
                         tmp_one.append(one_emp.bank_account if one_emp.bank_account else "--")  # 开户银行
+                        tmp_one.append(one_emp.bank_address if one_emp.bank_address else "--")  # 开户地
                         tmp_one.append(one_emp.job_dept if one_emp.job_dept else "--")  # 部门
                         tmp_one.append(one_emp.position if one_emp.position else "--")  # 职务
                         tmp_one.append(one_emp.get_sex_display() if one_emp.sex else "--")  # 性别

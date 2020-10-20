@@ -143,6 +143,7 @@ class Employee(models.Model):
     salary_card_number = models.CharField(u"银行卡号", max_length=100, blank=True)
     job_dept = models.CharField(u"部门", max_length=100, blank=True)
     bank_account = models.CharField(u"开户银行", max_length=100, blank=True)
+    bank_address = models.CharField(u"开户地", max_length=100, blank=True, null=True)
     position = models.CharField(u"职务", max_length=100, blank=True)
     nation = models.CharField(u"民族", max_length=10, choices=NATION_CHOICES, blank=True)
     education = models.CharField(u"学历", max_length=10, choices=EDUCATION_CHOICES, blank=True)
@@ -248,7 +249,7 @@ class EmployeeForm(forms.ModelForm):
         model = Employee
         fields = [
             "name", "sex", "identity_card_number", "project_name",
-            "recruitment_attache", "status", "salary_card_number", "job_dept", "bank_account", "position",
+            "recruitment_attache", "status", "salary_card_number", "job_dept", "bank_account", "bank_address", "position",
             "nation", "education", "birthday", "age", "register_address", "register_postcode",
             "register_type", "work_address", "insured_place", "person_type", "contract_type",
             "contract_subject", "entry_date", "call_out_time", "into_time", "social_insurance_increase_date",
