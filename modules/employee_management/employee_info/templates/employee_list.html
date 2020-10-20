@@ -336,7 +336,7 @@
                                 <td>{{ emplyee.get_status_display }}</td>
                                 <td>{{ emplyee.salary_card_number }}</td>
                                 <td>{{ emplyee.bank_account }}</td>
-                                <td>{{ emplyee.bank_address }}</td>
+                                <td>{{ emplyee.bank_address | default_if_none:"" }}</td>
                                 <td>{{ emplyee.job_dept | default_if_none:""}}</td>
                                 <td>{{ emplyee.position }}</td>
                                 <td>{{ emplyee.get_nation_display }}</td>
